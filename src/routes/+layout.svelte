@@ -1,7 +1,11 @@
-<slot />
+<script>
+	const pageTheme = 'dark';
+</script>
 
-<svelte:head>
-	<style lang="sass" src="./style.sass">
+<div class="app-container overflow-x-hidden" data-theme={pageTheme}>
+	<main>
+		<slot />
+	</main>
+</div>
 
-	</style>
-</svelte:head>
+<style lang="scss" src="./layout.scss" global></style>
