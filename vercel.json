@@ -183,11 +183,11 @@
         },
         {
             "source": "/portfolio/zebec-protocol",
-            "destination": "/c/announcements/zebec-protocol"
+            "destination": "/c/companies/zebec-protocol"
         },
         {
             "source": "/portfolio/clearpool",
-            "destination": "/c/announcements/clearpool"
+            "destination": "/c/companies/clearpool"
         },
         {
             "source": "/portfolio/amplify",
@@ -195,11 +195,11 @@
         },
         {
             "source": "/portfolio/blockpass",
-            "destination": "/c/announcements/pass-club"
+            "destination": "/c/companies/pass-club"
         },
         {
             "source": "/portfolio/pickle-finance",
-            "destination": "/c/announcements/pickle-finance"
+            "destination": "/c/companies/pickle-finance"
         },
         {
             "source": "/projects/18f2ecd9cab94b408543ee58c8029fd4",
