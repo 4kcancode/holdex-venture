@@ -490,6 +490,10 @@
             "destination": "/c/learn/what-is-erc-20-token-standard"
         },
         {
+            "source": "/c/announcements/why-apply",
+            "destination": "/c/announcements/for-startups"
+        },
+        {
             "source": "/x/holdex",
             "destination": "/c/announcements"
         },
