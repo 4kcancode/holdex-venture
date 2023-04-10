@@ -32,6 +32,7 @@ export function parseCommunityCoverImage(community: Community): string {
         case "learn":
         case "case-studies":
         case "founders-club":
+        case "companies":
             return `https://storage.googleapis.com/holdex-public/categories/${community.slug}.png`;
         default:
             return community?.logoUrl;
