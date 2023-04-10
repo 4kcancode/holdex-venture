@@ -1,3 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
-Disallow:
+user-agent: *
+allow: *
+disallow: /c/*/embed
+
+sitemap: https://holdex.io/sitemap.xml

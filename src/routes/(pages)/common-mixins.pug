@@ -1,0 +1,25 @@
+mixin content-wrapper
+    .content-wrapper(class="flex items-start flex-col gap-8 xs:gap-4 max-w-[604px] w-full xs:px-4")
+        block
+
+mixin header-wrapper
+    .header-wrapper(class="flex items-center justify-center mb-8 smDown:justify-start smDown:items-start max-w-[1028px] tb:max-w-[794px] smDown:max-w-[604px] xs:px-4 w-full")&attributes(attributes)
+        block
+
+mixin nav-crumbs
+    nav.crumbs: ul(class="flex items-center gap-3")
+        block
+
+mixin main-section
+    section.main(class="flex flex-col items-center pt-16 xs:pt-8")
+        block
+
+mixin primary-button(label)
+    button(
+        class="relative z-1 bg-accent1-default text-t4 text-cta shadow-button flex items-center justify-center py-1 px-4 rounded-xl transition-all focus:bg-accent1-default hover:bg-accent1-active hover:shadow-button-hover disabled:cursor-not-allowed disabled:bg-l3 disabled:shadow-button disabled:text-t3"
+    )&attributes(attributes)
+        span= label
+
+mixin button-icon-default
+    button(class="relative inline-flex z-1 bg-l3 text-t3 border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.75 rounded-2lg transition-all focus:border-accent1-default hover:text-t1 hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
+        block

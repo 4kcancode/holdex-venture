@@ -1,5 +1,18 @@
-@import "../lib/styles/theme.scss";
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/mono/mono-semibold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
 
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/fonts/satoshi/Satoshi-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-display: swap;
+    font-style: normal;
+}
 
 body {
     position: relative;
@@ -13,6 +26,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+
+    font-feature-settings: 'pnum';
+    font-variant-numeric: proportional-nums;
 
     *:focus {
         outline: 0;
