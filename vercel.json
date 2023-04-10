@@ -524,6 +524,10 @@
         {
             "source": "/projects/(.*)",
             "destination": "/portfolio/$1"
+        },
+        {
+            "source": "/login/(.*)",
+            "destination": "/"
         }
     ]
 }
