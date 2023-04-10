@@ -193,14 +193,14 @@ module.exports = {
         '18px',
         {
           lineHeight: '32px',
-          fontWeight: '500'
+          fontWeight: '400'
         }
       ],
       "paragraph-s": [
         '16px',
         {
           lineHeight: '32px',
-          fontWeight: '500'
+          fontWeight: '400'
         }
       ],
       "cta": [
