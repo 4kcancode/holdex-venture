@@ -494,10 +494,6 @@
             "destination": "/c/announcements/for-startups"
         },
         {
-            "source": "/c?filter=portfolio",
-            "destination": "/portfolio"
-        },
-        {
             "source": "/x/holdex",
             "destination": "/c/announcements"
         },
