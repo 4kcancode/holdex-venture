@@ -1,0 +1,6 @@
+@import "../../lib/styles/theme.scss";
+
+
+.mobile-dropdown ul li:before {
+    @apply hidden;
+}

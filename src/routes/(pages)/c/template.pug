@@ -1,0 +1,14 @@
+include ../common-mixins
+include ./mixins
+
++if('storeData')
+    +main-section
+        +header-wrapper()(class="flex-col gap-8 xs:gap-4")
+            +nav-crumbs
+                +crumbItemLink("/", "Home")
+                +crumbDelimiter
+                +crumbItemText("Studio")
+            +messageHeader("Studio", "We drive the adoption of web3 technologies by empowering leaders with the necessary tools and capital to succeed.")()
+        +content-wrapper
+            +filter-options
+            +feedRenderer

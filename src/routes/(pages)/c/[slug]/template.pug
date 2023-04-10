@@ -1,0 +1,20 @@
+include ../../common-mixins
+include ../mixins
+
++if('storeData')
+    +main-section
+        +header-wrapper()(class="flex-col gap-8 xs:gap-4")
+            +nav-crumbs
+                +crumbItemLink("/", "Home")
+                +crumbDelimiter
+                +crumbItemLink("/c", "Studio")
+                +crumbDelimiter
+                +crumbItemText("{community.name}")
+            +messageHeader("{community.name}", "{community.tagline}")(id="{community.id}")
+        +content-wrapper
+            +filter-options
+            +if('community.hashtags && community.hashtags.totalCount > 0')
+                ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
+                    +each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
+                        +hashtag("{'#'}{tag.node.id}")(class="{isHashtagActive(pageFilter, tag.node.id)}" on:click!="{() => handleSort($page.url, tag.node.id.toLowerCase())}")
+            +feedRenderer

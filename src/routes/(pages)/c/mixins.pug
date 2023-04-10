@@ -1,0 +1,101 @@
+mixin crumbItemLink(href, name)
+    li: a(class="text-paragraph-l text-t3 transition-colors hover:text-accent1-default" href=href title=name): span= name
+
+mixin crumbDelimiter
+    li(class="crumb-delimiter text-paragraph-l text-t3/50") / 
+
+mixin crumbItemText(name)
+    li: span(class="text-paragraph-l text-t3")= name
+
+//- Filter options
+mixin filter-options
+    ul.filter-options(class="relative flex items-start my-3 border border-solid border-l4 rounded-xl")
+        +filter-option-item("{() => handleSort($page.url, 'CREATED_AT')}", "By Time")(class!="border-r border-solid border-l4 rounded-l-underbase {pageFilter !== 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}")
+        +filter-option-item("{() => handleSort($page.url, 'NET_UP_VOTES')}", "By Rating")(class!="rounded-r-underbase {pageFilter === 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}")
+
+mixin filter-option-item(onClick, title)
+    li.option-item(
+        on:click!=onClick
+        class!="flex items-center justify-center cursor-pointer bg-l2 transition-colors text-cta text-t3 hover:text-t1 py-0.75 px-2.75")&attributes(attributes)= title
+
+//- Short links
+mixin short-links
+    ul.short-links(class="flex items-center justify-center gap-x-5 w-full max-w-[604px] smDown:justify-start smDown:flex-wrap")
+        block
+
+mixin short-link(href, icon, title)
+    a.short-link(class="flex items-center gap-2 text-cta text-t1 transition-colors hover:text-accent1-default" href=href)
+        Icon(icon=icon width="{20}" height="{20}" colorInherit)
+        span= title
+
+mixin inline-link(href, title)
+    a.short-link(class="relative underline underline-offset-4 pb-1 bg-accent1-default/15 text-accent1-default text-paragraph-l transition-colors hover:bg-accent1-default/25" href=href)&attributes(attributes)
+        span= title
+
+mixin button-secondary-small(label)
+    button(type="button" class="relative inline-flex z-1 bg-l3 text-t1 text-cta border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.75 px-3.75 rounded-xl transition-all focus:border-accent1-default hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
+        span= label
+
+//- Button Icon components
+mixin button-icon-small(icon)
+    button(type="button" class="relative inline-flex z-1 bg-l3 text-t1 border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.25 rounded-2lg transition-all focus:border-accent1-default hover:text-t1 hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
+        if block
+            block
+        else
+            Icon(icon=icon width="{20}" height="{20}" colorInherit)
+
+mixin messageHeader(title, subtitle)
+    h1(class="text-title-l font-satoshi text-center smDown:text-left xs:text-h1-s")&attributes(attributes)=title
+    if subtitle
+        p(class="text-subtitle-l text-t2 text-center smDown:text-left xs:text-subtitle-s max-w-[604px] w-full")=subtitle
+
+mixin hashtag(tag)
+    li(class="inline-flex relative justify-center cursor-pointer rounded-xl bg-l2 text-cta text-t3 shadow-tag transition-all px-3 hover:text-t1 hover:bg-l3 before:content-[''] before:absolute before:border before:border-solid before:border-l4 before:w-full before:h-full before:rounded-xl before:left-0 before:top-0")&attributes(attributes)= tag
+
+
+mixin feed
+    +if('totalCount > 0')
+        .feed-articles(class="relative block w-full")
+            +each('edges as messageNode, index (messageNode.node.id)')
+                +const('message = parseMessage(messageNode.node)')
+                a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-colors text-t1 hover:text-accent1-default block {index === 0 ? '' : 'mt-8 xs:mt-4'}")
+                    article(class="flex items-center gap-4")
+                        .feed-icon(class="relative block w-32 h-24 xs:w-24 border border-solid border-l4 rounded-xl bg-l2")
+                            +if('message.cover')
+                                img(class="relative block w-full h-full object-center rounded-xl object-cover" alt="{message.title}" src="{message.cover}")
+                                +else()
+                                    span(role="img" class="relative block w-10 h-12 mx-auto mt-6") {@html feedEmptyIcon}
+                        .feed-content(class="flex items-start justify-center flex-col")
+                            h2(class="relative w-full text-paragraph-l font-bold text-inherit block whitespace-nowrap overflow-hidden text-ellipsis") {message.title}
+                            +if('message.subtitle')
+                                p(class="relative w-full xs:hidden text-paragraph-l text-t2 block whitespace-nowrap overflow-hidden text-ellipsis") {message.subtitle}
+                            p(class="text-paragraph-l text-t3 flex gap-2") 
+                                time(
+                                    datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
+                                    title="{extendedTimeFormat(message.createdAt)}"
+                                ) {timeFormat(message.createdAt)}
+                                span(class="opacity-50 xs:hidden") • 
+                                span(class="inline-flex items-center gap-1 xs:hidden")
+                                    Icon(icon="{HandThumbUp}" width="{20}" height="{20}" colorInherit)
+                                    span {formatNumber(message.votesCount.up - message.votesCount.down, '0,0a')}
+                                span(class="inline-flex items-center gap-1 xs:hidden") 
+                                    Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
+                                    span {formatNumber(message.allReplies.totalCount, '0,0a')}
+        +if('pageInfo && pageInfo.hasNextPage')
+            .btn-wrapper(class="flex justify-center w-full py-3")
+                +primary-button("Load more")(on:click!="{() => loadMore(pageInfo.endCursor)}" disabled="{isRefetching}" class="mobile:w-full")
+        +else()
+            p(class="text-paragraph-l text-t3 w-full text-center") No articles found.
+
+
+mixin feedRenderer
+    +if('isSearchMode')
+        +if('totalCount > 0')
+            .result-label-wrapper(class="flex items-center flex-wrap gap-3")
+                p(class="text-paragraph-l font-bold") #[span(class="text-t3 font-medium") Showing results for] {pageQ || '#' + pageFilter} 
+                +button-icon-small("{XMark}")(on:click!="{() => handleSort($page.url, 'CREATED_AT')}")
+            +feed()
+            +else()
+                p(class="text-paragraph-l text-t1 w-full text-center font-bold") #[span(class="text-t3 font-medium") No articles found for] {pageQ || '#' + pageFilter}.
+        +else()
+            +feed()
