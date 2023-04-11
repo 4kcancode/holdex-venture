@@ -22,8 +22,6 @@
 	$: communityCover = parseCommunityCoverImage(community);
 	$: message = Parser.parseFromCategory(community);
 
-	let tocOpen: boolean = false;
-
 	let renderTocPadding = (level: 'h2' | 'h3' | 'h4') => {
 		switch (level) {
 			case 'h3':
@@ -40,6 +38,7 @@
 		return tag && tag.slice(1) === item ? '!text-t1' : '';
 	};
 
+	let tocOpen: boolean = false;
 	let toggleToc = () => {
 		tocOpen = !tocOpen;
 	};
@@ -47,7 +46,6 @@
 	let gotoTag = (url: URL, item: string) => {
 		// const currentUrl = url;
 		// currentUrl.hash = item;
-		tocOpen = false;
 		scrollToElement(item, 64);
 		// return goto(currentUrl);
 	};
