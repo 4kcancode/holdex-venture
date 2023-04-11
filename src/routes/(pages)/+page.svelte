@@ -2,6 +2,7 @@
 	import MetaTags from '$components/MetaTags/index.svelte';
 	import Parser, { type Message } from '$components/BodyParser';
 	import BodyRenderer from '$components/BodyRenderer/index.svelte';
+	import TextHighlight from '$components/TextHighlight/index.svelte';
 	import { signature } from '$components/Icons';
 	import { routes } from '$lib/config';
 	import type { PageData } from './$types';
@@ -14,8 +15,8 @@
 </script>
 
 <MetaTags
-	title="Holdex | Web3 based startup studio"
-	description="We empower the next web3 innovators to build and accelerate blockchain adoption."
+	title={message.title}
+	description={message.subtitle}
 	path={routes.index}
 	imagePath="/og/index.png"
 />

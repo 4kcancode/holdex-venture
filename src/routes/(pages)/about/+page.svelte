@@ -13,8 +13,8 @@
 </script>
 
 <MetaTags
-	title="About Holdex | Web3 based startup studio"
-	description="We empower the next web3 innovators to build and accelerate blockchain adoption"
+	title={message.title}
+	description={message.subtitle}
 	path={routes.about}
 	imagePath="/og/about.png"
 />
