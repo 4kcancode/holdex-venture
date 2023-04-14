@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     borderRadius: {
       ...defaultTheme.borderRadius,
+      '2sm': '4px',
       "2lg": "10px",
       'base-radius': '20px',
       'underbase': '11px'
@@ -249,8 +250,12 @@ module.exports = {
         '6.5': '1.625rem',
         '1/2': '50%',
         '19': '4.75rem',
+        '23': '5.75rem',
         '25': '6.25rem',
-        '30': '7.5rem'
+        '30': '7.5rem',
+        '31': '7.75rem',
+        '54': '13.5rem',
+        '61': '15.25rem'
       },
       opacity: {
         '15': '0.15'

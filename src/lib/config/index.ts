@@ -8,13 +8,15 @@ import {
     PUB_HEAP_APP_ID,
     PUB_ABOUT_ARTICLE_ID,
     PUB_HOME_ARTICLE_ID,
-    PUB_FOR_STARTUPS_ARTICLE_ID
+    PUB_FOR_STARTUPS_ARTICLE_ID,
+    PUB_HOLDEX_UTILS_API_URL
 } from '$env/static/public';
 import { dev, browser } from '$app/environment';
 
 type Config = {
     env: string;
     apiUrl: string;
+    utilsApiUrl: string;
     appUrl: string;
     rollbarAccessToken: string;
     heapAppKey: string;
@@ -30,6 +32,7 @@ type Config = {
 let baseConfig: Config = {
     env: PUB_VERCEL_ENV,
     apiUrl: PUB_API_URL,
+    utilsApiUrl: PUB_HOLDEX_UTILS_API_URL,
     appUrl: PUB_APP_URL,
     rollbarAccessToken: PUB_ROLLBAR_ACCESS_TOKEN,
     heapAppKey: PUB_HEAP_APP_ID,
