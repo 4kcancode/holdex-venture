@@ -46,6 +46,7 @@
 	"dependencies": {
 		"@apollo/client": "^3.7.10",
 		"@editorjs/editorjs": "^2.26.5",
+		"apexcharts": "^3.37.3",
 		"dotenv": "^16.0.3",
 		"editorjs-html": "^3.4.2",
 		"graphql": "^16.6.0",

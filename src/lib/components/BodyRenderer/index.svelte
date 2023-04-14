@@ -8,6 +8,7 @@
 	import Image from './Blocks/image.svelte';
 	import Embed from './Blocks/embed.svelte';
 	import TallyButton from './Blocks/tallyButton.svelte';
+	import Chart from './Blocks/chart.svelte';
 
 	export let blocks: any[];
 

@@ -45,3 +45,9 @@
         background-color: theme('colors.l1');
     }
 }
+
+@layer utilities {
+    .font-inherit {
+        font: inherit;
+    }
+}

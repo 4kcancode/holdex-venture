@@ -111,6 +111,7 @@ export type Author = {
 let videoRegExp = new RegExp(regExp.video, "gmi");
 let imageRegExp = new RegExp(regExp.image, "gmi");
 let tallyLinkExp = new RegExp(regExp.tallyLink, "mi");
+let coingeckoLinkExp = new RegExp(regExp.coingeckoLink, "mi");
 export let linkExp = new RegExp(/^<a\s+(?:[^>]*?\s+)?href=(["'\\])(.*?)\1[^>]*>(.*?)<\/a>$/, "ui");
 let inlineLinkExp = new RegExp(regExp.link, "ui");
 let inlineCodeExp = new RegExp(/^<(?:code|span) class=[\\]?"inline-code[\\]?"[^>]*>(.*)<\/(?:code|span)>$/, "ui");
@@ -147,6 +148,14 @@ let tokeniseInlineEls = (inlineBlocks: string[]) => {
                     })
                     break;
                 }
+                case coingeckoLinkExp.test(b): {
+                    let match = (b.match(coingeckoLinkExp) as RegExpExecArray);
+                    tokens.push({
+                        type: "chart",
+                        url: match[0],
+                    })
+                    break;
+                }
                 default: {
                     let match = (b.match(linkExp) as RegExpExecArray);
                     tokens.push({
@@ -173,6 +182,14 @@ let tokeniseInlineEls = (inlineBlocks: string[]) => {
                     tokens.push({
                         type: "image",
                         src: match[0],
+                    })
+                    break;
+                }
+                case coingeckoLinkExp.test(b): {
+                    let match = (b.match(coingeckoLinkExp) as RegExpExecArray);
+                    tokens.push({
+                        type: "chart",
+                        url: match[0],
                     })
                     break;
                 }
@@ -268,7 +285,7 @@ let parseParagraph = (block: ParagraphBlock) => {
         let inlineBlocks = parseInlineEls(block.data.text);
         let tokens = tokeniseInlineEls(inlineBlocks);
 
-        if (tokens.length == 1 && ["image", "embed"].includes(tokens[0].type)) {
+        if (tokens.length == 1 && ["image", "embed", "chart"].includes(tokens[0].type)) {
             return tokens[0];
         } else {
             return {

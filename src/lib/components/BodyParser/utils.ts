@@ -15,6 +15,7 @@ export const regExp = {
     default: /^[a-zA-Z0-9 ,.'-]{2,50}$/,
     slug: /^[a-zA-Z0-9_-]{2,50}$/,
     tallyLink: /^https?:\/\/tally.so\/r\/([\w\/-]+)$/,
+    coingeckoLink: /^https?:\/\/www.coingecko.com\/en\/coins\/([\w\/-]+)$/,
     customLink: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)#embed=true$/,
     link: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
     email: /^[a-z0-9._%+\-]{1,60}@[a-z0-9.\-]{1,30}\.[a-z]{2,10}$/,
