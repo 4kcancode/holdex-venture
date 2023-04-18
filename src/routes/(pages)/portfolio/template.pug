@@ -11,3 +11,11 @@ include ../c/mixins
             +messageHeader("Portfolio", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
         +content-wrapper
             +feedRenderer
+                Feed(
+                    feedType="portfolio"
+                    edges="{edges}"
+                    totalCount="{totalCount}"
+                    isRefetching="{isRefetching}"
+                    pageInfo="{pageInfo}"
+                    loadMore="{loadMore}"
+                )

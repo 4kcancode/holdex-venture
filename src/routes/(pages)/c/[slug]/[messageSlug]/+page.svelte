@@ -19,7 +19,6 @@
 	$: ({ store } = data);
 	$: ({ data: storeData } = $store);
 	$: community = storeData?.community as Community;
-	$: communityCover = parseCommunityCoverImage(community);
 	$: message = Parser.parseFromCategory(community);
 
 	let renderTocPadding = (level: 'h2' | 'h3' | 'h4') => {
@@ -58,7 +57,7 @@
 	description={message.subtitle ? message.subtitle : ''}
 	pageType="article"
 	path={routes.message(message.communitySlug, message.messageSlug)}
-	imageUrl={message.cover ? message.cover : communityCover}
+	imageUrl={message.cover ? message.cover : '/default-cover.png'}
 />
 
 <template lang="pug" src="./template.pug">
