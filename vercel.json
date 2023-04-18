@@ -526,6 +526,10 @@
             "destination": "/portfolio/$1"
         },
         {
+            "source": "/login",
+            "destination": "/"
+        },
+        {
             "source": "/login/(.*)",
             "destination": "/"
         }
