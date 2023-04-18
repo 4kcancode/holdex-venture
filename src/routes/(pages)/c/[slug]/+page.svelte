@@ -13,7 +13,11 @@
 		UserGroup
 	} from '$components/Icons';
 	import MetaTags from '$components/MetaTags/index.svelte';
+	import Hashtag from '$components/Hashtag/index.svelte';
 	import Icon from '$components/Icons/index.svelte';
+
+	import DefaultFeedItem from '$components/Feed/Item/index.svelte';
+	import Feed from '$components/Feed/index.svelte';
 
 	import { timeFormat, extendedTimeFormat } from '$components/DateManager';
 	import { formatNumber } from '$components/NumbersManager';
@@ -21,7 +25,7 @@
 	import { parseQueryFilter } from '../util';
 	import { parseCommunityCoverImage, sanitizeHtml } from '$lib/utils';
 
-	import type { Community, Hashtag, HashtagsConnectionEdge, Message } from '$lib/types/api';
+	import type { Community, Hashtag as HashtagType, HashtagsConnectionEdge, Message } from '$lib/types/api';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -62,12 +66,12 @@
 
 	let sortHashtags = (s: HashtagsConnectionEdge[]) => {
 		let values = s
-			.filter((a) => (a.node as Hashtag).postedMessagesTotalCount > 1)
+			.filter((a) => (a.node as HashtagType).postedMessagesTotalCount > 1)
 			.slice(0)
 			.sort(
 				(a, b) =>
-					(b.node as Hashtag).postedMessagesTotalCount -
-					(a.node as Hashtag).postedMessagesTotalCount
+					(b.node as HashtagType).postedMessagesTotalCount -
+					(a.node as HashtagType).postedMessagesTotalCount
 			);
 
 		return values;
@@ -117,7 +121,3 @@
 <template lang="pug" src="./template.pug">
 
 </template>
-
-<style lang="sass" src="../style.sass">
-
-</style>

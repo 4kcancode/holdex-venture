@@ -1,0 +1,20 @@
+.tag
+    @apply inline-flex relative justify-center rounded-full bg-l2 shadow-tag text-t3 transition-all cursor-pointer
+    @apply before:content-[''] before:absolute before:border before:border-solid before:border-l4 before:w-full before:h-full before:rounded-full before:left-0 before:top-0
+
+    &--medium
+        @apply text-cta px-3
+
+    &--small
+        @apply text-caption font-bold px-2 py-1
+
+    &:not(.tag__disabled)
+        &:hover
+            @apply bg-l3 text-t1 before:border-l5
+
+        &:focus,
+        &.active
+            @apply shadow-tag-active text-t1 before:border-accent1-default
+
+    &.tag__disabled
+        @apply shadow-none cursor-default

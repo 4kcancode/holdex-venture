@@ -15,14 +15,13 @@ export const handleError: HandleServerError = ({ error, event }) => {
     event.request.headers.forEach((v, k) => (headers[k] = v));
     const { code, message, stack, error: _error } = transformError(error);
 
-    rollbar.configure({ accessToken: config.rollbarAccessToken }).error({
-        message: message,
-        stack: stack
-    }, {
-        headers: headers,
-        url: event.url,
-        method: event.request.method
-    });
+    if (!message.includes('Not found') && !message.includes('not_found')) {
+        rollbar.configure({ accessToken: config.rollbarAccessToken }).error([message, stack], {
+            headers: headers,
+            url: event.url,
+            method: event.request.method
+        });
+    }
     return {
         code: code,
         message: message,
@@ -40,14 +39,15 @@ let transformError = (error: unknown) => {
             stack: _error?.networkError || _error?.graphQLErrors || _error
         }
     } else if (typeof error === "object") {
+        const _error = JSON.stringify(error as any);
         return {
             code: (error as any)?.code ?? '500',
-            message: (error as any)?.message || 'Server error',
-            error: error,
-            stack: error
+            message: (error as any)?.message ?? 'Server error',
+            error: _error,
+            stack: _error
         }
     } else {
-        const _error = JSON.parse(error as any);
+        const _error = JSON.stringify(error as any);
         return {
             code: '500',
             message: 'Server error',

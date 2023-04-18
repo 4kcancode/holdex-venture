@@ -16,5 +16,16 @@ include ../mixins
             +if('community.hashtags && community.hashtags.totalCount > 0')
                 ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
                     +each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
-                        +hashtag("{'#'}{tag.node.id}")(class="{isHashtagActive(pageFilter, tag.node.id)}" on:click!="{() => handleSort($page.url, tag.node.id.toLowerCase())}")
+                        Hashtag(
+                            tag="{'#'}{tag.node.id}"
+                            class="{isHashtagActive(pageFilter, tag.node.id)}"
+                            onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}"
+                        )
             +feedRenderer
+                Feed(
+                    edges="{edges}"
+                    totalCount="{totalCount}"
+                    isRefetching="{isRefetching}"
+                    pageInfo="{pageInfo}"
+                    loadMore="{loadMore}"
+                )

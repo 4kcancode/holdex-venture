@@ -5,20 +5,19 @@ import type { HandleClientError } from '@sveltejs/kit';
 
 export const handleError: HandleClientError = async ({ error, event }) => {
     const { code, message, stack, error: _error } = transformError(error);
-    rollbar.configure({
-        payload: {
-            environment: config.env,
-            client: {
-                javascript: {
-                    source_map_enabled: true,
-                    guess_uncaught_frames: true
+    if (!message.includes('Not found') && !message.includes('not_found')) {
+        rollbar.configure({
+            payload: {
+                environment: config.env,
+                client: {
+                    javascript: {
+                        source_map_enabled: true,
+                        guess_uncaught_frames: true
+                    }
                 }
             }
-        }
-    }).error({
-        message: message,
-        stack: stack
-    }, { url: event.url });
+        }).error([message, stack], { url: event.url });
+    }
 
     return {
         code: code,
@@ -37,14 +36,15 @@ let transformError = (error: unknown) => {
             stack: _error?.networkError || _error?.graphQLErrors || _error
         }
     } else if (typeof error === "object") {
+        const _error = JSON.stringify(error as any);
         return {
             code: (error as any)?.code ?? '500',
-            message: (error as any)?.message || 'Client error',
-            error: error,
-            stack: error
+            message: (error as any)?.message ?? 'Client error',
+            error: _error,
+            stack: _error
         }
     } else {
-        const _error = JSON.parse(error as any);
+        const _error = JSON.stringify(error as any);
         return {
             code: '500',
             message: 'Client error',
