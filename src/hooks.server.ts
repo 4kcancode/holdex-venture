@@ -15,11 +15,8 @@ export const handleError: HandleServerError = ({ error, event }) => {
     event.request.headers.forEach((v, k) => (headers[k] = v));
     const { code, message, stack, error: _error } = transformError(error);
 
-    if (Number(code) !== 404) {
-        rollbar.configure({ accessToken: config.rollbarAccessToken }).error({
-            message: message,
-            stack: stack
-        }, {
+    if (!message.includes('Not found') && !message.includes('not_found')) {
+        rollbar.configure({ accessToken: config.rollbarAccessToken }).error([message, stack], {
             headers: headers,
             url: event.url,
             method: event.request.method
