@@ -397,7 +397,7 @@ function cleanText(text: string) {
 }
 
 function getTableCellContent(content: Schema$StructuralElement[]) {
-    if (content && content?.length !== 0) return '';
+    if (!content || content.length === 0) return '';
     return content
         .map(({ paragraph }) => cleanText(getTextFromParagraph(paragraph as Schema$Paragraph)))
         .join('');
