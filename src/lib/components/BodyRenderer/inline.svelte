@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { escape } from '$components/BodyParser/escaper';
 	import { Switch, Case } from '$components/Switch';
+	import Embed from './Blocks/embed.svelte';
 	import TextWrapper from './Blocks/textWrapper.svelte';
 	import Image from './Blocks/image.svelte';
 	import Link from './Blocks/link.svelte';

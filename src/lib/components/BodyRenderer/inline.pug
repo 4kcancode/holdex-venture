@@ -17,6 +17,8 @@ Switch(condition="{item.type}")
     //- Case(value="mention")
     //-     s handle mention
     //- possible removal of image
+    Case(value="embed")
+        Embed(item="{item}")
     Case(value="image") 
         Image(item="{item}")
     Case(value="text")
