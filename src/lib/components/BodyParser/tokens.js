@@ -1,4 +1,4 @@
-import { regExp } from './utils'
+import { regExp, getEmbedUrl, getEmbedSource } from './utils'
 
 export let rules = {
     code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
@@ -157,9 +157,15 @@ let linkMatching = (stringArray, videoExp, imageExp, matches) => {
                     case imageExp.test(token):
                         list.push({ type: 'image', src: token })
                         break;
-                    case videoExp.test(token):
-                        list.push({ type: 'embed', embed: getEmbedUrl(href) })
+                    case videoExp.test(token): {
+                        let match = token.match(videoExp);
+                        list.push({
+                            type: "embed",
+                            embed: getEmbedUrl(match[0]),
+                            source: getEmbedSource(match[0]),
+                        })
                         break;
+                    }
                     default:
                         list.push({ type: 'link', href: token });
                         break;

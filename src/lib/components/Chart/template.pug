@@ -31,10 +31,10 @@ mixin legend-item(label, value)
         span(class="flex items-center gap-3")
             +if('isLoading')
                 span(class="block bg-l3 rounded-2sm h-8 w-32")
-                span(class="relative block bg-l3 border h-8 w-20 border-solid border-l5 rounded-2lg before:content-[''] before:absolute before:rounded-2sm before:bg-l4 before:h-4 before:w-16 before:left-1.75 before:top-1.75")
+                span(class="relative block bg-l3 border h-8 w-20 border-solid border-l5 rounded-full before:content-[''] before:absolute before:rounded-2sm before:bg-l4 before:h-4 before:w-16 before:left-1.75 before:top-1.75")
                 +else()
                     span(class="text-h3-l xs:text-h3-s") ${formatNumber(info.price, '0,0[.]000000')}
-                    span(class="relative block bg-l3 border border-solid border-l5 rounded-2lg p-1.75 text-caption text-t3") 
+                    span(class="relative block bg-l3 border border-solid border-l5 rounded-full p-1.75 text-caption text-t3") 
                         | 24H: {' '}
                         span(class!="{bindPriceChangeClass(info.priceChange24h)}") {formatNumber(info.priceChange24h, "0,0[.]00")}%
     .chart-graph-wrapper(class="absolute top-23 xs:top-28 h-61 xs:h-54" style:width="calc(100% + 2px)" style:left="-1px")
