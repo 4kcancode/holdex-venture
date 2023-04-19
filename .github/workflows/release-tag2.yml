@@ -19,7 +19,7 @@ jobs:
         shell: bash
       - name: Generate Changelog
         id: generate_changelog
-        uses: github-script@v4
+        uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
