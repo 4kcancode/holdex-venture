@@ -135,7 +135,7 @@ let tokeniseInlineEls = (inlineBlocks: string[]) => {
                     let match = (b.match(videoRegExp) as RegExpExecArray);
                     tokens.push({
                         type: "embed",
-                        url: getEmbedUrl(match[0]),
+                        embed: getEmbedUrl(match[0]),
                         source: getEmbedSource(match[0]),
                     })
                     break;
@@ -172,7 +172,7 @@ let tokeniseInlineEls = (inlineBlocks: string[]) => {
                     let match = (b.match(videoRegExp) as RegExpExecArray);
                     tokens.push({
                         type: "embed",
-                        url: getEmbedUrl(match[0]),
+                        embed: getEmbedUrl(match[0]),
                         source: getEmbedSource(match[0]),
                     })
                     break;
