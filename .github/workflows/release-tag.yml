@@ -1,0 +1,31 @@
+name: Update Release on Main Push
+
+on:
+  push:
+    branches:
+      - stage
+
+jobs:
+  update-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get latest tag name
+        id: get_latest_tag
+        run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
+      - name: Format changelog
+        id: format_changelog
+        uses: release-drafter/release-drafter@v7.3.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-path: .github/release-drafter.yml
+          next-tag: ${{ steps.get_latest_tag.outputs.tag_name }}
+      - name: Create or Update Release
+        uses: JasonEtco/create-or-update-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          tag_name: ${{ steps.get_latest_tag.outputs.tag_name }}
+          body: |
+            ${{\ steps.format_changelog.outputs.body }}
