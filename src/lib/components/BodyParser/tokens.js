@@ -158,7 +158,7 @@ let linkMatching = (stringArray, videoExp, imageExp, matches) => {
                         list.push({ type: 'image', src: token })
                         break;
                     case videoExp.test(token):
-                        list.push({ type: 'embed', url: getEmbedUrl(href) })
+                        list.push({ type: 'embed', embed: getEmbedUrl(href) })
                         break;
                     default:
                         list.push({ type: 'link', href: token });

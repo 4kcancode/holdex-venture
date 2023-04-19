@@ -235,7 +235,7 @@ let generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
                     <span class="text-footnote mb-1 block">${timeFormat(time, "DD-MMM-YYYY, HH:mm")}</span>
                     <span class="text-footnote text-t3">
                         Price: 
-                        <span class="text-t1">$${formatNumber(price, '0,0[.]0000')}</span>
+                        <span class="text-t1">$${formatNumber(price, '0,0[.]000000')}</span>
                     </span>`
             },
             x: {
