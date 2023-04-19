@@ -13,19 +13,29 @@ jobs:
       - name: Get latest tag name
         id: get_latest_tag
         run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
-      - name: Format changelog
-        id: format_changelog
-        uses: release-drafter/release-drafter@v5.23.0
+      - name: Generate Changelog
+        id: generate_changelog
+        uses: github-script@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          config-path: .github/release-drafter.yml
-          next-tag: ${{ steps.get_latest_tag.outputs.tag_name }}
-      - name: Create or Update Release
-        uses: JasonEtco/create-or-update-release@v1
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: commits } = await github.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+            });
+            const messages = commits.map((commit) => commit.commit.message);
+            const changelog = messages.join("\n");
+            return {
+              changelog,
+            };
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
           tag_name: ${{ steps.get_latest_tag.outputs.tag_name }}
+          release_name: Release ${{ steps.get_latest_tag.outputs.tag_name }}
           body: |
-            ${{ steps.format_changelog.outputs.body }}
+            ## Changelog
+            ${{ steps.generate_changelog.outputs.changelog }}
