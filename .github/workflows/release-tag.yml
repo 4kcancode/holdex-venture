@@ -15,7 +15,7 @@ jobs:
         run: echo "::set-output name=tag_name::$(git describe --tags --abbrev=0)"
       - name: Generate Changelog
         id: generate_changelog
-        uses: github-script@v4
+        uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
