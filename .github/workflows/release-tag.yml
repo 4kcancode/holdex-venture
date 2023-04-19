@@ -28,4 +28,4 @@ jobs:
           repo: ${{ github.event.repository.name }}
           tag_name: ${{ steps.get_latest_tag.outputs.tag_name }}
           body: |
-            ${{\ steps.format_changelog.outputs.body }}
+            ${{ steps.format_changelog.outputs.body }}
