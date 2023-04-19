@@ -6,6 +6,9 @@
 	import BodyRenderer from '$components/BodyRenderer/index.svelte';
 	import Icon from '$components/Icons/index.svelte';
 	import MetaTags from '$components/MetaTags/index.svelte';
+	import TextParagraph from '$components/TextParagraph/index.svelte';
+	import Button from '$components/Button/index.svelte';
+
 	import { timeFormat, extendedTimeFormat } from '$components/DateManager';
 	import { formatNumber } from '$components/NumbersManager';
 	import { BarsArrowDown, BarsArrowUp, Eye, ChatBubbleLeftEllipsis } from '$components/Icons';
