@@ -5,7 +5,7 @@ Switch(condition="{item.type}")
                 slot
     Case(value="hashtag")
         a(
-            class="relative underline underline-offset-4 pb-1 bg-accent1-default/15 text-accent1-default text-paragraph-l xs:text-paragraph-s transition-colors hover:bg-accent1-default/25"
+            class="relative underline underline-offset-4 bg-accent1-default/15 text-accent1-default text-paragraph-l xs:text-paragraph-s transition-colors hover:bg-accent1-default/25"
             href="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}"
         )
             TextWrapper(text="{item.text}")

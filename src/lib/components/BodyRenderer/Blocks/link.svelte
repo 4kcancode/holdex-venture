@@ -18,7 +18,7 @@
 <a
 	title={item.title ? item.title : ''}
 	href={item.href}
-	class="relative inline-block underline underline-offset-4 pb-1 bg-accent1-default/15 text-accent1-default text-paragraph-l transition-colors hover:bg-accent1-default/25"
+	class="relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default text-paragraph-l transition-colors hover:bg-accent1-default/25"
 >
 	<slot {text} />
 	{#if !isHoldexLink}
