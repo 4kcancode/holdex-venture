@@ -3,7 +3,7 @@ name: Create Release on Main Push
 on:
   push:
     branches:
-      - main
+      - stage
 
 jobs:
   create-release:
@@ -43,7 +43,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: "${{ steps.bump_version.outputs.new_tag_name }}",
-              name: "Release ${{ steps.bump_version.outputs.new_tag_name }}",
+              name: "Release Mark ${{ steps.bump_version.outputs.new_tag_name }}",
               body: `## Changelog\n\n${{ steps.generate_changelog.outputs.changelog }}`,
               draft: false,
               prerelease: false,
