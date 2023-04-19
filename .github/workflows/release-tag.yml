@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Get latest tag name
         id: get_latest_tag
-        run: echo 'tag_name='$(git describe --tags --abbrev=0) >> $GITHUB_OUTPUT
+        run: echo 'tag_name'=$(git describe --tags) >> $GITHUB_OUTPUT
       - name: Generate Changelog
         id: generate_changelog
         uses: actions/github-script@v4
