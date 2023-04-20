@@ -28,13 +28,13 @@ mixin author
                         title="{extendedTimeFormat(message.createdAt)}"
                     ) {timeFormat(message.createdAt)} { message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
                 TextParagraph(class="flex flex-wrap" textColor="text-t3") #[span.mr-1 By ] #[+author()]
-                TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
-                    span(class="inline-flex items-center gap-1")
-                        Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
-                        span {formatNumber(message.viewsCount, '0,0a')}
-                    span(class="inline-flex items-center gap-1") 
-                        Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
-                        span {formatNumber(message.allReplies.totalCount, '0,0a')}
+                //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
+                //-     span(class="inline-flex items-center gap-1")
+                //-         Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
+                //-         span {formatNumber(message.viewsCount, '0,0a')}
+                //-     span(class="inline-flex items-center gap-1") 
+                //-         Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
+                //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
             +if('message.isGoogleDoc')
                 .edit-wrapper(class="flex items-center justify-between gap-4 border-t border-solid border-l4 p-3.75")
                     TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
