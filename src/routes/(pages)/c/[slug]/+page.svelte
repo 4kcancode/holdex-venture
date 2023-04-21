@@ -111,7 +111,7 @@
 </script>
 
 <MetaTags
-	title="{community.name} - {community.tagline} | Holdex"
+	title="{community.tagline} | Holdex"
 	description={sanitizeHtml(community.tagline)}
 	path={routes.category(community.slug)}
 	imageUrl={communityCover}
