@@ -6,8 +6,13 @@
                     class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
                     message="{parseMessage(messageNode.node)}"
                 )
-                +else("feedType === 'portfolio'")
+                +elseif("feedType === 'portfolio'")
                     PortfolioFeedItem(
+                        class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
+                        message="{parseMessage(messageNode.node)}"
+                    )
+                +elseif("feedType === 'jobs'")
+                    JobsFeedItem(
                         class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
                         message="{parseMessage(messageNode.node)}"
                     )

@@ -3,6 +3,7 @@
 
 	import DefaultFeedItem from '$components/Feed/Item/index.svelte';
 	import PortfolioFeedItem from '$components/Feed/PortfolioItem/index.svelte';
+	import JobsFeedItem from '$components/Feed/JobsItem/index.svelte';
 
 	import type {
 		Message,
@@ -12,7 +13,7 @@
 	} from '$lib/types/api';
 	import Button from '$components/Button/index.svelte';
 
-	type FeedType = 'default' | 'portfolio';
+	type FeedType = 'default' | 'portfolio' | 'jobs';
 
 	export let feedType: FeedType = 'default';
 
