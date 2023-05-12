@@ -1,7 +1,11 @@
 include ../common-mixins
-
+include ../c/mixins
 +main-section
-    +header-wrapper()()
-        h1(class="text-title-l font-satoshi text-center smDown:text-left xs:text-h1-s" id="{message.id}") About Holdex
-    +content-wrapper
-        BodyRenderer(blocks="{message.blocks}")
+	+header-wrapper()(class="flex-col gap-8 xs:gap-4")
+		+nav-crumbs
+			+crumbItemLink("/", "Holdex")
+			+crumbDelimiter
+			+crumbItemText("About")
+		h1(class="text-title-l font-satoshi text-center smDown:text-left xs:text-h1-s" id="{message.id}") About Holdex
+	+content-wrapper
+		BodyRenderer(blocks="{message.blocks}")
