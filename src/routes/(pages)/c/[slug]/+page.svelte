@@ -16,7 +16,8 @@
 	import Hashtag from '$components/Hashtag/index.svelte';
 	import Icon from '$components/Icons/index.svelte';
 
-	import DefaultFeedItem from '$components/Feed/Item/index.svelte';
+	//import DefaultFeedItem from '$components/Feed/Item/index.svelte'; //
+	import DefaultFeedItem from '$components/Feed/JobsItem/index.svelte';
 	import Feed from '$components/Feed/index.svelte';
 
 	import { timeFormat, extendedTimeFormat } from '$components/DateManager';
