@@ -16,8 +16,6 @@
 	import Hashtag from '$components/Hashtag/index.svelte';
 	import Icon from '$components/Icons/index.svelte';
 
-	//import DefaultFeedItem from '$components/Feed/Item/index.svelte'; //
-	import DefaultFeedItem from '$components/Feed/JobsItem/index.svelte';
 	import Feed from '$components/Feed/index.svelte';
 
 	import { timeFormat, extendedTimeFormat } from '$components/DateManager';
@@ -26,7 +24,12 @@
 	import { parseQueryFilter } from '../util';
 	import { parseCommunityCoverImage, sanitizeHtml } from '$lib/utils';
 
-	import type { Community, Hashtag as HashtagType, HashtagsConnectionEdge, Message } from '$lib/types/api';
+	import type {
+		Community,
+		Hashtag as HashtagType,
+		HashtagsConnectionEdge,
+		Message
+	} from '$lib/types/api';
 	import type { PageData } from './$types';
 
 	export let data: PageData;

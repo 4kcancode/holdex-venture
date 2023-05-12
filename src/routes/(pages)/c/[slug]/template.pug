@@ -24,6 +24,7 @@ include ../mixins
             +feedRenderer
                 Feed(
                     edges="{edges}"
+                    feedType!="{community.slug === 'jobs' ? 'jobs' : 'default'}"
                     totalCount="{totalCount}"
                     isRefetching="{isRefetching}"
                     pageInfo="{pageInfo}"
