@@ -9,7 +9,8 @@ Once you've installed dependencies with `npm install` (or `npm install` or `yarn
 npm run dev
 
 
-## after running npm install successfuly Run `varcel link` to link `holdex-accelerator/holdex-venture-studio` on varcel.
+## after running npm install successfuly Run `varcel link` to link `holdex-accelerator/holdex-venture-studio`
+on varcel.
 make sure you `holdex-accelerator/holdex-venture-studio` have invited and, you have acepted the invite
 
 
