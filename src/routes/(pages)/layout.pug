@@ -47,7 +47,7 @@ mixin mobile-nav
 					textarea(
 						rows="{5}"
 						required
-						value!="{form?.message ?? ''}"
+						bind:value="{message}"
 						class="relative w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
 						name="message" 
 						placeholder="How can we help you?")
@@ -56,18 +56,23 @@ mixin mobile-nav
 						type="text" 
 						name="name" 
 						required
-						value!="{form?.name ?? ''}"
+						bind:value="{name}"
 						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
 						placeholder="Your name and company")
 					input(
 						type="email"
 						required
 						pattern!="{regExp.email.toString().slice(1,-1)}"
-						value!="{form?.email ?? ''}"
+						bind:value="{email}"
 						name="email" 
+						on:blur="{displayError(email)}"
 						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
 						placeholder="Your email address")
-				+primary-button("Submit")(class="mobile:w-full" type="submit")
+
+				p#error-message(class="text-rating-c text-footnote font-inter flex items-center mb-6 xs:mb-4 gap-2 py-2.5  {isError ? 'flex' : 'hidden'}")
+					Icon(icon="{ExclamationTriangle}" width="{17.26}" height="{15.62}" colorInherit)
+					span() Invalid email address
+				Button(label="Submit" class="mobile:!w-full" disabled="{message == '' || name == '' || email == '' || !validateEmail(email)  ? true : false}" isSubmitBtn="true")
 		.footer-nav(class="flex items-center justify-between tbDown:flex-col tbDown:items-start tbDown:py-6 tbDown:gap-6 py-4 px-4 max-w-[1240px] w-full")
 			.logo-wrapper(class="z-1 relative")
 				a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): img(alt="Home" src="/logo-white-w-text.svg")
