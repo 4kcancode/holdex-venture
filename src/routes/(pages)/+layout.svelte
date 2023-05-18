@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { routes } from '$lib/config';
 
-	import { socialIcons, Bars3, XMark, ExclamationTriangle } from '$components/Icons';
+	import { socialIcons, Bars3, XMark, ExclamationTriangle, CheckCircle } from '$components/Icons';
 	import Icon from '$components/Icons/index.svelte';
 	import { regExp } from '$components/BodyParser/utils';
 	import { deserialize, applyAction } from '$app/forms';
@@ -18,6 +18,7 @@
 	let message = '';
 	let name = '';
 	let isError = false;
+	let success = false;
 	
 	const isActive = (currentUrl: string, path: string, deepEqual: boolean = false) => {
 		if (deepEqual) {
@@ -36,7 +37,13 @@
 		clbk && clbk();
 		return scrollToElement('contact-form', 64);
 	};
+	const displaySuccess = () => {
+		success = true;
+		setInterval(() => {
+			success = false;
+		}, 5000)
 
+	} 
 	async function onContactFormSumbit(event: any) {
 		const data = new FormData(this);
 		
@@ -54,6 +61,7 @@
 		email = '';
 		message = '';
 		applyAction(result);
+		displaySuccess()
 	}
 
 	let scrollY: any;
