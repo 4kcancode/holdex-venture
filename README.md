@@ -16,8 +16,6 @@ make sure you `holdex-accelerator/holdex-venture-studio` have invited and, you h
 # or start the server and open the app in a new browser tab
 npm run dev -- --open
 ```
-![image](https://github.com/holdex/holdex-venture-studio/assets/77491787/92d010e3-65f6-4a25-9844-a3622832624f)
-
 
 ## Building
 
