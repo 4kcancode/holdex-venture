@@ -1,24 +1,30 @@
 +if('totalCount > 0')
-    .feed-articles(class="relative block w-full")
-        +each('edges as messageNode, index (messageNode.node.id)')
-            +if("feedType === 'default'")
-                DefaultFeedItem(
-                    class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
-                    message="{parseMessage(messageNode.node)}"
-                )
-                +else("feedType === 'portfolio'")
-                    PortfolioFeedItem(
-                        class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
-                        message="{parseMessage(messageNode.node)}"
-                    )
-    +if('pageInfo && pageInfo.hasNextPage')
-        .btn-wrapper(class="flex justify-center w-full py-3")
-            Button(
-                label="Load more"
-                class="mobile:!w-full"
-                size="medium"
-                disabled="{isRefetching}"
-                onClick!="{() => loadMore(pageInfo.endCursor)}"
-            )
-    +else()
-        p(class="text-paragraph-l text-t3 w-full text-center") No articles found.
+	.feed-articles(class="relative block w-full")
+		+each('edges as messageNode, index (messageNode.node.id)')
+			+if("feedType === 'default'")
+				DefaultFeedItem(
+					class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
+					message="{parseMessage(messageNode.node)}"
+				)
+				+elseif("feedType === 'portfolio'")
+					PortfolioFeedItem(
+						class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
+						message="{parseMessage(messageNode.node)}"
+					)
+				+elseif("feedType === 'job'")
+					JobFeedItem(
+						class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
+						message="{parseMessage(messageNode.node)}"
+					)
+
+	+if('pageInfo && pageInfo.hasNextPage')
+		.btn-wrapper(class="flex justify-center w-full py-3")
+			Button(
+				label="Load more"
+				class="mobile:!w-full"
+				size="medium"
+				disabled="{isRefetching}"
+				onClick!="{() => loadMore(pageInfo.endCursor)}"
+			)
+	+else()
+		p(class="text-paragraph-l text-t3 w-full text-center") No articles found.
