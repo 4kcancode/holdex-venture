@@ -1,10 +1,15 @@
-h2(class="relative w-full text-h2-s xs:text-h3-s !leading-114% xs:!leading-132% xs:!text-paragraph-l grow-0 mb-4 font-satoshi text-inherit block whitespace-nowrap overflow-hidden text-ellipsis align-strech ") {message.title}
-+if('message.subtitle')
+a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-colors text-t1 hover:text-accent1-default block {className}")
+	h2(class="relative w-full text-h2-s xs:text-h3-s xs:!text-paragraph-l mb-4 font-satoshi whitespace-nowrap") {message.title}
 	TextParagraph(class="mb-4") {message.subtitle}
-+if('message.hashtags && message.hashtags.length > 0')
-	ul(class="relative z-1 flex items-start gap-8 flex-wrap w-full ")
-		+each('message.hashtags as tag, index')
-			li(class="relative underline underline-offset-4 text-accent1-default text-inter bg-accent1-default/15 paragraph-l h-6.5 ")
-				span.disc(class="absolute w-4 h-4 rounded-full {index === '0' ? 'hidden' : 'inline-block'}")
-				|	"{'#'}{tag}"
+	+if('message.hashtags && message.hashtags.length > 0')
+		ul(class="relative z-1 flex items-start gap-8 flex-wrap w-full")
+			+each('message.hashtags as tag, index')
+				li(class="relative underline underline-offset-4 text-accent1-default text-inter bg-accent1-default/15 pt-1 h-8") 
+					span(class="absolute w-1.5 h-1.5 top-11/25 -left-5 rounded-full bg-t3 {index === 0 ? 'hidden' : 'block'}")
+					| {'#'}{tag}
+				
+
+
+
+
 		

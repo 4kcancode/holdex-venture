@@ -3,17 +3,10 @@
 	import type { ParsedMessage } from '$components/BodyParser';
 
 	export let message: ParsedMessage;
+	let className: string = '';
+	export { className as class };
 </script>
-<style>
-.disc{
-	width: 8px;
-	height: 8px;
-	background: #A2A7B8;
-	top: 10px;
-	left: -20px;
-}
 
-</style>
 <template lang="pug" src="./template.pug">
 
 </template>
