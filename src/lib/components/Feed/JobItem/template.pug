@@ -5,7 +5,7 @@ a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-col
 		ul(class=" relative z-1 flex items-start gap-2 flex-wrap w-full list-none")
 			+each('message.hashtags as tag, index')
 				li(class="  relative underline underline-offset-4 text-accent1-default text-inter bg-accent1-default/15 h-8 text-paragraph-l")
-					span(class="absolute w-1 h-1 top-11/25 -left-1.5 rounded-full bg-t3 {index !== 0? 'block' : 'hidden'} {index % 3 !== 0 ? 'xs:block' : 'xs:hidden'}" ).
+					span(class="absolute w-1 h-1 top-11/25 -left-1.5 rounded-full bg-t3 {index !== 0? 'block' : 'hidden'}" ).
 					| {'#'}{tag}
 				
 
