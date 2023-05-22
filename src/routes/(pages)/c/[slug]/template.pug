@@ -13,7 +13,8 @@ include ../mixins
 			+messageHeader("{community.name}", "{community.tagline}")(id="{community.id}")
 
 			+content-wrapper(class="xs:!px-0")
-				+filter-options
+				+if("community.slug !== 'jobs'")
+					+filter-options
 				+if('community.hashtags && community.hashtags.totalCount > 0')
 					ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
 						+each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
