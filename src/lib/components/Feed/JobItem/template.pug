@@ -2,10 +2,10 @@ a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-col
 	h3(class="relative w-full text-h3-l xs:text-h3-s mb-4 font-satoshi whitespace-nowrap") {message.title}
 	TextParagraph(class="mb-4 font-inter !text-t2") {message.subtitle}
 	+if('message.hashtags && message.hashtags.length > 0')
-		ul(class=" relative z-1 flex items-start gap-7 flex-wrap w-full list-style-none")
+		ul(class=" relative z-1 flex items-start gap-7 flex-wrap w-full list-none")
 			+each('message.hashtags as tag, index')
-				li(class="  relative underline underline-offset-4 text-accent1-default text-inter bg-accent1-default/15 h-8 text-paragraph-l") 
-					span(class="absolute w-1 h-1 top-11/25 -left-4 rounded-full bg-t3 {index === 0? 'hidden' : 'block'} {index % 3 === 0 ? 'xs:hidden' : 'xs:block'}" )
+				li(class="  relative underline underline-offset-4 text-accent1-default text-inter bg-accent1-default/15 h-8 text-paragraph-l")
+					span(class="absolute w-1 h-1 top-11/25 -left-4 rounded-full bg-t3 {index === 0? 'hidden' : 'block'} {index % 3 === 0 ? 'xs:hidden' : 'xs:block'}" ).
 					| {'#'}{tag}
 				
 
