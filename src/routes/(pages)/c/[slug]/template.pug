@@ -11,43 +11,25 @@ include ../mixins
 				+crumbDelimiter
 				+crumbItemText("{community.name}")
 			+messageHeader("{community.name}", "{community.tagline}")(id="{community.id}")
-			+if('community.name === "Jobs"')
-				+content-wrapper(class="xs:!px-0")
-					+if('community.hashtags && community.hashtags.totalCount > 0')
-						ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
-							+each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
-								Hashtag(
-									tag="{'#'}{tag.node.id}"
-									class="{isHashtagActive(pageFilter, tag.node.id)}"
-									onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}"
-								)
-					+feedRenderer
-						Feed(
-							feedType='job'
-							edges="{edges}"
-							totalCount="{totalCount}"
-							isRefetching="{isRefetching}"
-							pageInfo="{pageInfo}"
-							loadMore="{loadMore}"
-						)
 
-				+else()
-					+content-wrapper
-						+filter-options
-						+if('community.hashtags && community.hashtags.totalCount > 0')
-							ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
-								+each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
-									Hashtag(
-										tag="{'#'}{tag.node.id}"
-										class="{isHashtagActive(pageFilter, tag.node.id)}"
-										onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}"
-									)
-						+feedRenderer
-							Feed(
-								edges="{edges}"
-								totalCount="{totalCount}"
-								isRefetching="{isRefetching}"
-								pageInfo="{pageInfo}"
-								loadMore="{loadMore}"
+			+content-wrapper(class="xs:!px-0")
+				+filter-options
+				+if('community.hashtags && community.hashtags.totalCount > 0')
+					ul.hashtags-list(class="flex items-start gap-3 flex-wrap w-full")
+						+each('sortHashtags(community.hashtags.edges) as tag (tag.node.id)')
+							Hashtag(
+								tag="{'#'}{tag.node.id}"
+								class="{isHashtagActive(pageFilter, tag.node.id)}"
+								onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}"
 							)
-					
+				+feedRenderer
+					Feed(
+						feedType="{community.name === 'Jobs' ? 'job' : 'default'}"
+						edges="{edges}"
+						totalCount="{totalCount}"
+						isRefetching="{isRefetching}"
+						pageInfo="{pageInfo}"
+						loadMore="{loadMore}"
+					)
+
+
