@@ -1,6 +1,6 @@
 Switch(condition="{item.type}")
     Case(value="link")
-        Link(item="{item}" let:text class="relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default transition-colors hover:bg-accent1-default/26")
+        Link(item="{item}" let:text)
             TextWrapper(text="{text}")
                 slot
     Case(value="hashtag")
