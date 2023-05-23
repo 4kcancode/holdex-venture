@@ -48,7 +48,7 @@
 	let gotoTag = (url: URL, item: string) => {
 		// const currentUrl = url;
 		// currentUrl.hash = item;
-		scrollToElement(item, 64);
+		scrollToElement(item, 270);
 		// return goto(currentUrl);
 	};
 </script>
