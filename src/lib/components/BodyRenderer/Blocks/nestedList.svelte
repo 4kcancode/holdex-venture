@@ -8,7 +8,7 @@
 	export let type: string;
 </script>
 
-<li class="text-paragraph-l text-t2">
+<li class="text-paragraph-l text-t2 pl-4">
 	{#each item.content as inlineItem}
 		<slot item={inlineItem} />
 	{/each}
