@@ -13,7 +13,7 @@ Switch(condition="{item.type}")
         code(class="rounded-lg bg-l2 py-0 px-2 text-code font-mono")
             TextWrapper(text="{item.text}") 
     Case(value="price-ticker")
-        span(class="relative text-paragraph-l xs:text-paragraph-s text-accent1-default underline decoration-dashed") ${item.text}
+        span(class="underline-offset-4 relative text-paragraph-l xs:text-paragraph-s text-accent1-default underline decoration-dashed") ${item.text}
     //- Case(value="mention")
     //-     s handle mention
     //- possible removal of image
