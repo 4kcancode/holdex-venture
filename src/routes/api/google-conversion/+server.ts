@@ -295,16 +295,33 @@ function convertToHoldexJson(document: Schema$Document) {
             // Table
             else if (table && table.tableRows && table.tableRows.length > 0) {
                 const [thead, ...tbody] = table.tableRows;
+                const getTableCellStructure = (cellContent: string, index: number) => {
+                    if (index === 0) {
+                        return {
+                            type: "list",
+                            data: {
+                                items: cellContent
+                            }
+                        }
+                    }
+                    return {
+                        type: "paragraph",
+                        data: {
+                            text: cellContent
+                        }
+                    }
+                }
                 content.push({
                     type: 'table',
                     data: {
                         content: [
-                            (thead.tableCells as Schema$TableCell[]).map(({ content }) =>
-                                getTableCellContent(content as Schema$StructuralElement[])
+
+                            (thead.tableCells as Schema$TableCell[]).map(({ content }, index) =>
+                                getTableCellStructure(getTableCellContent(content as Schema$StructuralElement[]), index)
                             ),
                             ...tbody.map((row) =>
-                                (row.tableCells as Schema$TableCell[]).map(({ content }) =>
-                                    getTableCellContent(content as Schema$StructuralElement[])
+                                (row.tableCells as Schema$TableCell[]).map(({ content }, index) =>
+                                    getTableCellStructure(getTableCellContent(content as Schema$StructuralElement[]), index)
                                 )
                             )
                         ]
