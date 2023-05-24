@@ -12,7 +12,7 @@
 	};
 
 	export let item: Item;
-	export let parentWrapper = getContext('wrapper');
+ 	let parentWrapper = getContext('wrapper');
 
 	let classes = '';
 
