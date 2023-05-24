@@ -14,17 +14,11 @@
 	export let item: Item;
  	let parentWrapper = getContext('wrapper');
 
-	let classes = '';
+	let classes = 'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25';
 
 	switch (parentWrapper) {
-		case 'table':
-			classes =
-				'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25';
-			break;
-
 		default:
-			classes =
-				'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default text-paragraph-l transition-colors hover:bg-accent1-default/25';
+			classes += 'text-paragraph-l';
 			break;
 	}
 
