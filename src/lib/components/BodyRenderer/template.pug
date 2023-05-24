@@ -64,7 +64,9 @@
                                             td(
                                                 class="py-1.5 px-3 text-t2 text-footnote border-solid border-l border-t border-l4 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
                                                 +each('parseTableCell(cell) as cellItem')
-                                                    InlineBlock(item="{cellItem}")
+                                                    InlineBlock(item="{cellItem}", parentWrapper="table")
+
+
             Case(value="image")
                 Image(item="{item}" index="{index}")
             Case(value="tally")
