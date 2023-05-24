@@ -35,8 +35,6 @@
 </template>
 
 <style lang="sass">
-	:global(.p-el + ol), 
-	:global(.p-el + ul), 
 	:global(.heading + ol), 
 	:global(.heading + ul),
 	:global(.heading + .video-player),
