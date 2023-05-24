@@ -315,7 +315,6 @@ function convertToHoldexJson(document: Schema$Document) {
                     type: 'table',
                     data: {
                         content: [
-
                             (thead.tableCells as Schema$TableCell[]).map(({ content }, index) =>
                                 getTableCellStructure(getTableCellContent(content as Schema$StructuralElement[]), index)
                             ),
