@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { escape } from '$components/BodyParser/escaper';
+	import { Switch, Case } from '$components/Switch';
+	import Embed from './embed.svelte';
+	import TextWrapper from './textWrapper.svelte';
+	import Image from './image.svelte';
 	import Link from './link.svelte';
+
 	export let item: any;
 	export let value: string;
-
-	function itemTypeToTagMapper(itemType:string): string {
-		return 'p'
-	}
 </script>
 
 {#if value === 'table'}
@@ -17,8 +19,8 @@
 			{item.text}
 		</Link>
 	{:else}
-		<svelte:element this={itemTypeToTagMapper(item.type)}>
-			{item.text}
-		</svelte:element>
+		<template lang="pug" src="../inline.pug">
+
+		</template>
 	{/if}
 {/if}
