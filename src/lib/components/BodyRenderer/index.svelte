@@ -9,7 +9,7 @@
 	import Embed from './Blocks/embed.svelte';
 	import TallyButton from './Blocks/tallyButton.svelte';
 	import Chart from './Blocks/chart.svelte';
-
+	import ParentWrapper from './Blocks/parentWrapper.svelte';
 	export let blocks: any[];
 
 	let bindHeading = (level: string) => {

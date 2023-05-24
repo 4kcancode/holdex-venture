@@ -9,30 +9,16 @@
 	type Item = {
 		type: string;
 		text: string;
-		href: string;
+		href?: string;
 		title?: string;
 	};
 
 	export let item: Item;
-	export let isInTableCell: boolean;
 </script>
 
-{#if isInTableCell}
-	{#if item.type==='link'}
-		{" "}
-		<Link item={item} classes={"relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default transition-colors hover:bg-accent1-default/26"}>
-		{item.text}
-		</Link>
-		{:else}
-		<svelte:self item={item}>
-			<slot item={item} />
-		</svelte:self>
+<template lang="pug" src="./inline.pug">
+</template>
 
-	{/if}
-	{:else}
-		<template lang="pug" src="./inline.pug">
-		</template>
-{/if}
 
 <style lang="sass">
 	:global(b),
