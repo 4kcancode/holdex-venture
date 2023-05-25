@@ -2,6 +2,7 @@
 	import { Switch, Case } from '$components/Switch';
 	import { parseTableCell } from '$components/BodyParser/blocks';
 
+	
 	import InlineBlock from './inline.svelte';
 	import TextWrapper from './Blocks/textWrapper.svelte';
 	import NestedList from './Blocks/nestedList.svelte';
@@ -9,6 +10,7 @@
 	import Embed from './Blocks/embed.svelte';
 	import TallyButton from './Blocks/tallyButton.svelte';
 	import Chart from './Blocks/chart.svelte';
+
 
 	export let blocks: any[];
 

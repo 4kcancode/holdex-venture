@@ -12,9 +12,11 @@
 	};
 
 	export let item: Item;
- 	let parentWrapper = getContext('wrapper');
 
-	let classes = 'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25';
+	let parentWrapper = getContext('wrapper');
+
+	let classes =
+		'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25';
 
 	switch (parentWrapper) {
 		default:
@@ -25,8 +27,16 @@
 	$: text = item.text || item.href;
 	$: isHoldexLink = regExp.holdexLink.test(item.href);
 </script>
-{" "}
-<a title={item.title ? item.title : ''} href={item.href} class={classes}>
+
+{' '}
+<a
+	title={item.title ? item.title : ''}
+	href={item.href}
+	class={classes}
+	target={isHoldexLink ? '_self' : '_blank'}
+	rel="noreferrer"
+
+>
 	<slot {text} />
 	{#if !isHoldexLink}
 		<Icon icon={ArrowTopRightOnSquare} width={16} height={16} colorInherit />
