@@ -1,11 +1,11 @@
 mixin crumbItemLink(href, name)
-    li: a(class="text-paragraph-l text-t3 transition-colors hover:text-accent1-default" href=href title=name): span= name
+    li: a(class="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-accent1-default" href=href title=name): span= name
 
 mixin crumbDelimiter
-    li(class="crumb-delimiter text-paragraph-l text-t3/50") / 
+    li(class="crumb-delimiter text-paragraph-l xs:text-paragraph-s text-t3/50") / 
 
 mixin crumbItemText(name)
-    li: span(class="text-paragraph-l text-t3")= name
+    li: span(class="text-paragraph-l xs:text-paragraph-s text-t3")= name
 
 //- Filter options
 mixin filter-options

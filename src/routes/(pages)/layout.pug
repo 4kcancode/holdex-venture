@@ -1,17 +1,17 @@
 include ./common-mixins
 
 mixin link(href, title)
-	li(class="flex relative items-center text-cta text-t1 transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-1.5 before:w-full before:bg-transparent before:h-0.5")&attributes(attributes): a(class="text-inherit" href=href on:click!="{() => toggleBurger(false)}")= title
+	li(class="flex relative items-center text-cta text-t1 transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-4 before:w-full before:bg-transparent before:h-0.5")&attributes(attributes): a(class="text-inherit" href=href on:click!="{() => toggleBurger(false)}")= title
 
 mixin social-link(href, content)
 	a(class="flex flex-col items-center justify-center w-8 h-8 p-1 text-t1 transition-colors hover:text-accent1-default" href=href target="_blank" rel="noopener noreferrer")=content
 
 mixin main-nav
 	ul(class="absolute left-1/2 -translate-x-1/2 main-nav flex items-start gap-8 py-4" role="navigation")&attributes(attributes)
-		+link("{routes.about}", "About")(class!="{isActive(path,routes.about, true) ? '!text-accent1-default before:!bg-accent1-default' : ''}")
-		+link("{routes.portfolio}", "Portfolio")(class!="{isActive(path,routes.portfolio, true) ? '!text-accent1-default before:!bg-accent1-default' : ''}")
-		+link("{routes.forStartups}", "For Startups")(class!="{isActive(path, routes.forStartups, true) ? '!text-accent1-default before:!bg-accent1-default' : ''}")
-		+link("{routes.jobs}", "Jobs")(class!="{isActive(path, routes.jobs) ? '!text-accent1-default before:!bg-accent1-default' : ''}")
+		+link("{routes.about}", "About")(class!="{isActive(path,routes.about, true) ? 'before:!bg-accent1-default' : ''}")
+		+link("{routes.portfolio}", "Portfolio")(class!="{isActive(path,routes.portfolio, true) ? 'before:!bg-accent1-default' : ''}")
+		+link("{routes.forStartups}", "For Startups")(class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}")
+		+link("{routes.jobs}", "Jobs")(class!="{isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : ''}")
 		//- +link("/c?filter=partners", "Partners")(class!="{isFilterActive($page.url,'/c', 'partners') ? '!text-accent1-default before:!bg-accent1-default' : ''}")
 
 mixin mobile-nav
@@ -48,7 +48,7 @@ mixin mobile-nav
 						rows="{5}"
 						required
 						bind:value="{message}"
-						class="relative w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
+						class="relative w-full border border-solid border-l4 block min-h-32 h-32 bg-l2 shadow-input rounded-xl p-2.5 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
 						name="message" 
 						placeholder="How can we help you?")
 				.input-group(class="mb-6 xs:mb-4 gap-4 flex xs:flex-col")
