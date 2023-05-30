@@ -53,10 +53,22 @@ mixin feedRenderer
     +if('isSearchMode')
         +if('totalCount > 0')
             .result-label-wrapper(class="flex items-center flex-wrap gap-3")
-                p(class="text-paragraph-l font-bold") #[span(class="text-t3 font-medium") Showing results for] {pageQ || '#' + pageFilter} 
+                //p(class="text-paragraph-l font-bold") #[span(class="text-t3 font-medium") Showing results for] {pageQ || '#' + pageFilter} 
+                //New variant
+                p(class="text-paragraph-l font-bold")
+                  | Showing results for 
+                  span(class="text-t3 font-medium")
+                    a(href="#{pageQ || '#' + pageFilter}" class="relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25") 
+                      | {pageQ || '#' + pageFilter}
                 +button-icon-small("{XMark}")(on:click!="{() => handleSort($page.url, 'CREATED_AT')}")
             block
             +else()
-                p(class="text-paragraph-l text-t1 w-full text-center font-bold") #[span(class="text-t3 font-medium") No articles found for] {pageQ || '#' + pageFilter}.
+                //p(class="text-paragraph-l text-t1 w-full text-center font-bold") #[span(class="text-t3 font-medium") No articles found for] {pageQ || '#' + pageFilter}.
+                //New variant
+                p(class="text-paragraph-l text-t1 w-full text-center font-bold")
+                  | No articles found for 
+                  span(class="text-t3 font-medium")
+                    a(href="#{pageQ || '#' + pageFilter}" class="relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25") 
+                      | {pageQ || '#' + pageFilter}.
         +else()
             block
