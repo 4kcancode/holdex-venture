@@ -12,11 +12,6 @@ npm run dev
 npm run dev -- --open
 ```
 
-NOTE: Check if you link the repository with the Vercel project.
-Run `npx vercel link` to `link holdex-accelerator/holdex-venture-studio` on Vercel, make sure [Vercel](https://vercel.com/holdex-accelerator/holdex-venture-studio) have invited and, you have accepted the invite
-
-![image](https://github.com/holdex/holdex-venture-studio/assets/63777677/5f9f8ebe-0e53-4964-95ff-a814667f267b)
-
 ## Building
 
 To create a production version of your app:
