@@ -1,42 +1,53 @@
 include ./common-mixins
 
 mixin link(href, title)
-	li(class="flex relative items-center text-cta text-t1 transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-4 before:w-full before:bg-transparent before:h-0.5")&attributes(attributes): a(class="text-inherit" href=href on:click!="{() => toggleBurger(false)}")= title
+	li(class="flex relative items-center text-cta text-t1 transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-4 before:w-full before:bg-transparent xs:before:!bg-transparent before:h-0.5")&attributes(attributes): a(class="text-inherit" href=href on:click!="{() => toggleBurger(false)}")= title
 
 mixin social-link(href, content)
-	a(class="flex flex-col items-center justify-center w-8 h-8 p-1 text-t1 transition-colors hover:text-accent1-default" href=href target="_blank" rel="noopener noreferrer")=content
+	a(class="flex flex-col items-center justify-center w-8 h-8 p-1 text-t1 transition-colors hover:text-accent1-default" href=href target="_blank" rel="noopener noreferrer")&attributes(attributes)=content
 
 mixin main-nav
-	ul(class="absolute left-1/2 -translate-x-1/2 main-nav flex items-start gap-8 py-4" role="navigation")&attributes(attributes)
+	ul(class=" flex items-start gap-8 py-4" role="navigation")&attributes(attributes)
 		+link("{routes.about}", "About")(class!="{isActive(path,routes.about, true) ? 'before:!bg-accent1-default' : ''}")
 		+link("{routes.portfolio}", "Portfolio")(class!="{isActive(path,routes.portfolio, true) ? 'before:!bg-accent1-default' : ''}")
 		+link("{routes.forStartups}", "For Startups")(class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}")
 		+link("{routes.jobs}", "Jobs")(class!="{isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : ''}")
 		//- +link("/c?filter=partners", "Partners")(class!="{isFilterActive($page.url,'/c', 'partners') ? '!text-accent1-default before:!bg-accent1-default' : ''}")
-
+		
 mixin mobile-nav
-	+main-nav(class="relative flex-col")
-	+primary-button("Partner With Us")(type="button" on:click!="{() => handleClick(toggleBurger)}")
+	+main-nav(class="relative flex flex-wrap smDown:gap-4")
+	//-+primary-button("Partner With Us")(type="button" on:click!="{() => handleClick(toggleBurger)}")
 
 .app-container(data-theme="{pageTheme}")
 	header(class!="z-10 w-full block  relative {scrollY > 1 ? 'sticky top-0 border-b border-solid border-l4 bg-l1' : ''}")
-		.header-wrapper(class="flex px-4 py-3 justify-center items-center w-full")
-			.container(class="max-w-[1240px] flex items-center justify-between")
-				.logo-wrapper(class="z-10 relative")
-					a(class="relative flex w-6.5 h-6.5  {isBurgerDropdownShown ? '!w-25' : ''}" href="{routes.index}")
+			.outer-container(class="relative xs:before:content['] xs:before:absolute xs:before:left-0 xs:before:w-16 xs:before:h-16 xs:before:z-10 xs:before:bg-gradient-to-r xs:after:bg-gradient-to-l from-l1 to-transparent xs:after:content['] xs:after:absolute xs:after:right-0 xs:after:w-16 xs:after:h-16 xs:after:z-10 xs:after:top-0")
+				.header-wrapper(class="flex px-4 py-3 smDown:!pb-0 justify-center items-center w-full xs:overflow-x-scroll xsDown:!overflow-x-scroll whitespace-nowrap")
+					.container(class="max-w-[1240px] flex items-center justify-between  xs:gap-4 ")
+						.logo-wrapper(class="relative xs:hidden")
+							a(class="relative flex w-6.5 h-6.5  {isBurgerDropdownShown ? '!w-25' : ''}" href="{routes.index}")
+								+if('isBurgerDropdownShown')
+									img(alt="Home" src="/logo-white-w-text.svg")
+									+else()
+										img(alt="Home" src="/logo-w-o-text.svg")
+						.nav-wrapper(class="absolute left-1/2 -translate-x-1/2 main-nav flex items-center gap-8.5 smDown:!relative smDown:!left-0 smDown:!translate-x-0 gap-5.5 xs:ml-12 xs:pr-44")
+							+main-nav(class="smDown:gap-4")
+							.social-icons-nav(class="gap-5 flex items-start")
+								+social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(class="!h-5 !w-5 !p-0")
+								+social-link("https://github.com/holdex", "{@html socialIcons.github}")(class="!h-5 !w-5 !p-0")
+								+social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(class="!h-5 !w-5 !p-0")
+								+social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(class="!h-5 !w-5 !p-0")
+						+primary-button("Partner With Us")(class="xs:w-[141px] xs:hidden xs:right-3 xs:bottom-3" type="button" on:click!="{() => handleClick(undefined)}")
+			+primary-button("Partner With Us")(class="hidden xs:block xs:absolute xs:right-3 xs:bottom-3 z-10" type="button" on:click!="{() => handleClick(undefined)}")
+			.logo-wrapper(class="hidden xs:block absolute bottom-5 left-4 z-10")
+				a(class="relative flex w-6.5 h-6.5  {isBurgerDropdownShown ? '!w-25' : ''}" href="{routes.index}")
+					img(alt="Home" src="/logo-w-o-text.svg")
+					//-+button-icon-default()(class="hidden smDown:flex z-10" on:click!="{() => toggleBurger(!isBurgerDropdownShown)}")
 						+if('isBurgerDropdownShown')
-							img(alt="Home" src="/logo-white-w-text.svg")
+							Icon(icon="{XMark}" width="{24}" height="{24}" colorInherit)
 							+else()
-								img(alt="Home" src="/logo-w-o-text.svg")
-				+main-nav()(class="smDown:hidden")
-				+primary-button("Partner With Us")(class="smDown:hidden" type="button" on:click!="{() => handleClick(undefined)}")
-				+button-icon-default()(class="hidden smDown:flex z-10" on:click!="{() => toggleBurger(!isBurgerDropdownShown)}")
-					+if('isBurgerDropdownShown')
-						Icon(icon="{XMark}" width="{24}" height="{24}" colorInherit)
-						+else()
-							Icon(icon="{Bars3}" width="{24}" height="{24}" colorInherit)
-				.mobile-dropdown(class="hidden {isBurgerDropdownShown ? '!flex' : ''} bg-l2 fixed w-screen left-0 bottom-0 top-0 pt-19 px-4 flex-col transition-all z-9 gap-4")
-					+mobile-nav
+								Icon(icon="{Bars3}" width="{24}" height="{24}" colorInherit)
+					//-.mobile-dropdown(class="hidden  smDown:!flex ")
+						+mobile-nav
 	main: slot
 	footer(class="mt-16 xs:mt-8 flex flex-col items-center w-full")
 		.contact-form(class="w-full relative flex flex-col items-center border-t border-b border-solid border-l4 py-8 px-4 xs:py-4" id="contact-form")
@@ -75,7 +86,7 @@ mixin mobile-nav
 				.feedback-toast(class="absolute z-1 -bottom-4 xs:-bottom-2 left-1/2 -translate-x-1/2 h-12 border border-solid rounded-xl bg-l2 border-l4 px-2.75 py-1.75 justify-center items-center gap-2 shadow-tag text-accent1-default {success ? 'flex' : 'hidden'}")
 					Icon(icon="{CheckCircle}" width="{24}" height="{24}" colorInherit)
 					span.succ(class="text-t1 text-cta" ) Message sent!
-		.footer-nav(class="flex items-center justify-between tbDown:flex-col tbDown:items-start tbDown:py-6 tbDown:gap-6 py-4 px-4 max-w-[1240px] w-full")
+		.footer-nav(class="flex items-center justify-between xs:flex-col xs:items-start xs:py-6 xs:gap-6 py-4 px-4 max-w-[1240px] w-full")
 			.logo-wrapper(class="z-1 relative")
 				a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): img(alt="Home" src="/logo-white-w-text.svg")
 			ul(class="absolute left-1/2 -translate-x-1/2 main-nav flex items-start gap-8 tbDown:relative tbDown:gap-4 tbDown:left-0 tbDown:transform-none" role="navigation")
