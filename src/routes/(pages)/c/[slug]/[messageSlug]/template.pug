@@ -69,11 +69,11 @@ mixin author
                                 icon="{BarsArrowDown}"
                             )
                 +if('tocOpen')
-                    .details-content(transition:slide|local class="relative p-3.75 border-t border-solid border-l4")
+                    .details-content(transition:slide|local on:transitionend!="{() => allowScroll()}" class="relative p-3.75 border-t border-solid border-l4")
                         ul.toc-block
                             +each('message.tocs as item')
                                 li(
-                                    on:click!="{() => gotoTag($page.url, item.id)}"
+                                    on:click!="{() => { handleClick($page.url, item.id); }}"
                                     class!="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-t1 {renderTocPadding(item.level)}"
                                 ) ⏤ {@html item.cleanRef}
         BodyRenderer(blocks="{message.blocks}")

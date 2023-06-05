@@ -41,16 +41,39 @@
 	};
 
 	let tocOpen: boolean = false;
+	let tocScroll: boolean = false;
 	let toggleToc = () => {
 		tocOpen = !tocOpen;
 	};
 
+	let allowScroll = () => {
+		if(!tocOpen){
+			tocScroll = true;
+		}
+		else{
+			tocScroll = false;
+		}
+	};
 	let gotoTag = (url: URL, item: string) => {
 		// const currentUrl = url;
 		// currentUrl.hash = item;
-		scrollToElement(item, 270);
+		scrollToElement(item, 64);
 		// return goto(currentUrl);
 	};
+
+	let handleClick = async (url: URL, item: string) => {
+	await new Promise((resolve) => {
+		const interval = setInterval(() => {
+		if (tocScroll) {
+			clearInterval(interval);
+			resolve({});
+			tocScroll = false;
+		}
+		}, 10);
+  });
+
+  gotoTag(url, item);
+};
 </script>
 
 <MetaTags
