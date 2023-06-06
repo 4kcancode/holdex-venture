@@ -69,7 +69,7 @@ mixin author
                                 icon="{BarsArrowDown}"
                             )
                 +if('tocOpen')
-                    .details-content(transition:slide|local on:transitionend!="{() => allowScroll()}" class="relative p-3.75 border-t border-solid border-l4")
+                    .details-content(transition:slide|local on:transitionend="{allowScroll}" class="relative p-3.75 border-t border-solid border-l4")
                         ul.toc-block
                             +each('message.tocs as item')
                                 li(
