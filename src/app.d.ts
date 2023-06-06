@@ -3,16 +3,16 @@
 declare global {
 	namespace App {
 		interface Error {
-			message: string
-			status?: string | number
-			error?: any
+			message: string;
+			status?: string | number;
+			error?: any;
 		}
 		interface Locals {
-			apolloClient: import('@apollo/client').ApolloClient<any>
+			apolloClient: import('@apollo/client').ApolloClient<any>;
 		}
 		// interface PageData {}
 		// interface Platform {}
 	}
 }
 
-export { };
+export {};

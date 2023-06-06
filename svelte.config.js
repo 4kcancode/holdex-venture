@@ -26,7 +26,7 @@ const config = {
 			$styles: 'src/lib/styles',
 			$components: 'src/lib/components',
 		},
-	}
+	},
 };
 
 export default config;

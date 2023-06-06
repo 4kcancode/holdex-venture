@@ -1,7 +1,7 @@
 import numeral from 'numeral';
 
 function formatNumber(number: any, format: string) {
-    return numeral(number).format(format);
+	return numeral(number).format(format);
 }
 
-export { formatNumber, numeral }
+export { formatNumber, numeral };
