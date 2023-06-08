@@ -45,7 +45,8 @@
 			Case(value="embed")
 				+if("item.service !== 'twitter'")
 					Embed(item="{item}")
-					//- +else(): twitter
+					+else()
+						TwitterEmbed(source="{item.source}" )
 			Case(value="code")
 				pre(class="bg-l2 border border-solid border-l4 rounded-xl py-4 px-6 w-full overflow-auto")
 					code(class="text-code font-mono")
@@ -64,7 +65,7 @@
 											td(
 												class="py-1.5 px-3 text-t2 text-footnote border-solid border-l border-t border-l4 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
 												+each('parseTableCell(cell) as cellItem')
-													InlineBlock(item="{cellItem}", parentWrapper="table")
+													InlineBlock(item="{cellItem}" parentWrapper="table")
 
 
 			Case(value="image")

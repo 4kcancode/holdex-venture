@@ -10,6 +10,7 @@
 	import Embed from './Blocks/embed.svelte';
 	import TallyButton from './Blocks/tallyButton.svelte';
 	import Chart from './Blocks/chart.svelte';
+	import TwitterEmbed from './Blocks/twitterEmbed.svelte';
 
 
 	export let blocks: any[];

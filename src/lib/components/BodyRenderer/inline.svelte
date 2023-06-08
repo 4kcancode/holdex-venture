@@ -16,6 +16,7 @@
 	};
 
 	export let item: Item;
+	
 	export let parentWrapper: string;
 	setContext('wrapper',parentWrapper)
 

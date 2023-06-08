@@ -1,0 +1,37 @@
+@use "sass:math"
+
+.embed-link
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out
+    @apply relative inline-block w-full no-underline leading-none z-[1] mt-3 rounded-2xl bg-tw-tweet-bg-color border border-tw-tweet-border
+
+    &__image
+        @apply relative inline-block w-full align-top rounded-[16px_16px_0_0] bg-tw-tweet-bg-color border-b border-tw-tweet-border
+
+        img
+            @apply absolute w-full h-full object-cover rounded-[15px_15px_0_0]
+
+        &.relative
+            @apply pb-0
+
+            img
+                @apply relative
+
+    &.dark .embed-link__image
+        @apply bg-tw-tweet-bg-color border-b border-tw-tweet-border
+
+    &__content
+        @apply relative w-full block text-[15px] leading-5 whitespace-normal p-3
+
+    &__name
+        @apply truncate relative block mb-0.5 text-tw-accents-5
+
+    &__title
+        @apply truncate relative block mb-0.5 text-tw-tweet-bg-color
+
+    &__description
+        -webkit-line-clamp: 2
+        @apply relative block text-tw-accents-5
+            
+
+    &.dark .embed-link__title
+        @apply text-tw-tweet-bg-color
