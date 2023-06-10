@@ -105,16 +105,16 @@ const mockData = [
 	},
 ];
 
-let generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
+const generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
 	if (isMock) {
 		data = mockData;
 	}
-	let pricesMap = data?.map((v) => v.price) || [];
-	let datesMap = data?.map((v) => v.timestamp) || [];
+	const pricesMap = data?.map((v) => v.price) || [];
+	const datesMap = data?.map((v) => v.timestamp) || [];
 
-	let min = Math.min(...pricesMap);
-	let max = Math.max(...pricesMap);
-	let step = (max - min) / 10;
+	const min = Math.min(...pricesMap);
+	const max = Math.max(...pricesMap);
+	const step = (max - min) / 10;
 
 	return {
 		series: [
@@ -254,7 +254,7 @@ let generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
 	};
 };
 
-let bindFill = (isMock: boolean) => {
+const bindFill = (isMock: boolean) => {
 	if (isMock) {
 		return {
 			type: 'solid',

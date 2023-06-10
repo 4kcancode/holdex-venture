@@ -40,7 +40,7 @@
 		return tag && tag.slice(1) === item ? '!text-t1' : '';
 	};
 
-	let tocOpen: boolean = false;
+	let tocOpen = false;
 	let toggleToc = () => {
 		tocOpen = !tocOpen;
 	};

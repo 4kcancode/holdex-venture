@@ -68,7 +68,7 @@
 		return goto(newUrl, { invalidateAll: true });
 	};
 
-	let isRefetching: boolean = false;
+	let isRefetching = false;
 	let loadMore = async (afterCursor?: string) => {
 		isRefetching = true;
 		await store.fetchMore({

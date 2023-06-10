@@ -20,7 +20,7 @@
 	let isError = false;
 	let success = false;
 	
-	const isActive = (currentUrl: string, path: string, deepEqual: boolean = false) => {
+	const isActive = (currentUrl: string, path: string, deepEqual = false) => {
 		if (deepEqual) {
 			return currentUrl === path;
 		}
@@ -66,9 +66,9 @@
 
 	let scrollY: any;
 
-	let isBurgerDropdownShown: boolean = false;
+	let isBurgerDropdownShown = false;
 
-	const toggleBurger = (newStatus: boolean = false) => {
+	const toggleBurger = (newStatus = false) => {
 		isBurgerDropdownShown = newStatus;
 		setBodyClass(newStatus);
 	};

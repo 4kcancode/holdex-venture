@@ -31,7 +31,7 @@ export const GET: RequestHandler = async ({ fetch, url }) => {
 		.then(([chart, info]) => {
 			if (!info.error && !chart.error) {
 				const prices = chart.data.prices.map((v: string[]) => {
-					let [timestamp, price] = v;
+					const [timestamp, price] = v;
 					return { timestamp, price };
 				});
 				return json(

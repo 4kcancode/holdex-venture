@@ -1,8 +1,8 @@
 export function getOptimizedUrl(source: string, size = '_150x150') {
-	let holdexRegExp = new RegExp(/^(http:\/\/|https:\/\/)(storage\.googleapis\.com)/, 'gmi');
+	const holdexRegExp = new RegExp(/^(http:\/\/|https:\/\/)(storage\.googleapis\.com)/, 'gmi');
 	if (holdexRegExp.test(source)) {
 		// exclude gifs
-		let gifRegExp = new RegExp(
+		const gifRegExp = new RegExp(
 			/(?: ([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:gif))(?:\?([^#]*))?(?:#(.*))?/,
 			'gmi'
 		);
@@ -33,7 +33,7 @@ export const regExp = {
 };
 
 export const getEmbedUrl = (href: string) => {
-	let [source, embedId] = getEmbedId(href);
+	const [source, embedId] = getEmbedId(href);
 	if (source === 'youtube') {
 		return createYoutubeEmbedUrl(embedId);
 	}
@@ -43,7 +43,7 @@ export const getEmbedUrl = (href: string) => {
 };
 
 export const getVideoCover = (href: string) => {
-	let [source, embedId] = getEmbedId(href);
+	const [source, embedId] = getEmbedId(href);
 	if (source === 'youtube') {
 		return createYoutubeCover(embedId);
 	}
@@ -53,15 +53,15 @@ export const getVideoCover = (href: string) => {
 };
 
 export const getEmbedSource = (href: string) => {
-	let isYoutubeWithWatch = new RegExp(
+	const isYoutubeWithWatch = new RegExp(
 		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)(\/watch)([^\s]+)/,
 		'gmi'
 	);
-	let isYoutube = new RegExp(
+	const isYoutube = new RegExp(
 		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w\/-]+)([^\s]+)/,
 		'gmi'
 	);
-	let isVimeo = new RegExp(
+	const isVimeo = new RegExp(
 		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w\/-]+)([^\s]+)/,
 		'gmi'
 	);
@@ -81,31 +81,31 @@ export const getEmbedSource = (href: string) => {
 };
 
 const getEmbedId = (href: string) => {
-	let isYoutubeWithWatch = new RegExp(
+	const isYoutubeWithWatch = new RegExp(
 		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)(\/watch)([^\s]+)/,
 		'gmi'
 	);
-	let isYoutube = new RegExp(
+	const isYoutube = new RegExp(
 		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w\/-]+)([^\s]+)/,
 		'gmi'
 	);
-	let isVimeo = new RegExp(
+	const isVimeo = new RegExp(
 		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w\/-]+)([^\s]+)/,
 		'gmi'
 	);
-	let source = getEmbedSource(href);
+	const source = getEmbedSource(href);
 
 	if (isYoutubeWithWatch.test(href)) {
 		return [source, `${href.slice(href.indexOf('v') + 2, href.indexOf('v') + 13)}`];
 	}
 
 	if (isYoutube.test(href)) {
-		let list = href.split('/');
+		const list = href.split('/');
 		return [source, list[3]];
 	}
 
 	if (isVimeo.test(href)) {
-		let list = href.split('/');
+		const list = href.split('/');
 		return [source, list[4]];
 	}
 	return [source, null];
@@ -127,7 +127,7 @@ const createVimeoEmbedUrl = (embedId: string | null) => {
 
 export function uuidv4() {
 	return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-		var r = (Math.random() * 16) | 0,
+		const r = (Math.random() * 16) | 0,
 			v = c == 'x' ? r : (r & 0x3) | 0x8;
 		return v.toString(16);
 	});

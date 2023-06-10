@@ -9,7 +9,7 @@ const skeleton = (urls: string) =>
 
 export const GET: RequestHandler = async ({ locals, params }) => {
 	const cursor = params.cursor;
-	let { edges } = await getThreadsList(cursor === 'index' ? undefined : cursor, locals);
+	const { edges } = await getThreadsList(cursor === 'index' ? undefined : cursor, locals);
 
 	if (edges == null) {
 		return new Response('', {
@@ -21,8 +21,8 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 	} else {
 		let files = '';
 		(edges as PostedMessagesConnectionEdge[]).forEach((item) => {
-			let url = `${item?.node?.postedIn?.node?.slug}/${item?.node?.postedIn?.messageSlug}`;
-			let lastMod = moment(item?.node?.updatedAt).format('YYYY-MM-DD');
+			const url = `${item?.node?.postedIn?.node?.slug}/${item?.node?.postedIn?.messageSlug}`;
+			const lastMod = moment(item?.node?.updatedAt).format('YYYY-MM-DD');
 			files = files.concat(generateLocation(url, lastMod));
 		});
 		return new Response(skeleton(files), {

@@ -33,7 +33,7 @@ export const actions: Actions = {
 			return fail(400, { email, name, message, missing: { message: true } });
 		}
 
-		let response = await fetch(config.contactFormSubmitUrl, {
+		const response = await fetch(config.contactFormSubmitUrl, {
 			method: 'POST',
 			body: JSON.stringify({ email, name, message }),
 		});

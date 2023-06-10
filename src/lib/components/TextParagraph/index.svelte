@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let element: string = 'p';
-	export let responsive: boolean = true;
-	export let textColor: string = 'text-t1';
+	export let element = 'p';
+	export let responsive = true;
+	export let textColor = 'text-t1';
 
-	let className: string = '';
+	let className = '';
 	export { className as class };
 
 	$: classNames = [

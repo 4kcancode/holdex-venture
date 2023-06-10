@@ -21,7 +21,7 @@ function createServerClient(fetch: any) {
 	});
 }
 
-let browserClient = createBrowserClient();
+const browserClient = createBrowserClient();
 function createBrowserClient() {
 	return new ApolloClient({
 		credentials: 'omit',

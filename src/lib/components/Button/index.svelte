@@ -14,10 +14,10 @@
 	export let fixedTo: string | undefined = undefined;
 	export let icon: any | undefined = undefined;
 
-	export let disabled: boolean = false;
-	export let isSubmitBtn: boolean = false;
+	export let disabled = false;
+	export let isSubmitBtn = false;
 
-	let className: string = '';
+	let className = '';
 	export { className as class };
 
 	let clickHandler = () => {

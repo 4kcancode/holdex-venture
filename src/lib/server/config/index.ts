@@ -16,7 +16,7 @@ type Config = {
 	utilsApiKey: string;
 };
 
-let config: Config = {
+const config: Config = {
 	sitemapAuthKey: SITEMAP_AUTHORIZATION_KEY,
 	contactFormSubmitUrl: CONTACT_FORM_SUBMIT_URL,
 	rollbarAccessToken: ROLLBAR_ACCESS_TOKEN,
@@ -24,7 +24,7 @@ let config: Config = {
 	utilsApiKey: HOLDEX_UTILS_API_KEY,
 };
 
-export let isDev = dev;
-export let isStage = VERCEL_ENV === 'preview';
+export const isDev = dev;
+export const isStage = VERCEL_ENV === 'preview';
 
 export default config;

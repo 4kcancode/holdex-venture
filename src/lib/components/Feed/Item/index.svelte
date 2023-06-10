@@ -9,7 +9,7 @@
 
 	export let message: ParsedMessage;
 
-	let className: string = '';
+	let className = '';
 	export { className as class };
 </script>
 

@@ -26,7 +26,7 @@ const cacheConfig: InMemoryCacheConfig = {
 };
 
 const mergePostedMessages = (existing: any, incoming: any, typenameName: string) => {
-	let edges = existing ? existing.edges.slice(0) : [];
+	const edges = existing ? existing.edges.slice(0) : [];
 	let totalCount = existing ? existing.totalCount : 0;
 	let pageInfo = existing ? existing.pageInfo : {};
 

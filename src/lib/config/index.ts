@@ -29,7 +29,7 @@ type Config = {
 	};
 };
 
-let baseConfig: Config = {
+const baseConfig: Config = {
 	env: PUB_VERCEL_ENV,
 	apiUrl: PUB_API_URL,
 	utilsApiUrl: PUB_HOLDEX_UTILS_API_URL,
@@ -45,14 +45,14 @@ let baseConfig: Config = {
 	},
 };
 
-let mockConfig: Config = {
+const mockConfig: Config = {
 	...baseConfig,
 	env: 'development',
 	apiUrl: 'https://stellate.holdex.io',
 };
 
-const previewMock: boolean = false;
-let config = previewMock ? mockConfig : baseConfig;
+const previewMock = false;
+const config = previewMock ? mockConfig : baseConfig;
 
 export const routes = {
 	index: '/',
@@ -67,6 +67,6 @@ export const routes = {
 		`/c/${category}/${message}`,
 };
 
-export let isDev = dev;
-export let isBrowser = browser;
+export const isDev = dev;
+export const isBrowser = browser;
 export default config;

@@ -2,8 +2,8 @@ import insane from 'insane';
 import type { Community } from '$lib/types/api';
 
 export function scrollToElement(id: string, offset = 0) {
-	let el = document.getElementById(id);
-	let top = findPos(el) - offset;
+	const el = document.getElementById(id);
+	const top = findPos(el) - offset;
 
 	window.scrollTo({
 		left: 0,
@@ -13,7 +13,7 @@ export function scrollToElement(id: string, offset = 0) {
 }
 
 function findPos(obj: any) {
-	var curtop = 0;
+	let curtop = 0;
 	if (obj.offsetParent) {
 		do {
 			curtop += obj.offsetTop;

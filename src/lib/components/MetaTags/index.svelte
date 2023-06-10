@@ -3,8 +3,8 @@
 
 	export let title: string;
 	export let description: string;
-	export let path: string = '';
-	export let imagePath: string = '';
+	export let path = '';
+	export let imagePath = '';
 	export let imageUrl: string | undefined = undefined;
 	export let pageType: string | undefined = undefined;
 	export let pageName: string | undefined = undefined;

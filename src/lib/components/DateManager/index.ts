@@ -18,7 +18,7 @@ function howFarFromNow(endsAt:Date) {
   return moment(endsAt).toNow()
 }
 
-function timeFormat(time: number | string, format: string = 'DD MMM YYYY') {
+function timeFormat(time: number | string, format = 'DD MMM YYYY') {
 	return moment(time).format(format);
 }
 
@@ -26,7 +26,7 @@ function extendedTimeFormat(time: number | string) {
 	return timeFormat(time, 'MMM DD, YYYY HH:mm A Z');
 }
 
-function customFormat(time: any, format: string = '--') {
+function customFormat(time: any, format = '--') {
 	switch (true) {
 		case Math.floor(time / 31536000) >= 1:
 			return `${Math.floor(time / 31536000)} years`;

@@ -53,7 +53,7 @@ export function subscribeQuery<TData>(
 export async function query<TData>(
 	client: ApolloClient<any>,
 	options: QueryOptions<any, TData>,
-	useQueryName: boolean = false
+	useQueryName = false
 ): Promise<BaseHandler<TData>> {
 	const response = await client.query<TData>(options);
 

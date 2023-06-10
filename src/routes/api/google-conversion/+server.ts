@@ -39,8 +39,8 @@ export const POST: RequestHandler = async ({ request }) => {
 function convertToHoldexJson(document: Schema$Document) {
 	const { body, headers, lists } = document;
 
-	let content: any[] = [];
-	let authorBlock = {
+	const content: any[] = [];
+	const authorBlock = {
 		type: 'author',
 		items: [] as Author[],
 	};
@@ -90,7 +90,7 @@ function convertToHoldexJson(document: Schema$Document) {
 					const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
 
 					if (prevListId === listId) {
-						let list = _last(content).data.items;
+						const list = _last(content).data.items;
 
 						if (nestingLevel !== undefined) {
 							const lastIndex = list.length - 1;
@@ -117,16 +117,16 @@ function convertToHoldexJson(document: Schema$Document) {
 
 				// Headings, Images, Texts
 				else if (tag) {
-					let tagContent: any[] = [];
+					const tagContent: any[] = [];
 
 					if (paragraph?.elements?.length === 2 && isLink(paragraph.elements)) {
-						let { textStyle, content } = paragraph.elements[0].textRun as Schema$TextRun;
+						const { textStyle, content } = paragraph.elements[0].textRun as Schema$TextRun;
 
 						if (textStyle?.link?.url) {
 							const link = textStyle?.link?.url as string;
 							switch (true) {
 								case twitterRegExp.test(link): {
-									let match =
+									const match =
 										/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
 											.exec(link)
 											?.slice(2);
@@ -141,7 +141,7 @@ function convertToHoldexJson(document: Schema$Document) {
 									break;
 								}
 								case videoRegExp.test(link): {
-									let match = link.match(videoRegExp) as RegExpMatchArray;
+									const match = link.match(videoRegExp) as RegExpMatchArray;
 									tagContent.push({
 										type: 'embed',
 										data: {
@@ -153,7 +153,7 @@ function convertToHoldexJson(document: Schema$Document) {
 									break;
 								}
 								case tallyRegExp.test(link): {
-									let match = link.match(tallyRegExp) as RegExpMatchArray;
+									const match = link.match(tallyRegExp) as RegExpMatchArray;
 									tagContent.push({
 										type: 'embed',
 										data: {
@@ -248,7 +248,7 @@ function convertToHoldexJson(document: Schema$Document) {
 								},
 							});
 						} else if (tag == 'p') {
-							let paragraphContent = tagContent
+							const paragraphContent = tagContent
 								.map((el) => el[tag])
 								.join(' ')
 								.replace(' .', '.')
@@ -317,7 +317,7 @@ function convertToHoldexJson(document: Schema$Document) {
 }
 
 function getHeaderRowAuthor(content: Schema$ParagraphElement) {
-	let author: Author = {} as Author;
+	const author: Author = {} as Author;
 	if (content && content.textRun?.textStyle?.link) {
 		const textRun = content.textRun as Schema$TextRun;
 		author.name = cleanText(textRun.content as string);
@@ -354,23 +354,23 @@ function getListTag(list: Schema$List, nestingLevel: number | null | undefined) 
 	return glyphType !== undefined ? 'ol' : 'ul';
 }
 
-let twitterRegExp = new RegExp(regExp.twitter, 'mi');
-let videoRegExp = new RegExp(regExp.video, 'mi');
-let tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^\/\?\&]*)?$/, 'mi');
+const twitterRegExp = new RegExp(regExp.twitter, 'mi');
+const videoRegExp = new RegExp(regExp.video, 'mi');
+const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^\/\?\&]*)?$/, 'mi');
 
 function isLink(elements: Schema$ParagraphElement[]) {
-	let [el1, el2] = elements;
+	const [el1, el2] = elements;
 
-	let s2 = cleanText(el2?.textRun?.content as string) === '';
-	let s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
+	const s2 = cleanText(el2?.textRun?.content as string) === '';
+	const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
 
 	return s1 && s2;
 }
 
 function getRichLink(el: Schema$ParagraphElement) {
-	let richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
+	const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
 
-	let match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
+	const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
 	return {
 		type: 'embed',
 		data: {
@@ -381,11 +381,11 @@ function getRichLink(el: Schema$ParagraphElement) {
 		},
 	};
 }
-let quoteExp = new RegExp(/^\> (.*$)/, 'im');
+const quoteExp = new RegExp(/^\> (.*$)/, 'im');
 function isQuote(el: Schema$ParagraphElement) {
-	let { textRun } = el;
+	const { textRun } = el;
 	if (textRun && textRun.content) {
-		let txt = cleanText(textRun.content);
+		const txt = cleanText(textRun.content);
 		return quoteExp.test(txt);
 	} else {
 		return false;
