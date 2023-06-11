@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { page } from '$app/stores';
 	import { routes } from '$lib/config';
 
@@ -7,9 +8,8 @@
 	import { regExp } from '$components/BodyParser/utils';
 	import { deserialize, applyAction } from '$app/forms';
 	import { scrollToElement } from '$lib/utils';
-	import Button from '$components/Button/index.svelte'
-	
-	
+	import Button from '$components/Button/index.svelte';
+
 	const pageTheme = 'dark';
 
 	$: path = $page.url.pathname;
@@ -19,7 +19,7 @@
 	let name = '';
 	let isError = false;
 	let success = false;
-	
+
 	const isActive = (currentUrl: string, path: string, deepEqual = false) => {
 		if (deepEqual) {
 			return currentUrl === path;
@@ -27,7 +27,6 @@
 		return currentUrl.startsWith(path);
 	};
 
-	
 	const isFilterActive = (currentUrl: URL, path: string, filter: string) => {
 		const f = currentUrl.searchParams.get('filter');
 		return currentUrl.pathname === path && filter === f;
@@ -41,18 +40,17 @@
 		success = true;
 		setInterval(() => {
 			success = false;
-		}, 5000)
-
-	} 
+		}, 5000);
+	};
 	async function onContactFormSumbit(event: any) {
 		const data = new FormData(this);
-		
+
 		const response = await fetch(this.action, {
 			method: 'POST',
 			body: data,
 			headers: {
-				'x-sveltekit-action': 'true'
-			}
+				'x-sveltekit-action': 'true',
+			},
 		});
 
 		const result = deserialize(await response.text());
@@ -61,7 +59,7 @@
 		email = '';
 		message = '';
 		applyAction(result);
-		displaySuccess()
+		displaySuccess();
 	}
 
 	let scrollY: any;
@@ -81,13 +79,13 @@
 		}
 	};
 
-	const validateEmail =(email: string) => {
+	const validateEmail = (email: string) => {
 		return regExp.email.test(email);
-	}
+	};
 
 	const displayError = (email: string) => {
-		return !validateEmail(email) && email.length > 0 ? isError = true : isError = false
-	}
+		return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
+	};
 </script>
 
 <template lang="pug" src="./layout.pug">

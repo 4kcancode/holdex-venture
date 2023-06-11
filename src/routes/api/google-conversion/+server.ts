@@ -1,6 +1,6 @@
 import { default as _last } from 'lodash-es/last';
 import { default as _get } from 'lodash-es/get';
-import { default as _repeat } from 'lodash-es/repeat';
+// import { default as _repeat } from 'lodash-es/repeat';
 import { json } from '@sveltejs/kit';
 import { getEmbedUrl, getEmbedSource, regExp } from '$components/BodyParser/utils';
 
@@ -36,7 +36,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	);
 };
 
-function convertToHoldexJson(document: Schema$Document) {
+const convertToHoldexJson = (document: Schema$Document) => {
 	const { body, headers, lists } = document;
 
 	const content: any[] = [];
@@ -47,7 +47,7 @@ function convertToHoldexJson(document: Schema$Document) {
 
 	if (headers) {
 		Object.values(headers).forEach(({ content }) => {
-			(content as Schema$StructuralElement[]).forEach(({ paragraph }, i) => {
+			(content as Schema$StructuralElement[]).forEach(({ paragraph }) => {
 				if (
 					paragraph &&
 					Array.isArray(paragraph.elements) &&
@@ -314,9 +314,9 @@ function convertToHoldexJson(document: Schema$Document) {
 		});
 	}
 	return content;
-}
+};
 
-function getHeaderRowAuthor(content: Schema$ParagraphElement) {
+const getHeaderRowAuthor = (content: Schema$ParagraphElement) => {
 	const author: Author = {} as Author;
 	if (content && content.textRun?.textStyle?.link) {
 		const textRun = content.textRun as Schema$TextRun;
@@ -324,9 +324,9 @@ function getHeaderRowAuthor(content: Schema$ParagraphElement) {
 		author.url = textRun.textStyle?.link?.url || '';
 	}
 	return author;
-}
+};
 
-function getParagraphTag(p: Schema$Paragraph) {
+const getParagraphTag = (p: Schema$Paragraph) => {
 	const tags: Record<string, string> = {
 		NORMAL_TEXT: 'p',
 		SUBTITLE: 'blockquote',
@@ -338,9 +338,9 @@ function getParagraphTag(p: Schema$Paragraph) {
 	};
 
 	return tags[p?.paragraphStyle?.namedStyleType as string];
-}
+};
 
-function getListTag(list: Schema$List, nestingLevel: number | null | undefined) {
+const getListTag = (list: Schema$List, nestingLevel: number | null | undefined) => {
 	const glyphType = _get(list, [
 		'listProperties',
 		'nestingLevels',
@@ -352,22 +352,22 @@ function getListTag(list: Schema$List, nestingLevel: number | null | undefined) 
 		return 'ul';
 	}
 	return glyphType !== undefined ? 'ol' : 'ul';
-}
+};
 
 const twitterRegExp = new RegExp(regExp.twitter, 'mi');
 const videoRegExp = new RegExp(regExp.video, 'mi');
-const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^\/\?\&]*)?$/, 'mi');
+const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
 
-function isLink(elements: Schema$ParagraphElement[]) {
+const isLink = (elements: Schema$ParagraphElement[]) => {
 	const [el1, el2] = elements;
 
 	const s2 = cleanText(el2?.textRun?.content as string) === '';
 	const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
 
 	return s1 && s2;
-}
+};
 
-function getRichLink(el: Schema$ParagraphElement) {
+const getRichLink = (el: Schema$ParagraphElement) => {
 	const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
 
 	const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
@@ -380,9 +380,9 @@ function getRichLink(el: Schema$ParagraphElement) {
 			caption: richLinkProperties.title || '',
 		},
 	};
-}
-const quoteExp = new RegExp(/^\> (.*$)/, 'im');
-function isQuote(el: Schema$ParagraphElement) {
+};
+const quoteExp = new RegExp(/^> (.*$)/, 'im');
+const isQuote = (el: Schema$ParagraphElement) => {
 	const { textRun } = el;
 	if (textRun && textRun.content) {
 		const txt = cleanText(textRun.content);
@@ -390,29 +390,25 @@ function isQuote(el: Schema$ParagraphElement) {
 	} else {
 		return false;
 	}
-}
+};
 
-function cleanText(text: string) {
-	return text.replace(/\n/g, '').trim();
-}
+const cleanText = (text: string) => text.replace(/\n/g, '').trim();
 
-function getTableCellContent(content: Schema$StructuralElement[]) {
+const getTableCellContent = (content: Schema$StructuralElement[]) => {
 	if (!content || content.length === 0) return '';
 	return content
 		.map(({ paragraph }) => cleanText(getTextFromParagraph(paragraph as Schema$Paragraph)))
 		.join('');
-}
+};
 
-function getTextFromParagraph(p: Schema$Paragraph) {
-	return p.elements
+const getTextFromParagraph = (p: Schema$Paragraph) => p.elements
 		? p.elements
 				.filter((el) => el.textRun && el.textRun.content !== '\n')
 				.map((el) => (el.textRun ? getText(el) : ''))
 				.join('')
 		: '';
-}
 
-function getBulletContent(document: Schema$Document, element: Schema$ParagraphElement) {
+const getBulletContent = (document: Schema$Document, element: Schema$ParagraphElement) => {
 	if (element.inlineObjectElement) {
 		const image = getImage(document, element);
 		if (image) {
@@ -421,9 +417,9 @@ function getBulletContent(document: Schema$Document, element: Schema$ParagraphEl
 	}
 
 	return getText(element);
-}
+};
 
-function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
+const getImage = (document: Schema$Document, element: Schema$ParagraphElement) => {
 	const { inlineObjects } = document;
 
 	if (!inlineObjects || !element.inlineObjectElement) {
@@ -442,9 +438,9 @@ function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
 	}
 
 	return null;
-}
+};
 
-function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
+const getText = (element: Schema$ParagraphElement, { isHeader = false } = {}) => {
 	let text = cleanText(element.textRun?.content as string);
 	const { link, underline, strikethrough, bold, italic } = element?.textRun
 		?.textStyle as Schema$TextStyle;
@@ -472,4 +468,4 @@ function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
 	}
 
 	return text;
-}
+};

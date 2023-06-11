@@ -1,8 +1,8 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { Switch, Case } from '$components/Switch';
 	import { parseTableCell } from '$components/BodyParser/blocks';
 
-	
 	import InlineBlock from './inline.svelte';
 	import TextWrapper from './Blocks/textWrapper.svelte';
 	import NestedList from './Blocks/nestedList.svelte';
@@ -11,7 +11,6 @@
 	import TallyButton from './Blocks/tallyButton.svelte';
 	import Chart from './Blocks/chart.svelte';
 	import TwitterEmbed from './Blocks/twitterEmbed.svelte';
-
 
 	export let blocks: any[];
 

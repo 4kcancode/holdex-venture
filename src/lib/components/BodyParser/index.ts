@@ -89,7 +89,9 @@ class Parser {
 		if (message && message.body) {
 			try {
 				body = JSON.parse(message.body);
-			} catch (error) {}
+			} catch (error) {
+				/* empty */
+			}
 		}
 		return body;
 	}
@@ -143,7 +145,9 @@ class Parser {
 				authors = docAuthors.items;
 			}
 			return [blocks, subtitle, authors, isGoogleDoc];
-		} catch (error) {}
+		} catch (error) {
+			/* empty */
+		}
 		return [blocks, '', [] as Author[], ''];
 	}
 

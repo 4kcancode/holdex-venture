@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Parser from '$components/BodyParser';
@@ -10,7 +11,7 @@
 		XMark,
 		InformationCircle,
 		BookOpen,
-		UserGroup
+		UserGroup,
 	} from '$components/Icons';
 	import MetaTags from '$components/MetaTags/index.svelte';
 	import Hashtag from '$components/Hashtag/index.svelte';
@@ -25,7 +26,12 @@
 	import { parseQueryFilter } from '../util';
 	import { parseCommunityCoverImage, sanitizeHtml } from '$lib/utils';
 
-	import type { Community, Hashtag as HashtagType, HashtagsConnectionEdge, Message } from '$lib/types/api';
+	import type {
+		Community,
+		Hashtag as HashtagType,
+		HashtagsConnectionEdge,
+		Message,
+	} from '$lib/types/api';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -37,7 +43,7 @@
 	$: ({ edges, totalCount, pageInfo } = community?.postedMessages || {
 		edges: [],
 		totalCount: 0,
-		pageInfo: null
+		pageInfo: null,
 	});
 	$: pageFilter = getPageFilter($page.url);
 	$: pageQ = getPageQ($page.url);
@@ -101,10 +107,10 @@
 					...queryOptions.feedInput,
 					pageInfo: {
 						...queryOptions.feedInput.pageInfo,
-						afterCursor
-					}
-				}
-			}
+						afterCursor,
+					},
+				},
+			},
 		});
 		isRefetching = false;
 	};

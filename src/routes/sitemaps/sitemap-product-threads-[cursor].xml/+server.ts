@@ -39,7 +39,7 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 	}
 };
 
-async function getThreadsList(nextCursor: string | undefined, locals: App.Locals) {
+const getThreadsList = async (nextCursor: string | undefined, locals: App.Locals) => {
 	const response = await loadFeedForSitemapLink(
 		locals.apolloClient,
 		{
@@ -60,8 +60,6 @@ async function getThreadsList(nextCursor: string | undefined, locals: App.Locals
 	} else {
 		return { edges: response.data.edges };
 	}
-}
+};
 
-function generateLocation(url: string, updatedAt: string) {
-	return `<url><loc>https://holdex.io/c/${url}</loc><lastmod>${updatedAt}</lastmod></url>`;
-}
+const generateLocation = (url: string, updatedAt: string) => `<url><loc>https://holdex.io/c/${url}</loc><lastmod>${updatedAt}</lastmod></url>`;

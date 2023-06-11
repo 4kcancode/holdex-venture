@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import MetaTags from '$components/MetaTags/index.svelte';
 	import Parser, { type Message } from '$components/BodyParser';
 	import BodyRenderer from '$components/BodyRenderer/index.svelte';

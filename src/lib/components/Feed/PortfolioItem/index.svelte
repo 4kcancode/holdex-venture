@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import Icon from '$components/Icons/index.svelte';
 
 	import Hashtag from '$components/Hashtag/index.svelte';

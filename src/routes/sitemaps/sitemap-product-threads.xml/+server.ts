@@ -35,7 +35,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	}
 };
 
-async function getThreadsList(locals: App.Locals) {
+const getThreadsList = async (locals: App.Locals) => {
 	let list = null;
 	const { pageInfo } = await getBatchCursor(undefined, locals);
 
@@ -50,9 +50,9 @@ async function getThreadsList(locals: App.Locals) {
 		}
 	}
 	return list;
-}
+};
 
-async function getBatchCursor(nextCursor: string | undefined, locals: App.Locals) {
+const getBatchCursor = async (nextCursor: string | undefined, locals: App.Locals) => {
 	const response = await loadFeedForSitemapCursor(
 		locals.apolloClient,
 		{
@@ -73,9 +73,9 @@ async function getBatchCursor(nextCursor: string | undefined, locals: App.Locals
 	} else {
 		return { pageInfo: response.data.pageInfo };
 	}
-}
+};
 
-async function getList(cursor: string, hasNextPage: boolean, locals: App.Locals) {
+const getList = async (cursor: string, hasNextPage: boolean, locals: App.Locals) => {
 	let list: any = null;
 	if (hasNextPage) {
 		const { pageInfo } = await getBatchCursor(cursor, locals);
@@ -89,8 +89,6 @@ async function getList(cursor: string, hasNextPage: boolean, locals: App.Locals)
 		}
 	}
 	return list;
-}
+};
 
-function generateSitemapFile(startCursor: string) {
-	return `<sitemap><loc>http://holdex.io/sitemaps/sitemap-product-threads-${startCursor}.xml</loc></sitemap>`;
-}
+const generateSitemapFile = (startCursor: string) => `<sitemap><loc>http://holdex.io/sitemaps/sitemap-product-threads-${startCursor}.xml</loc></sitemap>`;

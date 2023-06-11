@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import Button from '$components/Button/index.svelte';
 
 	type Item = {

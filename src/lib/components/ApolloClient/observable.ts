@@ -26,14 +26,11 @@ export type Result<TData = unknown> = Loading | Error | Data<TData>;
 
 export type WritableResult<TData = unknown> = Writable<Result<TData>>;
 
-export function observableToWritable<TData = unknown>(
-	observable: Observable<FetchResult<TData>>,
-	initialValue: Result<TData> = {
+export const observableToWritable = <TData = unknown>(observable: Observable<FetchResult<TData>>, initialValue: Result<TData> = {
 		loading: true,
 		data: undefined,
 		error: undefined,
-	}
-): WritableResult<TData> {
+	}): WritableResult<TData> => {
 	const store = writable<Result<TData>>(initialValue, (set) => {
 		const skipDuplicate = initialValue?.data !== undefined;
 		let skipped = false;
@@ -59,7 +56,7 @@ export function observableToWritable<TData = unknown>(
 	});
 
 	return store;
-}
+};
 
 // For live queries, ObservableQuery is used, adding methods like refetch
 // extend readable with these methods
@@ -102,10 +99,7 @@ export const extensions: Array<keyof ObservableQueryExtensions> = [
 
 export type WritableQuery<TData> = WritableResult<TData> & ObservableQueryExtensions<TData>;
 
-export function observableQueryToWritable<TData = unknown, TVariables = unknown>(
-	query: ObservableQuery<TData, TVariables>,
-	initialValue?: Result<TData>
-): WritableQuery<TData> {
+export const observableQueryToWritable = <TData = unknown, TVariables = unknown>(query: ObservableQuery<TData, TVariables>, initialValue?: Result<TData>): WritableQuery<TData> => {
 	const store = observableToWritable(query, initialValue) as WritableQuery<TData>;
 
 	for (const extension of extensions) {
@@ -113,4 +107,4 @@ export function observableQueryToWritable<TData = unknown, TVariables = unknown>
 	}
 
 	return store;
-}
+};

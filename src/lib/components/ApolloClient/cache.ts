@@ -6,9 +6,7 @@ const cacheConfig: InMemoryCacheConfig = {
 			fields: {
 				postedMessages: {
 					keyArgs: [],
-					merge(existing, incoming) {
-						return mergePostedMessages(existing, incoming, 'CommunityPostedMessagesConnection');
-					},
+					merge: (existing, incoming) => mergePostedMessages(existing, incoming, 'CommunityPostedMessagesConnection'),
 				},
 			},
 		},
@@ -16,9 +14,7 @@ const cacheConfig: InMemoryCacheConfig = {
 			fields: {
 				postedMessages: {
 					keyArgs: [],
-					merge(existing, incoming) {
-						return mergePostedMessages(existing, incoming, 'PostedMessagesConnection');
-					},
+					merge: (existing, incoming) => mergePostedMessages(existing, incoming, 'PostedMessagesConnection'),
 				},
 			},
 		},

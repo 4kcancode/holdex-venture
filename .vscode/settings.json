@@ -4,6 +4,10 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true
 	},
-	"eslint.validate": ["javascript", "typescript"],
-	"eslint.enable": true
+	"eslint.validate": ["javascript", "typescript", "svelte"],
+	"eslint.enable": true,
+	"svelte.plugin.svelte.compilerWarnings": {
+		"unused-export-let": "ignore"
+	},
+	"scss.lint.unknownAtRules": "ignore"
 }

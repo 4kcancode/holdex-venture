@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import TextParagraph from '$components/TextParagraph/index.svelte';
 	import type { ParsedMessage } from '$components/BodyParser';
 

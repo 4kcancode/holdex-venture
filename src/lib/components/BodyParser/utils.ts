@@ -1,4 +1,4 @@
-export function getOptimizedUrl(source: string, size = '_150x150') {
+export const getOptimizedUrl = (source: string, size = '_150x150') => {
 	const holdexRegExp = new RegExp(/^(http:\/\/|https:\/\/)(storage\.googleapis\.com)/, 'gmi');
 	if (holdexRegExp.test(source)) {
 		// exclude gifs
@@ -12,22 +12,22 @@ export function getOptimizedUrl(source: string, size = '_150x150') {
 		}
 	}
 	return source;
-}
+};
 
 export const regExp = {
 	default: /^[a-zA-Z0-9 ,.'-]{2,50}$/,
 	slug: /^[a-zA-Z0-9_-]{2,50}$/,
-	tallyLink: /^https?:\/\/tally.so\/r\/([\w\/-]+)$/,
-	coingeckoLink: /^https?:\/\/www.coingecko.com\/en\/coins\/([\w\/-]+)$/,
+	tallyLink: /^https?:\/\/tally.so\/r\/([\w/-]+)$/,
+	coingeckoLink: /^https?:\/\/www.coingecko.com\/en\/coins\/([\w/-]+)$/,
 	customLink:
-		/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)#embed=true$/,
-	link: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
-	email: /^[a-z0-9._%+\-]{1,60}@[a-z0-9.\-]{1,30}\.[a-z]{2,10}$/,
+		/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)#embed=true$/,
+	link: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/,
+	email: /^[a-z0-9._%+-]{1,60}@[a-z0-9.-]{1,30}\.[a-z]{2,10}$/,
 	video:
-		/(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com|youtu\.be|www\.youtube\.com|youtube\.com)(?!(\/c+))([\w\/-]+)([^\s]+)/,
+		/(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com|youtu\.be|www\.youtube\.com|youtube\.com)(?!(\/c+))([\w/-]+)([^\s]+)/,
 	website: /^(https:\/\/)(www\.)?([a-zA-Z0-9]+(-?[a-zA-Z0-9])*\.)+[\w]{2,}(\/\S*)?$/,
 	twitter: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
-	symbols: /^[a-zA-Z0-9 ,.";():&%£’€$#@_=\/\-'!*?\\/s]{2,}$/,
+	symbols: /^[a-zA-Z0-9 ,.";():&%£’€$#@_=/\-'!*?\\/s]{2,}$/,
 	image: /.*\.(gif|jpe?g|bmp|png)$/,
 	holdexLink: /^(http:\/\/|https:\/\/)(holdex\.io)/,
 };
@@ -58,11 +58,11 @@ export const getEmbedSource = (href: string) => {
 		'gmi'
 	);
 	const isYoutube = new RegExp(
-		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w\/-]+)([^\s]+)/,
+		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w/-]+)([^\s]+)/,
 		'gmi'
 	);
 	const isVimeo = new RegExp(
-		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w\/-]+)([^\s]+)/,
+		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w/-]+)([^\s]+)/,
 		'gmi'
 	);
 
@@ -86,11 +86,11 @@ const getEmbedId = (href: string) => {
 		'gmi'
 	);
 	const isYoutube = new RegExp(
-		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w\/-]+)([^\s]+)/,
+		/^(http:\/\/|https:\/\/)(youtu\.be|www\.youtube\.com|youtube\.com)([\w/-]+)([^\s]+)/,
 		'gmi'
 	);
 	const isVimeo = new RegExp(
-		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w\/-]+)([^\s]+)/,
+		/^(http:\/\/|https:\/\/)(player\.vimeo\.com|vimeo\.com)([\w/-]+)([^\s]+)/,
 		'gmi'
 	);
 	const source = getEmbedSource(href);
@@ -125,10 +125,9 @@ const createVimeoEmbedUrl = (embedId: string | null) => {
 	return `https://player.vimeo.com/video/${embedId}`;
 };
 
-export function uuidv4() {
-	return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+export const uuidv4 = () =>
+	'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
 		const r = (Math.random() * 16) | 0,
 			v = c == 'x' ? r : (r & 0x3) | 0x8;
 		return v.toString(16);
 	});
-}

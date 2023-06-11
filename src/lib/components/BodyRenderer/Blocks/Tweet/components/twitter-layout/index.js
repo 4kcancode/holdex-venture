@@ -8,7 +8,7 @@ import { Table, Th, Td } from './table';
 import Img from './img.svelte';
 import { Mention, Hashtag, Cashtag, Emoji, Poll } from './Twitter';
 import Tweet from './Tweet/index.svelte';
-import LinkPreview from "./LinkPreview/index.svelte";
+import LinkPreview from './LinkPreview/index.svelte';
 import TweetSkeleton from './Tweet/TweetSkeleton.svelte';
 
 export default {

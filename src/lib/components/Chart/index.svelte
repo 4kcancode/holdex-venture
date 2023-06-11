@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { isBrowser } from '$lib/config';
 	import { generateOptions } from './options';
 	import { formatNumber } from '$components/NumbersManager';

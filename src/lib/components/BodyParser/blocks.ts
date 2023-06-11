@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import HTMLParser from 'editorjs-html';
 import { bindTokens } from './tokens';
@@ -112,14 +113,20 @@ const videoRegExp = new RegExp(regExp.video, 'gmi');
 const imageRegExp = new RegExp(regExp.image, 'gmi');
 const tallyLinkExp = new RegExp(regExp.tallyLink, 'mi');
 const coingeckoLinkExp = new RegExp(regExp.coingeckoLink, 'mi');
-export const linkExp = new RegExp(/^<a\s+(?:[^>]*?\s+)?href=(["'\\])(.*?)\1[^>]*>(.*?)<\/a>$/, 'ui');
+export const linkExp = new RegExp(
+	/^<a\s+(?:[^>]*?\s+)?href=(["'\\])(.*?)\1[^>]*>(.*?)<\/a>$/,
+	'ui'
+);
 const inlineLinkExp = new RegExp(regExp.link, 'ui');
 const inlineCodeExp = new RegExp(
 	/^<(?:code|span) class=[\\]?"inline-code[\\]?"[^>]*>(.*)<\/(?:code|span)>$/,
 	'ui'
 );
 const hashtagExp = new RegExp(/^<span class=[\\]?"cdx-hashtag[\\]?"[^>]*>(.*?)<\/span>$/, 'ui');
-const tickerExp = new RegExp(/^<span class=[\\]?"cdx-price-ticker[\\]?"[^>]*>\$(.*?)<\/span>$/, 'ui');
+const tickerExp = new RegExp(
+	/^<span class=[\\]?"cdx-price-ticker[\\]?"[^>]*>\$(.*?)<\/span>$/,
+	'ui'
+);
 const mentionExp = new RegExp(/^<span class=[\\]?"cdx-mention[\\]?"[^>]*>(.*?)<\/span>$/, 'ui');
 const boldExp = new RegExp(/^<b[^>]*>(.*?)<\/b>$/, 'ui');
 const strongExp = new RegExp(/^<strong[^>]*>(.*?)<\/strong>$/, 'ui');
@@ -347,7 +354,7 @@ const parseNestedList = (block: NestedListBlock) => {
 	};
 };
 
-function parseNestedListItem(items: ListItem[]) {
+const parseNestedListItem = (items: ListItem[]) => {
 	const list: any[] = [];
 	for (const item of items) {
 		if (item.items.length > 0) {
@@ -364,7 +371,7 @@ function parseNestedListItem(items: ListItem[]) {
 		}
 	}
 	return list;
-}
+};
 
 const parseListItem = (item: string) => {
 	const inlineBlocks = parseInlineEls(item);
@@ -468,8 +475,6 @@ const htmlParser = HTMLParser({
 	author: parseAuthor,
 });
 
-function parseBlocks(blocks: any[]) {
-	return htmlParser.parse({ blocks });
-}
+const parseBlocks = (blocks: any[]) => htmlParser.parse({ blocks });
 
 export default parseBlocks;

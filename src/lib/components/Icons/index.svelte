@@ -5,7 +5,7 @@
 	} & {
 		[tag in AllowedTags]?: Array<{ [attribute: string]: string }>;
 	};
-	type IconSource = { solid: IconThemeSource } | { default: IconThemeSource };
+	type IconSource = { solid: IconThemeSource } & { default: IconThemeSource };
 </script>
 
 <script lang="ts">
@@ -16,7 +16,6 @@
 	export let colorInherit = false;
 	export let onClick: () => void = () => {};
 
-	// @ts-ignore
 	let iconProps = icon[isOutlined ? 'default' : 'solid'];
 
 	export let forwardRef: SVGSVGElement | null = null;

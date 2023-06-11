@@ -1,5 +1,5 @@
 <script>
-    import Handler from "./handler.svelte";
+    import Handler from './handler.svelte';
 
     export let node;
     export let components;

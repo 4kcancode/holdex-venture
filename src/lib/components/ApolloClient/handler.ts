@@ -1,19 +1,19 @@
 import type { ApolloQueryResult } from '@apollo/client';
 import type { GraphQLError } from 'graphql';
 
-export type BaseHandler<T extends any> = {
+export type BaseHandler<T = any> = {
 	data?: T | null;
 	error?: GraphQLError | null;
 };
 
-type Handler<T extends any> = (handler: BaseHandler<T>) => BaseHandler<T> | any;
+type Handler<T = any> = (handler: BaseHandler<T>) => BaseHandler<T> | any;
 
-function responseHandler<QueryResponse>(
+const responseHandler = <QueryResponse>(
 	response: ApolloQueryResult<any>,
 	queryName?: string,
 	onSuccess?: Handler<QueryResponse>,
 	onError?: Handler<QueryResponse>
-): BaseHandler<QueryResponse> {
+): BaseHandler<QueryResponse> => {
 	if (Array.isArray(response.errors)) {
 		if (onError) {
 			return onError({ error: response.errors[0] });
@@ -25,6 +25,6 @@ function responseHandler<QueryResponse>(
 		}
 		return { error: null, data: queryName ? response.data[queryName] : response.data };
 	}
-}
+};
 
 export default responseHandler;

@@ -618,11 +618,15 @@ export interface Schema$DocumentStyleSuggestionState {
 /**
  * The properties of an embedded drawing.
  */
-export interface Schema$EmbeddedDrawingProperties {}
+export interface Schema$EmbeddedDrawingProperties {
+	[key: string]: any;
+}
 /**
  * A mask that indicates which of the fields on the base EmbeddedDrawingProperties have been changed in this suggestion. For any field set to true, there is a new suggested value.
  */
-export interface Schema$EmbeddedDrawingPropertiesSuggestionState {}
+export interface Schema$EmbeddedDrawingPropertiesSuggestionState {
+	[key: string]: any;
+}
 /**
  * An embedded object in the document.
  */

@@ -33,12 +33,11 @@ const updateEnvs = async () => {
 	}
 };
 
-function escapeValue(value) {
-	return value
+const escapeValue = (value) =>
+	value
 		? value
-				.replace(new RegExp('\n', 'g'), '\\n') // combine newlines (unix) into one line
-				.replace(new RegExp('\r', 'g'), '\\r') // combine newlines (windows) into one line
+				.replace(new RegExp('\\n', 'g'), '\\n') // combine newlines (unix) into one line
+				.replace(new RegExp('\\r', 'g'), '\\r') // combine newlines (windows) into one line
 		: '';
-}
 
 updateEnvs();

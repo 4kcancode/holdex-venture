@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import Icon from '$components/Icons/index.svelte';
 
 	type Variant = 'primary' | 'secondary' | 'solo';
@@ -31,9 +32,7 @@
 	export let forwardRef: HTMLButtonElement | undefined = undefined;
 	export let forwardAction: any = () => {};
 
-	export function getRef() {
-		return forwardRef;
-	}
+	export const getRef = () => forwardRef;
 
 	$: variantClass = `btn--${variant}`;
 	$: sizeClass = `btn--${size}`;
