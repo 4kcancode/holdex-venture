@@ -18,22 +18,161 @@ import type {
 import type { RequestHandler } from './$types';
 import type { Author } from '$components/BodyParser/blocks';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const { data, updatedAt } = await request.json();
-	const jsonData = convertToHoldexJson(data);
-	return json(
-		{
-			blocks: jsonData,
-			time: updatedAt,
-			version: '2.20.0',
-		},
-		{
-			status: 200,
-			headers: {
-				'Content-Type': 'application/json',
-			},
+const twitterRegExp = new RegExp(regExp.twitter, 'mi');
+const videoRegExp = new RegExp(regExp.video, 'mi');
+const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
+
+const cleanText = (text: string) => text.replace(/\n/g, '').trim();
+
+const getImage = (document: Schema$Document, element: Schema$ParagraphElement) => {
+	const { inlineObjects } = document;
+
+	if (!inlineObjects || !element.inlineObjectElement) {
+		return null;
+	}
+
+	const inlineObject = inlineObjects[element.inlineObjectElement?.inlineObjectId as string];
+	const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
+
+	if (embeddedObject && embeddedObject.imageProperties) {
+		return {
+			source: embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri,
+			title: embeddedObject.title || '',
+			alt: embeddedObject.description || '',
+		};
+	}
+
+	return null;
+};
+
+const getText = (element: Schema$ParagraphElement, { isHeader = false } = {}) => {
+	let text = cleanText(element.textRun?.content as string);
+	const { link, underline, strikethrough, bold, italic } = element?.textRun
+		?.textStyle as Schema$TextStyle;
+
+	if (underline && !link) {
+		// Underline isn't supported in markdown so we'll use emphasis
+		text = `<u>${text}</u>`;
+	}
+
+	if (italic) {
+		text = `<i>${text}</i>`;
+	}
+
+	// Set bold unless it's a header
+	if (bold && !isHeader) {
+		text = `<b>${text}</b>`;
+	}
+
+	if (strikethrough) {
+		text = `<s>${text}</s>`;
+	}
+
+	if (link) {
+		return `<a href="${link.url}">${text}</a>`;
+	}
+
+	return text;
+};
+
+const isLink = (elements: Schema$ParagraphElement[]) => {
+	const [el1, el2] = elements;
+
+	const s2 = cleanText(el2?.textRun?.content as string) === '';
+	const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
+
+	return s1 && s2;
+};
+
+const getBulletContent = (document: Schema$Document, element: Schema$ParagraphElement) => {
+	if (element.inlineObjectElement) {
+		const image = getImage(document, element);
+		if (image) {
+			return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
 		}
-	);
+	}
+
+	return getText(element);
+};
+
+const getListTag = (list: Schema$List, nestingLevel: number | null | undefined) => {
+	const glyphType = _get(list, [
+		'listProperties',
+		'nestingLevels',
+		nestingLevel ? nestingLevel : 0,
+		'glyphType',
+	]);
+
+	if (glyphType === 'GLYPH_TYPE_UNSPECIFIED') {
+		return 'ul';
+	}
+	return glyphType !== undefined ? 'ol' : 'ul';
+};
+
+const getParagraphTag = (p: Schema$Paragraph) => {
+	const tags: Record<string, string> = {
+		NORMAL_TEXT: 'p',
+		SUBTITLE: 'blockquote',
+		HEADING_1: 'h1',
+		HEADING_2: 'h2',
+		HEADING_3: 'h3',
+		HEADING_4: 'h4',
+		HEADING_5: 'h5',
+	};
+
+	return tags[p?.paragraphStyle?.namedStyleType as string];
+};
+
+const getHeaderRowAuthor = (content: Schema$ParagraphElement) => {
+	const author: Author = {} as Author;
+	if (content && content.textRun?.textStyle?.link) {
+		const textRun = content.textRun as Schema$TextRun;
+		author.name = cleanText(textRun.content as string);
+		author.url = textRun.textStyle?.link?.url || '';
+	}
+	return author;
+};
+
+const getRichLink = (el: Schema$ParagraphElement) => {
+	const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
+
+	const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
+	return {
+		type: 'embed',
+		data: {
+			service: getEmbedSource(match[0]),
+			source: match[0],
+			embed: getEmbedUrl(match[0]),
+			caption: richLinkProperties.title || '',
+		},
+	};
+};
+
+const quoteExp = new RegExp(/^> (.*$)/, 'im');
+
+const isQuote = (el: Schema$ParagraphElement) => {
+	const { textRun } = el;
+	if (textRun && textRun.content) {
+		const txt = cleanText(textRun.content);
+		return quoteExp.test(txt);
+	} else {
+		return false;
+	}
+};
+
+const getTextFromParagraph = (p: Schema$Paragraph) =>
+	p.elements
+		? p.elements
+				.filter((el) => el.textRun && el.textRun.content !== '\n')
+				.map((el) => (el.textRun ? getText(el) : ''))
+				.join('')
+		: '';
+
+const getTableCellContent = (content: Schema$StructuralElement[]) => {
+	if (!content || content.length === 0) return '';
+	return content
+		.map(({ paragraph }) => cleanText(getTextFromParagraph(paragraph as Schema$Paragraph)))
+		.join('');
 };
 
 const convertToHoldexJson = (document: Schema$Document) => {
@@ -316,156 +455,20 @@ const convertToHoldexJson = (document: Schema$Document) => {
 	return content;
 };
 
-const getHeaderRowAuthor = (content: Schema$ParagraphElement) => {
-	const author: Author = {} as Author;
-	if (content && content.textRun?.textStyle?.link) {
-		const textRun = content.textRun as Schema$TextRun;
-		author.name = cleanText(textRun.content as string);
-		author.url = textRun.textStyle?.link?.url || '';
-	}
-	return author;
-};
-
-const getParagraphTag = (p: Schema$Paragraph) => {
-	const tags: Record<string, string> = {
-		NORMAL_TEXT: 'p',
-		SUBTITLE: 'blockquote',
-		HEADING_1: 'h1',
-		HEADING_2: 'h2',
-		HEADING_3: 'h3',
-		HEADING_4: 'h4',
-		HEADING_5: 'h5',
-	};
-
-	return tags[p?.paragraphStyle?.namedStyleType as string];
-};
-
-const getListTag = (list: Schema$List, nestingLevel: number | null | undefined) => {
-	const glyphType = _get(list, [
-		'listProperties',
-		'nestingLevels',
-		nestingLevel ? nestingLevel : 0,
-		'glyphType',
-	]);
-
-	if (glyphType === 'GLYPH_TYPE_UNSPECIFIED') {
-		return 'ul';
-	}
-	return glyphType !== undefined ? 'ol' : 'ul';
-};
-
-const twitterRegExp = new RegExp(regExp.twitter, 'mi');
-const videoRegExp = new RegExp(regExp.video, 'mi');
-const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
-
-const isLink = (elements: Schema$ParagraphElement[]) => {
-	const [el1, el2] = elements;
-
-	const s2 = cleanText(el2?.textRun?.content as string) === '';
-	const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
-
-	return s1 && s2;
-};
-
-const getRichLink = (el: Schema$ParagraphElement) => {
-	const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
-
-	const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
-	return {
-		type: 'embed',
-		data: {
-			service: getEmbedSource(match[0]),
-			source: match[0],
-			embed: getEmbedUrl(match[0]),
-			caption: richLinkProperties.title || '',
+export const POST: RequestHandler = async ({ request }) => {
+	const { data, updatedAt } = await request.json();
+	const jsonData = convertToHoldexJson(data);
+	return json(
+		{
+			blocks: jsonData,
+			time: updatedAt,
+			version: '2.20.0',
 		},
-	};
-};
-const quoteExp = new RegExp(/^> (.*$)/, 'im');
-const isQuote = (el: Schema$ParagraphElement) => {
-	const { textRun } = el;
-	if (textRun && textRun.content) {
-		const txt = cleanText(textRun.content);
-		return quoteExp.test(txt);
-	} else {
-		return false;
-	}
-};
-
-const cleanText = (text: string) => text.replace(/\n/g, '').trim();
-
-const getTableCellContent = (content: Schema$StructuralElement[]) => {
-	if (!content || content.length === 0) return '';
-	return content
-		.map(({ paragraph }) => cleanText(getTextFromParagraph(paragraph as Schema$Paragraph)))
-		.join('');
-};
-
-const getTextFromParagraph = (p: Schema$Paragraph) => p.elements
-		? p.elements
-				.filter((el) => el.textRun && el.textRun.content !== '\n')
-				.map((el) => (el.textRun ? getText(el) : ''))
-				.join('')
-		: '';
-
-const getBulletContent = (document: Schema$Document, element: Schema$ParagraphElement) => {
-	if (element.inlineObjectElement) {
-		const image = getImage(document, element);
-		if (image) {
-			return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
+		{
+			status: 200,
+			headers: {
+				'Content-Type': 'application/json',
+			},
 		}
-	}
-
-	return getText(element);
-};
-
-const getImage = (document: Schema$Document, element: Schema$ParagraphElement) => {
-	const { inlineObjects } = document;
-
-	if (!inlineObjects || !element.inlineObjectElement) {
-		return null;
-	}
-
-	const inlineObject = inlineObjects[element.inlineObjectElement?.inlineObjectId as string];
-	const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
-
-	if (embeddedObject && embeddedObject.imageProperties) {
-		return {
-			source: embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri,
-			title: embeddedObject.title || '',
-			alt: embeddedObject.description || '',
-		};
-	}
-
-	return null;
-};
-
-const getText = (element: Schema$ParagraphElement, { isHeader = false } = {}) => {
-	let text = cleanText(element.textRun?.content as string);
-	const { link, underline, strikethrough, bold, italic } = element?.textRun
-		?.textStyle as Schema$TextStyle;
-
-	if (underline && !link) {
-		// Underline isn't supported in markdown so we'll use emphasis
-		text = `<u>${text}</u>`;
-	}
-
-	if (italic) {
-		text = `<i>${text}</i>`;
-	}
-
-	// Set bold unless it's a header
-	if (bold && !isHeader) {
-		text = `<b>${text}</b>`;
-	}
-
-	if (strikethrough) {
-		text = `<s>${text}</s>`;
-	}
-
-	if (link) {
-		return `<a href="${link.url}">${text}</a>`;
-	}
-
-	return text;
+	);
 };

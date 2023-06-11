@@ -20,11 +20,6 @@
 
 	export let data: PageData;
 
-	$: ({ store } = data);
-	$: ({ data: storeData } = $store);
-	$: community = storeData?.community as Community;
-	$: message = Parser.parseFromCategory(community);
-
 	let renderTocPadding = (level: 'h2' | 'h3' | 'h4') => {
 		switch (level) {
 			case 'h3':
@@ -47,11 +42,6 @@
 	};
 
 	let scrollTarget: { url: URL; item: string } | null = null;
-	let handleOutroEnd = () => {
-		if (scrollTarget !== null) {
-			gotoTag(scrollTarget.url, scrollTarget.item);
-		}
-	};
 
 	let gotoTag = (url: URL, item: string) => {
 		// const currentUrl = url;
@@ -61,9 +51,20 @@
 		// return goto(currentUrl);
 	};
 
+	let handleOutroEnd = () => {
+		if (scrollTarget !== null) {
+			gotoTag(scrollTarget.url, scrollTarget.item);
+		}
+	};
+
 	let handleClick = (url: URL, item: string) => {
 		scrollTarget = { url, item };
 	};
+
+	$: ({ store } = data);
+	$: ({ data: storeData } = $store);
+	$: community = storeData?.community as Community;
+	$: message = Parser.parseFromCategory(community);
 </script>
 
 <MetaTags

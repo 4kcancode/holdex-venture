@@ -1,17 +1,6 @@
 import insane from 'insane';
 import type { Community } from '$lib/types/api';
 
-export const scrollToElement = (id: string, offset = 0) => {
-	const el = document.getElementById(id);
-	const top = findPos(el) - offset;
-
-	window.scrollTo({
-		left: 0,
-		top: top,
-		behavior: 'smooth',
-	});
-};
-
 const findPos = (obj: any) => {
 	let curtop = 0;
 	if (obj.offsetParent) {
@@ -21,6 +10,17 @@ const findPos = (obj: any) => {
 		return curtop;
 	}
 	return curtop;
+};
+
+export const scrollToElement = (id: string, offset = 0) => {
+	const el = document.getElementById(id);
+	const top = findPos(el) - offset;
+
+	window.scrollTo({
+		left: 0,
+		top: top,
+		behavior: 'smooth',
+	});
 };
 
 export const sanitizeHtml = (s: string) => insane(s, {}, true);

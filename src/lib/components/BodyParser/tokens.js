@@ -58,89 +58,6 @@ export const tokensLength = (tokens, allowedTypes) => {
 	return length;
 };
 
-export const tokenizer = {
-	/**
-	 * @param {string} string
-	 * @returns {Record<string, any> | undefined}
-	 */
-	codespan: (string) => {
-		let cap = rules.code.exec(string);
-		if (cap) {
-			let text = cap[2].replace(/\n/g, ' ');
-			const hasNonSpaceChars = /[^ ]/.test(text);
-			const hasSpaceCharsOnBothEnds = /^ /.test(text) && / $/.test(text);
-			if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
-				text = text.substring(1, text.length - 1);
-			}
-			let tokens = bindTokens(text, true);
-			return {
-				type: 'codespan',
-				raw: cap[0],
-				text: text,
-				tokens: tokens,
-			};
-		}
-	},
-	/**
-	 * @param {string} string
-	 * @returns {Record<string, any> | boolean | undefined}
-	 */
-	inlineText: (string) => {
-		let cap = rules.text.exec(string);
-		if (cap) {
-			let tokens = bindTokens(cap[0], true);
-			if (tokens) {
-				return {
-					type: 'text',
-					raw: cap[0],
-					text: cap[0].trim(),
-					tokens: tokens,
-				};
-			}
-			return false;
-		}
-	},
-};
-
-/**
- *
- * @param {string} text
- * @param {boolean | undefined} isRootText
- * @param {boolean | undefined} useLinkMatch
- * @returns
- */
-export let bindTokens = (text, isRootText = false, useLinkMatch = false) => {
-	let tokens = null;
-	switch (true) {
-		case tickers(text).match !== null: {
-			let { match, exp } = tickers(text);
-			tokens = tickersMatching(text.split(exp), match);
-			break;
-		}
-		case mentions(text).match !== null: {
-			let { match, exp } = mentions(text);
-			tokens = mentionsMatching(text.split(exp), match);
-			break;
-		}
-		case hashtags(text).match !== null: {
-			let { match, exp } = hashtags(text);
-			tokens = hashtagsMatching(text.split(exp), match);
-			break;
-		}
-		case textLink(text).match !== null && useLinkMatch: {
-			let { match, exp, videoExp, imageExp } = textLink(text);
-			tokens = linkMatching(text.split(exp), videoExp, imageExp, match);
-			break;
-		}
-		default:
-			if (!isRootText) {
-				tokens = textMatching(text);
-			}
-			break;
-	}
-	return tokens;
-};
-
 /**
  * @param {string} text
  * @returns
@@ -169,6 +86,77 @@ let tickersMatching = (stringArray, matches) => {
 			if (matches?.includes(`${token}`)) {
 				list.push({ type: 'price-ticker', raw: token, text: token });
 			} else {
+				// eslint-disable-next-line no-use-before-define
+				list.push(...(bindTokens(token) || []));
+			}
+		}
+	});
+	return list;
+};
+
+/**
+ * @param {string} text
+ * @returns
+ */
+export let mentions = (text) => {
+	let exp = new RegExp(rules.mention, 'gm');
+	let match = text.match(exp);
+
+	return { match, exp };
+};
+
+/**
+ *
+ * @param {string[]} stringArray
+ * @param {RegExpMatchArray | null} matches
+ * @returns
+ */
+let mentionsMatching = (stringArray, matches) => {
+	/**
+	 * @type {Array<Record<string, any> | string | null>}
+	 */
+	let list = [];
+	stringArray.forEach((token) => {
+		if (token !== undefined && token.length) {
+			if (matches?.includes(token)) {
+				list.push({ type: 'mention', raw: token, text: token });
+			} else {
+				// eslint-disable-next-line no-use-before-define
+				list.push(...(bindTokens(token) || []));
+			}
+		}
+	});
+	return list;
+};
+
+/**
+ * @param {string} text
+ * @returns
+ */
+export let hashtags = (text) => {
+	let exp = new RegExp(rules.hashtag, 'gmu');
+	let match = text.match(exp);
+
+	return { match, exp };
+};
+
+/**
+ *
+ * @param {string[]} stringArray
+ * @param {RegExpMatchArray | null} matches
+ * @returns
+ */
+let hashtagsMatching = (stringArray, matches) => {
+	/**
+	 * @type {Array<Record<string, any> | string | null>}
+	 */
+	let list = [];
+	stringArray.forEach((token) => {
+		if (token !== undefined && token.length) {
+			if (matches?.includes(token)) {
+				list.push({ type: 'hashtag', raw: token, text: token });
+			} else {
+				// eslint-disable-next-line no-use-before-define
 				list.push(...(bindTokens(token) || []));
 			}
 		}
@@ -223,74 +211,7 @@ let linkMatching = (stringArray, videoExp, imageExp, matches) => {
 						break;
 				}
 			} else {
-				list.push(...(bindTokens(token) || []));
-			}
-		}
-	});
-	return list;
-};
-
-/**
- * @param {string} text
- * @returns
- */
-export let mentions = (text) => {
-	let exp = new RegExp(rules.mention, 'gm');
-	let match = text.match(exp);
-
-	return { match, exp };
-};
-
-/**
- *
- * @param {string[]} stringArray
- * @param {RegExpMatchArray | null} matches
- * @returns
- */
-let mentionsMatching = (stringArray, matches) => {
-	/**
-	 * @type {Array<Record<string, any> | string | null>}
-	 */
-	let list = [];
-	stringArray.forEach((token) => {
-		if (token !== undefined && token.length) {
-			if (matches?.includes(token)) {
-				list.push({ type: 'mention', raw: token, text: token });
-			} else {
-				list.push(...(bindTokens(token) || []));
-			}
-		}
-	});
-	return list;
-};
-
-/**
- * @param {string} text
- * @returns
- */
-export let hashtags = (text) => {
-	let exp = new RegExp(rules.hashtag, 'gmu');
-	let match = text.match(exp);
-
-	return { match, exp };
-};
-
-/**
- *
- * @param {string[]} stringArray
- * @param {RegExpMatchArray | null} matches
- * @returns
- */
-let hashtagsMatching = (stringArray, matches) => {
-	/**
-	 * @type {Array<Record<string, any> | string | null>}
-	 */
-	let list = [];
-	stringArray.forEach((token) => {
-		if (token !== undefined && token.length) {
-			if (matches?.includes(token)) {
-				list.push({ type: 'hashtag', raw: token, text: token });
-			} else {
+				// eslint-disable-next-line no-use-before-define
 				list.push(...(bindTokens(token) || []));
 			}
 		}
@@ -304,6 +225,90 @@ let hashtagsMatching = (stringArray, matches) => {
  */
 let textMatching = (token) => {
 	return [{ type: 'text', raw: token, text: token }];
+};
+
+/**
+ *
+ * @param {string} text
+ * @param {boolean | undefined} isRootText
+ * @param {boolean | undefined} useLinkMatch
+ * @returns
+ */
+// eslint-disable-next-line prefer-arrow-functions/prefer-arrow-functions
+export function bindTokens(text, isRootText = false, useLinkMatch = false) {
+	let tokens = null;
+	switch (true) {
+		case tickers(text).match !== null: {
+			let { match, exp } = tickers(text);
+			tokens = tickersMatching(text.split(exp), match);
+			break;
+		}
+		case mentions(text).match !== null: {
+			let { match, exp } = mentions(text);
+			tokens = mentionsMatching(text.split(exp), match);
+			break;
+		}
+		case hashtags(text).match !== null: {
+			let { match, exp } = hashtags(text);
+			tokens = hashtagsMatching(text.split(exp), match);
+			break;
+		}
+		case textLink(text).match !== null && useLinkMatch: {
+			let { match, exp, videoExp, imageExp } = textLink(text);
+			tokens = linkMatching(text.split(exp), videoExp, imageExp, match);
+			break;
+		}
+		default:
+			if (!isRootText) {
+				tokens = textMatching(text);
+			}
+			break;
+	}
+	return tokens;
+}
+
+export const tokenizer = {
+	/**
+	 * @param {string} string
+	 * @returns {Record<string, any> | undefined}
+	 */
+	codespan: (string) => {
+		let cap = rules.code.exec(string);
+		if (cap) {
+			let text = cap[2].replace(/\n/g, ' ');
+			const hasNonSpaceChars = /[^ ]/.test(text);
+			const hasSpaceCharsOnBothEnds = /^ /.test(text) && / $/.test(text);
+			if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
+				text = text.substring(1, text.length - 1);
+			}
+			let tokens = bindTokens(text, true);
+			return {
+				type: 'codespan',
+				raw: cap[0],
+				text: text,
+				tokens: tokens,
+			};
+		}
+	},
+	/**
+	 * @param {string} string
+	 * @returns {Record<string, any> | boolean | undefined}
+	 */
+	inlineText: (string) => {
+		let cap = rules.text.exec(string);
+		if (cap) {
+			let tokens = bindTokens(cap[0], true);
+			if (tokens) {
+				return {
+					type: 'text',
+					raw: cap[0],
+					text: cap[0].trim(),
+					tokens: tokens,
+				};
+			}
+			return false;
+		}
+	},
 };
 
 /**

@@ -9,7 +9,8 @@ import cacheConfig from './cache';
  * Initialize new Client instance
  * @returns Apollo Client
  */
-const createServerClient = (fetch: any) => new ApolloClient({
+const createServerClient = (fetch: any) =>
+	new ApolloClient({
 		credentials: 'include',
 		link: new HttpLink({
 			uri: config.apiUrl,
@@ -19,8 +20,8 @@ const createServerClient = (fetch: any) => new ApolloClient({
 		cache: new InMemoryCache(cacheConfig),
 	});
 
-const browserClient = createBrowserClient();
-const createBrowserClient = () => new ApolloClient({
+const createBrowserClient = () =>
+	new ApolloClient({
 		credentials: 'omit',
 		link: new HttpLink({
 			uri: config.apiUrl,
@@ -29,6 +30,8 @@ const createBrowserClient = () => new ApolloClient({
 		ssrForceFetchDelay: 100,
 		connectToDevTools: isDev,
 	});
+
+const browserClient = createBrowserClient();
 
 const hydrateApolloClient = (client: any, context?: Record<string, string>) => {
 	browserClient.restore(client as any);

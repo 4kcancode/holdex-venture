@@ -3,55 +3,6 @@ import { MessagesSortBy } from '$lib/types/api';
 import type { RequestHandler } from './$types';
 import config, { isDev, isStage } from '$lib/server/config';
 
-const skeleton = (urls: string) =>
-	`<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</sitemapindex>`;
-
-export const GET: RequestHandler = async ({ locals }) => {
-	const list = await getThreadsList(locals);
-
-	if (list == null) {
-		return new Response('', {
-			status: 404,
-			headers: {
-				'Content-Type': 'text/xml',
-			},
-		});
-	} else {
-		let files = '';
-		list.forEach((item) => {
-			files = files.concat(generateSitemapFile(item));
-		});
-		return new Response(skeleton(files), {
-			status: 200,
-			headers: {
-				'Content-Type': 'text/xml',
-				'Cache-Contro': isDev
-					? 'no-cache'
-					: isStage
-					? 'max-age=0, s-maxage=300'
-					: 'max-age=0, s-maxage=6000',
-			},
-		});
-	}
-};
-
-const getThreadsList = async (locals: App.Locals) => {
-	let list = null;
-	const { pageInfo } = await getBatchCursor(undefined, locals);
-
-	if (pageInfo !== null) {
-		if (pageInfo.hasNextPage) {
-			const item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
-			if (item !== null) {
-				list = ['index', ...item];
-			}
-		} else {
-			list = ['index'];
-		}
-	}
-	return list;
-};
-
 const getBatchCursor = async (nextCursor: string | undefined, locals: App.Locals) => {
 	const response = await loadFeedForSitemapCursor(
 		locals.apolloClient,
@@ -91,4 +42,54 @@ const getList = async (cursor: string, hasNextPage: boolean, locals: App.Locals)
 	return list;
 };
 
-const generateSitemapFile = (startCursor: string) => `<sitemap><loc>http://holdex.io/sitemaps/sitemap-product-threads-${startCursor}.xml</loc></sitemap>`;
+const getThreadsList = async (locals: App.Locals) => {
+	let list = null;
+	const { pageInfo } = await getBatchCursor(undefined, locals);
+
+	if (pageInfo !== null) {
+		if (pageInfo.hasNextPage) {
+			const item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
+			if (item !== null) {
+				list = ['index', ...item];
+			}
+		} else {
+			list = ['index'];
+		}
+	}
+	return list;
+};
+
+const generateSitemapFile = (startCursor: string) =>
+	`<sitemap><loc>http://holdex.io/sitemaps/sitemap-product-threads-${startCursor}.xml</loc></sitemap>`;
+
+const skeleton = (urls: string) =>
+	`<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</sitemapindex>`;
+
+export const GET: RequestHandler = async ({ locals }) => {
+	const list = await getThreadsList(locals);
+
+	if (list == null) {
+		return new Response('', {
+			status: 404,
+			headers: {
+				'Content-Type': 'text/xml',
+			},
+		});
+	} else {
+		let files = '';
+		list.forEach((item) => {
+			files = files.concat(generateSitemapFile(item));
+		});
+		return new Response(skeleton(files), {
+			status: 200,
+			headers: {
+				'Content-Type': 'text/xml',
+				'Cache-Contro': isDev
+					? 'no-cache'
+					: isStage
+					? 'max-age=0, s-maxage=300'
+					: 'max-age=0, s-maxage=6000',
+			},
+		});
+	}
+};

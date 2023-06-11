@@ -12,17 +12,6 @@
 	let el: HTMLDivElement;
 	let chart: any;
 
-	$: isLoading = !Array.isArray(prices);
-	$: options = generateOptions(prices, isLoading);
-
-	$: {
-		if (isBrowser && prices) {
-			initComponent(options);
-		}
-	}
-
-	$: chart && chart.updateOptions(options);
-
 	let initComponent = async (options: ApexOptions) => {
 		let module = await import('apexcharts');
 		chart = new module.default(el, options);
@@ -36,6 +25,17 @@
 			return 'text-rating-c';
 		}
 	};
+
+	$: isLoading = !Array.isArray(prices);
+	$: options = generateOptions(prices, isLoading);
+
+	$: {
+		if (isBrowser && prices) {
+			initComponent(options);
+		}
+	}
+
+	$: chart && chart.updateOptions(options);
 </script>
 
 <template lang="pug" src="./template.pug">

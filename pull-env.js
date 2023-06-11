@@ -14,6 +14,13 @@ const fetchEnvs = async () => {
 	return await result.json();
 };
 
+const escapeValue = (value) =>
+	value
+		? value
+				.replace(new RegExp('\\n', 'g'), '\\n') // combine newlines (unix) into one line
+				.replace(new RegExp('\\r', 'g'), '\\r') // combine newlines (windows) into one line
+		: '';
+
 const updateEnvs = async () => {
 	let data = await fetchEnvs();
 	let envVars = data.data.env;
@@ -32,12 +39,5 @@ const updateEnvs = async () => {
 		console.error('Error updating .env file:', error);
 	}
 };
-
-const escapeValue = (value) =>
-	value
-		? value
-				.replace(new RegExp('\\n', 'g'), '\\n') // combine newlines (unix) into one line
-				.replace(new RegExp('\\r', 'g'), '\\r') // combine newlines (windows) into one line
-		: '';
 
 updateEnvs();

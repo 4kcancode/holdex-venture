@@ -105,6 +105,26 @@ const mockData = [
 	},
 ];
 
+const bindFill = (isMock: boolean) => {
+	if (isMock) {
+		return {
+			type: 'solid',
+			colors: ['#252933'],
+		};
+	}
+	return {
+		type: 'gradient',
+		gradient: {
+			type: 'vertical',
+			shadeIntensity: 1,
+			opacityFrom: 0.8,
+			opacityTo: 0,
+			stops: [0, 100],
+			gradientToColors: ['rgba(0, 170, 255, 0)'],
+		},
+	};
+};
+
 const generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
 	if (isMock) {
 		data = mockData;
@@ -250,26 +270,6 @@ const generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
 			style: {
 				fontFamily: 'inherit',
 			},
-		},
-	};
-};
-
-const bindFill = (isMock: boolean) => {
-	if (isMock) {
-		return {
-			type: 'solid',
-			colors: ['#252933'],
-		};
-	}
-	return {
-		type: 'gradient',
-		gradient: {
-			type: 'vertical',
-			shadeIntensity: 1,
-			opacityFrom: 0.8,
-			opacityTo: 0,
-			stops: [0, 100],
-			gradientToColors: ['rgba(0, 170, 255, 0)'],
 		},
 	};
 };

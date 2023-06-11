@@ -23,6 +23,15 @@ module.exports = {
 	rules: {
 		'comma-dangle': 'off',
 		quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+		'no-use-before-define': [
+			'error',
+			{
+				functions: true,
+				classes: true,
+				variables: true,
+				allowNamedExports: false,
+			},
+		],
 		'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-empty-function': 'off',

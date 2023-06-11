@@ -44,17 +44,17 @@ type ListBlock = {
 	};
 };
 
+type ListItem = {
+	content: string;
+	items: ListItem[];
+};
+
 type NestedListBlock = {
 	type: 'nestedList';
 	data: {
 		style: string;
 		items: ListItem[];
 	};
-};
-
-type ListItem = {
-	content: string;
-	items: ListItem[];
 };
 
 type ParagraphBlock = {
@@ -99,14 +99,14 @@ type LinkToolBlock = {
 	};
 };
 
-type AuthorBlock = {
-	type: string;
-	items: Author[];
-};
-
 export type Author = {
 	name: string;
 	url: string;
+};
+
+type AuthorBlock = {
+	type: string;
+	items: Author[];
 };
 
 const videoRegExp = new RegExp(regExp.video, 'gmi');
@@ -133,6 +133,10 @@ const strongExp = new RegExp(/^<strong[^>]*>(.*?)<\/strong>$/, 'ui');
 const italicExp = new RegExp(/^<i[^>]*>(.*?)<\/i>$/, 'ui');
 const emExp = new RegExp(/^<em[^>]*>(.*?)<\/em>$/, 'ui');
 const underlineExp = new RegExp(/^<u[^>]*>(.*?)<\/u>$/, 'ui');
+
+const replaceSymbols = (text: string) => {
+	return text.replace(/<br>/g, '').replace(/&nbsp;/g, ' ');
+};
 
 const tokeniseInlineEls = (inlineBlocks: string[]) => {
 	const tokens: any[] = [];
@@ -278,10 +282,6 @@ const tokeniseInlineEls = (inlineBlocks: string[]) => {
 	return tokens;
 };
 
-const replaceSymbols = (text: string) => {
-	return text.replace(/<br>/g, '').replace(/&nbsp;/g, ' ');
-};
-
 export const parseInlineEls = (text: string) => {
 	const exp = new RegExp(
 		/(?:(<(?:code|span) class="inline-code"[^>]*>.*?<\/(?:code|span)>)|(?:(<b[^>]*>.*?<\/b>))|(?:(<u[^>]*>.*?<\/u>))|(?:(<i[^>]*>.*?<\/i>))|(?:(<strong[^>]*>.*?<\/strong>))|(?:(<em[^>]*>.*?<\/em>))|(?:(<span class="cdx-hashtag"[^>]*>.*?<\/span>))|(?:(<span class="cdx-price-ticker"[^>]*>.*?<\/span>))|(?:(<span class="cdx-mention"[^>]*>.*?<\/span>))|(?:(<a[^>]*>.*?<\/a>)))/,
@@ -344,14 +344,10 @@ const parseList = (block: ListBlock) => {
 	};
 };
 
-const parseNestedList = (block: NestedListBlock) => {
-	const items = parseNestedListItem(block.data.items);
-
-	return {
-		type: 'nestedList',
-		style: block.data.style,
-		items,
-	};
+const parseListItem = (item: string) => {
+	const inlineBlocks = parseInlineEls(item);
+	const inlineTokens = tokeniseInlineEls(inlineBlocks);
+	return inlineTokens;
 };
 
 const parseNestedListItem = (items: ListItem[]) => {
@@ -373,10 +369,14 @@ const parseNestedListItem = (items: ListItem[]) => {
 	return list;
 };
 
-const parseListItem = (item: string) => {
-	const inlineBlocks = parseInlineEls(item);
-	const inlineTokens = tokeniseInlineEls(inlineBlocks);
-	return inlineTokens;
+const parseNestedList = (block: NestedListBlock) => {
+	const items = parseNestedListItem(block.data.items);
+
+	return {
+		type: 'nestedList',
+		style: block.data.style,
+		items,
+	};
 };
 
 const parseQuote = (block: BlockquoteBlock) => {

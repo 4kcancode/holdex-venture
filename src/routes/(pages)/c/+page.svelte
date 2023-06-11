@@ -29,17 +29,6 @@
 
 	export let data: PageData;
 
-	$: ({ store, options: queryOptions } = data);
-	$: ({ data: storeData } = $store);
-	$: ({ edges, totalCount, pageInfo } = storeData?.postedMessages || {
-		edges: [],
-		totalCount: 0,
-		pageInfo: null,
-	});
-	$: pageFilter = getPageFilter($page.url);
-	$: pageQ = getPageQ($page.url);
-	$: isSearchMode = checkSearchMode($page.url);
-
 	let parseMessage = (message: Message, category: string) => {
 		return Parser.parseViaCategory(message, category);
 	};
@@ -85,6 +74,17 @@
 		});
 		isRefetching = false;
 	};
+
+	$: ({ store, options: queryOptions } = data);
+	$: ({ data: storeData } = $store);
+	$: ({ edges, totalCount, pageInfo } = storeData?.postedMessages || {
+		edges: [],
+		totalCount: 0,
+		pageInfo: null,
+	});
+	$: pageFilter = getPageFilter($page.url);
+	$: pageQ = getPageQ($page.url);
+	$: isSearchMode = checkSearchMode($page.url);
 </script>
 
 <MetaTags

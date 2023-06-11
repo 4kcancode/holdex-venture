@@ -1,3 +1,17 @@
+const createYoutubeCover = (embedId: string | null) => {
+	return `https://i.ytimg.com/vi/${embedId}/hqdefault.jpg`;
+};
+const createYoutubeEmbedUrl = (embedId: string | null) => {
+	return `https://www.youtube-nocookie.com/embed/${embedId}`;
+};
+
+const createVimeoCover = (embedId: string | null) => {
+	return `https://i.vimeocdn.com/video/${embedId}.jpg`;
+};
+const createVimeoEmbedUrl = (embedId: string | null) => {
+	return `https://player.vimeo.com/video/${embedId}`;
+};
+
 export const getOptimizedUrl = (source: string, size = '_150x150') => {
 	const holdexRegExp = new RegExp(/^(http:\/\/|https:\/\/)(storage\.googleapis\.com)/, 'gmi');
 	if (holdexRegExp.test(source)) {
@@ -30,26 +44,6 @@ export const regExp = {
 	symbols: /^[a-zA-Z0-9 ,.";():&%£’€$#@_=/\-'!*?\\/s]{2,}$/,
 	image: /.*\.(gif|jpe?g|bmp|png)$/,
 	holdexLink: /^(http:\/\/|https:\/\/)(holdex\.io)/,
-};
-
-export const getEmbedUrl = (href: string) => {
-	const [source, embedId] = getEmbedId(href);
-	if (source === 'youtube') {
-		return createYoutubeEmbedUrl(embedId);
-	}
-	if (source === 'vimeo') {
-		return createVimeoEmbedUrl(embedId);
-	}
-};
-
-export const getVideoCover = (href: string) => {
-	const [source, embedId] = getEmbedId(href);
-	if (source === 'youtube') {
-		return createYoutubeCover(embedId);
-	}
-	if (source === 'vimeo') {
-		return createVimeoCover(embedId);
-	}
 };
 
 export const getEmbedSource = (href: string) => {
@@ -111,18 +105,24 @@ const getEmbedId = (href: string) => {
 	return [source, null];
 };
 
-const createYoutubeCover = (embedId: string | null) => {
-	return `https://i.ytimg.com/vi/${embedId}/hqdefault.jpg`;
-};
-const createYoutubeEmbedUrl = (embedId: string | null) => {
-	return `https://www.youtube-nocookie.com/embed/${embedId}`;
+export const getEmbedUrl = (href: string) => {
+	const [source, embedId] = getEmbedId(href);
+	if (source === 'youtube') {
+		return createYoutubeEmbedUrl(embedId);
+	}
+	if (source === 'vimeo') {
+		return createVimeoEmbedUrl(embedId);
+	}
 };
 
-const createVimeoCover = (embedId: string | null) => {
-	return `https://i.vimeocdn.com/video/${embedId}.jpg`;
-};
-const createVimeoEmbedUrl = (embedId: string | null) => {
-	return `https://player.vimeo.com/video/${embedId}`;
+export const getVideoCover = (href: string) => {
+	const [source, embedId] = getEmbedId(href);
+	if (source === 'youtube') {
+		return createYoutubeCover(embedId);
+	}
+	if (source === 'vimeo') {
+		return createVimeoCover(embedId);
+	}
 };
 
 export const uuidv4 = () =>

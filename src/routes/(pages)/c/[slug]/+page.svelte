@@ -36,19 +36,6 @@
 
 	export let data: PageData;
 
-	$: ({ store, options: queryOptions } = data);
-	$: ({ data: storeData } = $store);
-	$: community = storeData?.community as Community;
-	$: communityCover = parseCommunityCoverImage(community);
-	$: ({ edges, totalCount, pageInfo } = community?.postedMessages || {
-		edges: [],
-		totalCount: 0,
-		pageInfo: null,
-	});
-	$: pageFilter = getPageFilter($page.url);
-	$: pageQ = getPageQ($page.url);
-	$: isSearchMode = checkSearchMode($page.url);
-
 	let parseMessage = (message: Message, category: string) => {
 		return Parser.parseViaCategory(message, category);
 	};
@@ -114,6 +101,19 @@
 		});
 		isRefetching = false;
 	};
+
+	$: ({ store, options: queryOptions } = data);
+	$: ({ data: storeData } = $store);
+	$: community = storeData?.community as Community;
+	$: communityCover = parseCommunityCoverImage(community);
+	$: ({ edges, totalCount, pageInfo } = community?.postedMessages || {
+		edges: [],
+		totalCount: 0,
+		pageInfo: null,
+	});
+	$: pageFilter = getPageFilter($page.url);
+	$: pageQ = getPageQ($page.url);
+	$: isSearchMode = checkSearchMode($page.url);
 </script>
 
 <MetaTags

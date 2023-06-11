@@ -12,8 +12,6 @@
 
 	const pageTheme = 'dark';
 
-	$: path = $page.url.pathname;
-	$: form = $page.form;
 	let email = '';
 	let message = '';
 	let name = '';
@@ -36,16 +34,19 @@
 		clbk && clbk();
 		return scrollToElement('contact-form', 64);
 	};
+
 	const displaySuccess = () => {
 		success = true;
 		setInterval(() => {
 			success = false;
 		}, 5000);
 	};
-	async function onContactFormSumbit(event: any) {
-		const data = new FormData(this);
 
-		const response = await fetch(this.action, {
+	const onContactFormSumbit = async (event: Event) => {
+		const form = event.currentTarget as HTMLFormElement;
+		const data = new FormData(form);
+
+		const response = await fetch(form.action, {
 			method: 'POST',
 			body: data,
 			headers: {
@@ -54,22 +55,17 @@
 		});
 
 		const result = deserialize(await response.text());
-		event.target.reset();
+		form.reset();
 		name = '';
 		email = '';
 		message = '';
 		applyAction(result);
 		displaySuccess();
-	}
+	};
 
 	let scrollY: any;
 
 	let isBurgerDropdownShown = false;
-
-	const toggleBurger = (newStatus = false) => {
-		isBurgerDropdownShown = newStatus;
-		setBodyClass(newStatus);
-	};
 
 	const setBodyClass = (state: boolean) => {
 		if (state) {
@@ -79,6 +75,11 @@
 		}
 	};
 
+	const toggleBurger = (newStatus = false) => {
+		isBurgerDropdownShown = newStatus;
+		setBodyClass(newStatus);
+	};
+
 	const validateEmail = (email: string) => {
 		return regExp.email.test(email);
 	};
@@ -86,6 +87,9 @@
 	const displayError = (email: string) => {
 		return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
 	};
+
+	$: path = $page.url.pathname;
+	$: form = $page.form;
 </script>
 
 <template lang="pug" src="./layout.pug">
