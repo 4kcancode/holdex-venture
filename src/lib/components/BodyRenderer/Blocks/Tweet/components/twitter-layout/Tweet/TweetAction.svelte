@@ -20,10 +20,10 @@
 
 	$: isConversation = count > 4;
 
-	let chevronSrc = 'https://storage.googleapis.com/stage-holdex-public/assets/chevron.png';
-	let profileSrc = 'https://storage.googleapis.com/stage-holdex-public/assets/person.png';
-	let replySrc = 'https://storage.googleapis.com/stage-holdex-public/assets/reply.png?v=1';
-	let heartSrc = 'https://storage.googleapis.com/stage-holdex-public/assets/heart.png?v=1';
+	let chevronSrc = '/tweet/chevron.png';
+	let profileSrc = '/tweet/person.png';
+	let replySrc = '/tweet/reply.png';
+	let heartSrc = '/tweet/heart.png';
 	let likeUrl = `https://twitter.com/intent/like?tweet_id=${id}`;
 	let replyUrl = '';
 
