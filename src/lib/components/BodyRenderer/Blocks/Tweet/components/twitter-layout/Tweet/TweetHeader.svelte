@@ -9,8 +9,6 @@
 
 	$: authorInfo = users.find((u) => u.id === author_id);
 	$: url = `https://twitter.com/${authorInfo.username}`;
-
-	const twitterSrc = 'https://storage.googleapis.com/stage-holdex-public/assets/twitter.png';
 </script>
 
 <div class="flex">
@@ -46,7 +44,7 @@
 			class="icon w-[1.25em] h-[1.25em] object-contain twicon"
 			title="View on Twitter"
 			alt="twitter"
-			src={twitterSrc}
+			src="/tweet/twitter.png"
 		/>
 	</a>
 </div>
