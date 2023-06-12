@@ -13,6 +13,13 @@ module.exports = {
 			underbase: '11px',
 		},
 		screens: {
+			// 'rwd' means "Responsive Web Design". And these breakpoints follow the breakpoints in the actual Figma while adhering to the Mobile-first RWD principle.
+			'rwd-xs': '375px',
+			'rwd-sm': '480px',
+			'rwd-md': '768px',
+			'rwd-lg': '992px',
+			'rwd-xl': '1200px',
+			'rwd-2xl': '1440px',
 			xl: {
 				min: '1680px',
 				limit: '1920px',
@@ -104,6 +111,7 @@ module.exports = {
 			'tw-tweet-btn-border': 'rgb(var(--tweet-btn-border) / <alpha-value>)',
 		},
 		fontSize: {
+			...defaultTheme.fontSize,
 			'title-l': [
 				'56px',
 				{
