@@ -54,7 +54,7 @@ mixin mobile-nav
 						rows="{5}"
 						required
 						bind:value="{message}"
-						class="relative w-full border border-solid border-l4 block min-h-32 h-32 bg-l2 shadow-input rounded-xl p-2.5 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
+						class="relative w-full border border-solid border-l4 block min-h-32 h-32 bg-l1 shadow-input rounded-xl p-2.5 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2" 
 						name="message" 
 						placeholder="How can we help you?")
 				.input-group(class="mb-6 xs:mb-4 gap-4 flex xs:flex-col")
@@ -63,7 +63,7 @@ mixin mobile-nav
 						name="name" 
 						required
 						bind:value="{name}"
-						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
+						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l1 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2" 
 						placeholder="Your name and company")
 					input(
 						type="email"
@@ -72,18 +72,18 @@ mixin mobile-nav
 						bind:value="{email}"
 						name="email" 
 						on:blur="{displayError(email)}"
-						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l2 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3" 
+						class="relative w-1/2 xs:w-full border border-solid border-l4 bg-l1 shadow-input rounded-xl p-2.25 text-footnote text-t1 transition-all placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2" 
 						placeholder="Your email address")
 				p(class="text-rating-c text-footnote font-inter flex items-center mb-6 xs:mb-4 gap-2 py-2.5  {isError ? 'flex' : 'hidden'}")
 					Icon(icon="{ExclamationTriangle}" width="{17.26}" height="{15.62}" colorInherit)
 					span() Invalid email address
-				Button(label="Submit" class="mobile:!w-full" disabled="{message == '' || name == '' || email == '' || !validateEmail(email)  ? true : false}" isSubmitBtn="true")
+				Button(label="Submit" class="dark:bg-l2 mobile:!w-full" disabled="{message == '' || name == '' || email == '' || !validateEmail(email)  ? true : false}" isSubmitBtn="true")
 				.feedback-toast(class="absolute z-1 -bottom-4 xs:-bottom-2 left-1/2 -translate-x-1/2 h-12 border border-solid rounded-xl bg-l2 border-l4 px-2.75 py-1.75 justify-center items-center gap-2 shadow-tag text-accent1-default {success ? 'flex' : 'hidden'}")
 					Icon(icon="{CheckCircle}" width="{24}" height="{24}" colorInherit)
 					span.succ(class="text-t1 text-cta" ) Message sent!
 		.footer-nav(class="flex items-center justify-between xs:flex-col xs:items-start xs:py-6 xs:gap-6 py-4 px-4 max-w-[1240px] w-full")
 			.logo-wrapper(class="z-1 relative")
-				a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): img(alt="Home" src="/logo-white-w-text.svg")
+				a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(name="logo" class="w-32")
 			ul(class="absolute left-1/2 -translate-x-1/2 main-nav flex items-start gap-8 tbDown:relative tbDown:gap-4 tbDown:left-0 tbDown:transform-none" role="navigation")
 				+link("https://policies.holdex.io/#/terms", "Terms of Use")(target="_blank" rel="noreferrer")
 				+link("https://policies.holdex.io/#/privacy", "Privacy Policy")(target="_blank" rel="noreferrer")

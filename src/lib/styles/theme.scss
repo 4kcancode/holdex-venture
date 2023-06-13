@@ -8,17 +8,18 @@
 
 @mixin colorScheme($scheme: 'dark') {
 	@if $scheme == 'light' {
+		@include createVariables($common-colors);
 		@include createVariables($light-colors);
-		@include createVariables($common-colors);
 		@include createVariables($tw-light);
+		background-color: theme('colors.l2');
 	} @else {
-		@include createVariables($dark-colors);
 		@include createVariables($common-colors);
+		@include createVariables($dark-colors);
 		@include createVariables($tw-dark);
+		background-color: theme('colors.l1');
 	}
 
 	color: theme('colors.t1');
-	background-color: theme('colors.l1');
 }
 
 @layer base {

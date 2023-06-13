@@ -4,6 +4,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{html,svelte,ts,sass,scss,pug}'],
+	darkMode: ['class', '[data-theme="dark"]'],
 	theme: {
 		borderRadius: {
 			...defaultTheme.borderRadius,
@@ -60,6 +61,7 @@ module.exports = {
 			},
 		},
 		colors: {
+			white: 'white',
 			inherit: 'inherit',
 			current: 'currentColor',
 			transparent: 'transparent',
@@ -314,21 +316,23 @@ module.exports = {
 			},
 			boxShadow: {
 				...defaultTheme.boxShadow,
-				input: '0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16)',
+				input:
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, var(--shadow-input-alpha))',
 				tag: '0px 4px 8px rgba(0, 0, 0, 0.16)',
-				'tag-active': ' 0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16)',
+				'tag-active':
+					' 0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, 0.16)',
 				button:
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, 0.16), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'button-hover':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'button-active':
-					'0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'secondary-button':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 0px 8px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 				'secondary-button-hover':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 				'secondary-button-active':
-					'0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 			},
 			minHeight: {
 				32: '8rem',
