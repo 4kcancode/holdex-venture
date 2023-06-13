@@ -40,9 +40,9 @@
 	$: pageQ = getPageQ($page.url);
 	$: isSearchMode = checkSearchMode($page.url);
 
-	// let parseMessage = (message: Message, category: string) => {
-	// 	return Parser.parseViaCategory(message, category);
-	// };
+	let parseMessage = (message: Message, category: string) => {
+		return Parser.parseViaCategory(message, category);
+	};
 
 	let getPageFilter = (url: URL) => {
 		const filter = url.searchParams.get('filter');
