@@ -13,7 +13,7 @@ module.exports = {
 			underbase: '11px',
 		},
 		screens: {
-			// 'rwd' means "Responsive Web Design". And these breakpoints follow the breakpoints in the actual Figma while adhering to the Mobile-first RWD principle.
+			// 'rwd' means "Responsive Web Design". And these breakpoints follow/match the breakpoints in the actual Figma while adhering to the Mobile-first RWD principle.
 			'rwd-xs': '375px',
 			'rwd-sm': '480px',
 			'rwd-md': '768px',

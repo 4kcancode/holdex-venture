@@ -18,7 +18,7 @@ mixin mobile-nav
 	+main-nav(class="relative flex flex-wrap smDown:gap-4")
 	//-+primary-button("Partner With Us")(type="button" on:click!="{() => handleClick(toggleBurger)}")
 
-.app-container(data-theme="{pageTheme}")
+.app-container
 	header(class!="z-10 w-full block  relative {scrollY > 1 ? 'sticky top-0 border-b border-solid border-l4 bg-l1' : ''}")
 		.outer-container(class="relative xs:before:content['] xs:before:absolute xs:before:left-0 xs:before:w-16 xs:before:h-16 xs:before:z-10 xs:before:bg-gradient-to-r xs:after:bg-gradient-to-l from-l1 to-transparent xs:after:content['] xs:after:absolute xs:after:right-0 xs:after:w-16 xs:after:h-16 xs:after:z-10 xs:after:top-0")
 			.header-wrapper(class="flex px-4 py-3 justify-start items-center w-full overflow-x-auto whitespace-nowrap rwd-lg:justify-center")
@@ -39,8 +39,8 @@ mixin mobile-nav
 							+social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(class="!h-5 !w-5 !p-0")
 
 					.flex.items-center.gap-2.sticky.right-0.z-20(class='md:gap-4')
-						+button-icon-default(type='button' on:click!="{() => undefined}")
-							SVGIcon(name='sun' class='w-5 stroke-current')
+						+button-icon-default(type='button' on:click!="{onThemeToggle}")
+							SVGIcon(name='{themeIconName}' class='w-5 stroke-current')
 						+primary-button("Partner With Us")(class="sticky" type="button" on:click!="{() => handleClick(undefined)}")
 
 	main: slot

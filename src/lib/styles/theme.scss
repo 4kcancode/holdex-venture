@@ -6,6 +6,21 @@
 
 @import './utils';
 
+@mixin colorScheme($scheme: 'dark') {
+	@if $scheme == 'light' {
+		@include createVariables($light-colors);
+		@include createVariables($common-colors);
+		@include createVariables($tw-light);
+	} @else {
+		@include createVariables($dark-colors);
+		@include createVariables($common-colors);
+		@include createVariables($tw-dark);
+	}
+
+	color: theme('colors.t1');
+	background-color: theme('colors.l1');
+}
+
 @layer base {
 	html {
 		--main-font: 'Inter';
@@ -18,22 +33,24 @@
 		}
 	}
 
-	[data-theme='light'] {
-		@include createVariables($light-colors);
-		@include createVariables($common-colors);
-		@include createVariables($tw-light);
+	@media (prefers-color-scheme: dark) {
+		body {
+			@include colorScheme();
+		}
+	}
 
-		color: theme('colors.t1');
-		background-color: theme('colors.l1');
+	@media (prefers-color-scheme: light) {
+		body {
+			@include colorScheme('light');
+		}
 	}
 
 	[data-theme='dark'] {
-		@include createVariables($dark-colors);
-		@include createVariables($common-colors);
-		@include createVariables($tw-dark);
+		@include colorScheme();
+	}
 
-		color: theme('colors.t1');
-		background-color: theme('colors.l1');
+	[data-theme='light'] {
+		@include colorScheme('light');
 	}
 }
 
