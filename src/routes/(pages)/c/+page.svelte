@@ -29,9 +29,20 @@
 
 	export let data: PageData;
 
-	let parseMessage = (message: Message, category: string) => {
-		return Parser.parseViaCategory(message, category);
-	};
+	$: ({ store, options: queryOptions } = data);
+	$: ({ data: storeData } = $store);
+	$: ({ edges, totalCount, pageInfo } = storeData?.postedMessages || {
+		edges: [],
+		totalCount: 0,
+		pageInfo: null,
+	});
+	$: pageFilter = getPageFilter($page.url);
+	$: pageQ = getPageQ($page.url);
+	$: isSearchMode = checkSearchMode($page.url);
+
+	// let parseMessage = (message: Message, category: string) => {
+	// 	return Parser.parseViaCategory(message, category);
+	// };
 
 	let getPageFilter = (url: URL) => {
 		const filter = url.searchParams.get('filter');
@@ -74,17 +85,6 @@
 		});
 		isRefetching = false;
 	};
-
-	$: ({ store, options: queryOptions } = data);
-	$: ({ data: storeData } = $store);
-	$: ({ edges, totalCount, pageInfo } = storeData?.postedMessages || {
-		edges: [],
-		totalCount: 0,
-		pageInfo: null,
-	});
-	$: pageFilter = getPageFilter($page.url);
-	$: pageQ = getPageQ($page.url);
-	$: isSearchMode = checkSearchMode($page.url);
 </script>
 
 <MetaTags

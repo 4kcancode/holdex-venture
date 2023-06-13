@@ -258,7 +258,7 @@ const generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
 										)}</span>
                     <span class="text-footnote text-t3">
                         Price: 
-                        <span class="text-t1">${formatNumber(price, '0,0[.]000000')}</span>
+                        <span class="text-t1">$${formatNumber(price, '0,0[.]000000')}</span>
                     </span>`;
 			},
 			x: {
