@@ -166,7 +166,7 @@ function tickersMatching(stringArray, matches) {
 	let list = [];
 	stringArray.forEach((token) => {
 		if (token !== undefined && token.length) {
-			if (matches?.includes(`${token}`)) {
+			if (matches?.includes(`$${token}`)) {
 				list.push({ type: 'price-ticker', raw: token, text: token });
 			} else {
 				list.push(...(bindTokens(token) || []));
