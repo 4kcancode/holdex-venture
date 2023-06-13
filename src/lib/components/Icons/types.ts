@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-
 export interface SVGIconProps extends Omit<svelte.JSX.HTMLProps<HTMLElement>, 'size' | 'slot'> {
 	name: SVGIconName;
 	size?: string | number;
@@ -7,4 +5,4 @@ export interface SVGIconProps extends Omit<svelte.JSX.HTMLProps<HTMLElement>, 's
 	svgClass?: string;
 }
 
-export type SVGIconName = 'sun' | 'moon';
+export type SVGIconName = 'sun' | 'moon' | 'logo';
