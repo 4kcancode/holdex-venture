@@ -35,14 +35,14 @@ type ParsedMessage = Partial<Message> & {
 
 class Parser {
 	static parse(message: Message): ParsedMessage {
-		let parsedBody = Parser.parseBody(message);
-		let parsedMAuthor = Parser.parseMessageAuthor(message);
-		let [parsedBlocks, subtitle, parsedDAuthors, isGoogleDoc] = Parser.parseSubtitle(
+		const parsedBody = Parser.parseBody(message);
+		const parsedMAuthor = Parser.parseMessageAuthor(message);
+		const [parsedBlocks, subtitle, parsedDAuthors, isGoogleDoc] = Parser.parseSubtitle(
 			parsedBody?.blocks
 		);
-		let blocks = Parser.parseBlocks(parsedBlocks);
-		let tocs = Parser.parseTocs(blocks);
-		let cover = Parser.parseThreadCover(blocks);
+		const blocks = Parser.parseBlocks(parsedBlocks);
+		const tocs = Parser.parseTocs(blocks);
+		const cover = Parser.parseThreadCover(blocks);
 
 		return {
 			...message,
@@ -58,8 +58,8 @@ class Parser {
 	}
 
 	static parseFromCategory(category: Community, communitySlug?: string): ParsedMessage {
-		let { postedThread, ...rest } = category;
-		let newMessage = {
+		const { postedThread, ...rest } = category;
+		const newMessage = {
 			...((postedThread as CommunityPostedThreadConnectionEdge).node as DefaultMessage),
 			messageSlug: (postedThread as CommunityPostedThreadConnectionEdge).messageSlug,
 			communitySlug: communitySlug || rest.slug,
@@ -71,8 +71,8 @@ class Parser {
 	}
 
 	static parseViaCategory(message: DefaultMessage, communitySlug?: string): ParsedMessage {
-		let { postedIn, ...rest } = message;
-		let newMessage = {
+		const { postedIn, ...rest } = message;
+		const newMessage = {
 			...rest,
 			messageSlug: (postedIn as MessagePostedInCommunityConnectionEdge).messageSlug,
 			communitySlug:
@@ -89,7 +89,9 @@ class Parser {
 		if (message && message.body) {
 			try {
 				body = JSON.parse(message.body);
-			} catch (error) {}
+			} catch (error) {
+				/* empty */
+			}
 		}
 		return body;
 	}
@@ -109,8 +111,8 @@ class Parser {
 	}
 
 	private static parseTocs(blocks: any[], allowedDepth: string[] = ['h2', 'h3', 'h4']): any[] {
-		let tocs = [];
-		for (let block of blocks) {
+		const tocs = [];
+		for (const block of blocks) {
 			if (block.type === 'heading' && allowedDepth.includes(block.level)) {
 				tocs.push(block);
 			}
@@ -120,7 +122,7 @@ class Parser {
 
 	private static parseSubtitle(blocks: any[]): [any[], string, Author[], string] {
 		try {
-			let firstBlock = blocks[0];
+			const firstBlock = blocks[0];
 
 			let subtitle = '';
 			let isGoogleDoc = '';
@@ -131,24 +133,26 @@ class Parser {
 				subtitle = firstBlock.data.text;
 			}
 
-			let isSourceBlock = blocks.find((b) => b.type === 'source');
+			const isSourceBlock = blocks.find((b) => b.type === 'source');
 			if (isSourceBlock) {
 				blocks = blocks.filter((b) => b.type !== 'source');
 				isGoogleDoc = isSourceBlock.url;
 			}
 
-			let docAuthors = blocks.find((b) => b.type === 'author');
+			const docAuthors = blocks.find((b) => b.type === 'author');
 			if (docAuthors) {
 				blocks = blocks.filter((b) => b.type !== 'author');
 				authors = docAuthors.items;
 			}
 			return [blocks, subtitle, authors, isGoogleDoc];
-		} catch (error) {}
+		} catch (error) {
+			/* empty */
+		}
 		return [blocks, '', [] as Author[], ''];
 	}
 
 	private static parseThreadCover(blocks: any[]): string | undefined {
-		let block = blocks.find((b) => b.type === 'image' || b.type === 'embed');
+		const block = blocks.find((b) => b.type === 'image' || b.type === 'embed');
 		if (block) {
 			if (block.type === 'image') {
 				return block.src;

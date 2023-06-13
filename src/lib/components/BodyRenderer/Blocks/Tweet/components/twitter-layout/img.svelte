@@ -4,7 +4,6 @@
 	const { width, height, src, alt_text, html, ...rest } = $$props;
 
 	onMount(async () => {
-		// @ts-ignore
 		await import('@github/details-dialog-element');
 	});
 </script>
@@ -33,7 +32,7 @@
 	</details>
 {/if}
 
-<style>
+<style lang="scss">
 	details {
 		@apply mt-2.5;
 	}

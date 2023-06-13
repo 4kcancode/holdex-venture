@@ -7,7 +7,7 @@ import type {
 	QueryOptions,
 	MutationOptions,
 	FetchResult,
-	OperationVariables,
+	// OperationVariables,
 } from '@apollo/client/core';
 
 import responseHandler from './handler';
@@ -15,11 +15,11 @@ import queryName from './utils';
 
 import type { BaseHandler } from './handler';
 
-export function readQuery<TData>(
+export const readQuery = <TData>(
 	client: ApolloClient<any>,
 	options: WatchQueryOptions<any, TData>,
 	fallback: TData | undefined = undefined
-): WritableQuery<TData> {
+): WritableQuery<TData> => {
 	let initialValue: TData | undefined;
 	try {
 		// undefined = skip initial value (not in cache)
@@ -39,30 +39,28 @@ export function readQuery<TData>(
 	);
 
 	return store;
-}
+};
 
-export function subscribeQuery<TData>(
+export const subscribeQuery = <TData>(
 	client: ApolloClient<any>,
 	options: SubscriptionOptions<any, TData>
-): WritableResult<TData> {
+): WritableResult<TData> => {
 	const observable = client.subscribe<TData>(options);
 
 	return observableToWritable<TData>(observable);
-}
+};
 
-export async function query<TData>(
+export const query = async <TData>(
 	client: ApolloClient<any>,
 	options: QueryOptions<any, TData>,
-	useQueryName: boolean = false
-): Promise<BaseHandler<TData>> {
+	useQueryName = false
+): Promise<BaseHandler<TData>> => {
 	const response = await client.query<TData>(options);
 
 	return responseHandler<TData>(response, useQueryName ? queryName(options.query) : undefined);
-}
+};
 
-export async function mutation<TMutation>(
+export const mutation = async <TMutation>(
 	client: ApolloClient<any>,
 	options: MutationOptions<TMutation, any, any>
-): Promise<FetchResult<TMutation>> {
-	return client.mutate<TMutation>(options);
-}
+): Promise<FetchResult<TMutation>> => client.mutate<TMutation>(options);

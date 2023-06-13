@@ -1,14 +1,14 @@
 <script lang="ts">
-	export let element: string = 'li';
+	export let element = 'li';
 
 	export let size: 'medium' | 'small' = 'medium';
 
 	export let tag: string;
 	export let onClick: () => void;
 
-	export let disabled: boolean = false;
+	export let disabled = false;
 
-	let className: string = '';
+	let className = '';
 
 	export { className as class };
 

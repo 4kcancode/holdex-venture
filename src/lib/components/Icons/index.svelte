@@ -5,24 +5,23 @@
 	} & {
 		[tag in AllowedTags]?: Array<{ [attribute: string]: string }>;
 	};
-	type IconSource = { solid: IconThemeSource } | { default: IconThemeSource };
+	type IconSource = { solid: IconThemeSource } & { default: IconThemeSource };
 </script>
 
 <script lang="ts">
 	export let icon: IconSource;
-	export let width: number = 24;
-	export let height: number = 24;
-	export let isOutlined: boolean = false;
-	export let colorInherit: boolean = false;
+	export let width = 24;
+	export let height = 24;
+	export let isOutlined = false;
+	export let colorInherit = false;
 	export let onClick: () => void = () => {};
 
-	// @ts-ignore
 	let iconProps = icon[isOutlined ? 'default' : 'solid'];
 
 	export let forwardRef: SVGSVGElement | null = null;
 	export let forwardAction: any = () => {};
 
-	let className: string = '';
+	let className = '';
 	export { className as class };
 </script>
 

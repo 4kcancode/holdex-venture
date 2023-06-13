@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
@@ -100,7 +101,7 @@ module.exports = {
 			'tw-tweet-border': 'rgb(var(--tweet-border) / <alpha-value>)',
 			'tw-tweet-border-hover': 'rgb(var(--tweet-border-hover) / <alpha-value>)',
 			'tw-tweet-avatar-border': 'rgb(var(--tweet-avatar-border) / <alpha-value>)',
-			'tw-tweet-btn-border': 'rgb(var(--tweet-btn-border) / <alpha-value>)'
+			'tw-tweet-btn-border': 'rgb(var(--tweet-btn-border) / <alpha-value>)',
 		},
 		fontSize: {
 			'title-l': [
@@ -322,9 +323,9 @@ module.exports = {
 					'0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 			},
 			minHeight: {
-				32: '8rem'
-			}
-		}
+				32: '8rem',
+			},
+		},
 	},
 	plugins: [],
 };

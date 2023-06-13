@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { getContext } from 'svelte';
 
 	import { CopyLinkIcon, HeartIcon, ReplyIcon } from '../Icons';
@@ -27,9 +28,9 @@
 	let likeUrl = `https://twitter.com/intent/like?tweet_id=${id}`;
 	let replyUrl = '';
 
-	function gotoTweet(tweetUrl: string) {
+	const gotoTweet = (tweetUrl: string) => {
 		window.open(tweetUrl, '_blank').focus();
-	}
+	};
 </script>
 
 <template lang="pug">

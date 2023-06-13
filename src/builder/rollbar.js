@@ -7,7 +7,12 @@ import fetch from 'node-fetch';
 
 const ROLLBAR_ENDPOINT = 'https://api.rollbar.com/api/1/sourcemap';
 
-async function uploadSourcemap(form, { filename, rollbarEndpoint, silent, baseUrl }) {
+/**
+ *
+ * @param {FormData} form
+ * @param {{ filename: string, rollbarEndpoint: string, silent: boolean, baseUrl: string }} options
+ */
+const uploadSourcemap = async (form, { filename, rollbarEndpoint, silent, baseUrl }) => {
 	const errMessage = `Failed to upload ${filename} to Rollbar`;
 
 	let res;
@@ -16,9 +21,9 @@ async function uploadSourcemap(form, { filename, rollbarEndpoint, silent, baseUr
 			method: 'POST',
 			body: form,
 		});
-	} catch (err) {
+	} catch (/** @type {any} */ err) {
 		// Network or operational errors
-		throw new Error(err, errMessage);
+		throw new Error(err.message || errMessage);
 	}
 
 	// 4xx or 5xx response
@@ -26,6 +31,7 @@ async function uploadSourcemap(form, { filename, rollbarEndpoint, silent, baseUr
 		// Attempt to parse error details from response
 		let details;
 		try {
+			/** @type {any} */
 			const body = await res.json();
 			details = body?.message ?? `${res.status} - ${res.statusText}`;
 		} catch (parseErr) {
@@ -39,9 +45,12 @@ async function uploadSourcemap(form, { filename, rollbarEndpoint, silent, baseUr
 	if (!silent) {
 		console.info(`Uploaded ${filename} to Rollbar for ${baseUrl} domain`);
 	}
-}
+};
 
-export default function rollbarSourcemaps({
+/**
+ * @param {{ accessToken: string, version: string, baseUrl: string, silent: boolean, rollbarEndpoint: string, ignoreUploadErrors: boolean, base: string, outputDir: string }} options
+ */
+export default ({
 	accessToken,
 	version,
 	baseUrl,
@@ -50,75 +59,76 @@ export default function rollbarSourcemaps({
 	ignoreUploadErrors = true,
 	base = '/',
 	outputDir = '.svelte-kit',
-}) {
-	return {
-		localProps: {
-			accessToken,
-			version,
-			baseUrl,
-			silent,
-			rollbarEndpoint,
-		},
-		name: 'vite-plugin-rollbar',
-		async writeBundle() {
-			if (!accessToken || !baseUrl) return;
+}) => ({
+	localProps: {
+		accessToken,
+		version,
+		baseUrl,
+		silent,
+		rollbarEndpoint,
+	},
+	name: 'vite-plugin-rollbar',
+	writeBundle: async () => {
+		if (!accessToken || !baseUrl) return;
 
-			const files = await glob('./**/*.map', { cwd: outputDir });
-			const sourcemaps = files
-				.map((file) => {
-					const sourcePath = file.replace(/\.map$/, '');
-					const sourceFilename = resolve(outputDir, sourcePath);
+		const files = await glob('./**/*.map', { cwd: outputDir });
+		const sourcemaps = files
+			.map((file) => {
+				const sourcePath = file.replace(/\.map$/, '');
+				const sourceFilename = resolve(outputDir, sourcePath);
 
-					if (!existsSync(sourceFilename)) {
-						console.error(`No corresponding source found for '${file}'`, true);
-						return null;
-					}
+				if (!existsSync(sourceFilename)) {
+					console.error(`No corresponding source found for '${file}'`, true);
+					return null;
+				}
 
-					const sourcemapLocation = resolve(outputDir, file);
+				const sourcemapLocation = resolve(outputDir, file);
 
-					try {
-						return {
-							content: readFileSync(sourcemapLocation, 'utf8'),
-							sourcemap_url: sourcemapLocation,
-							original_file: `${base}${sourcePath}`,
-						};
-					} catch (error) {
-						console.error(`Error reading sourcemap file ${sourcemapLocation}: ${error}`, true);
-						return null;
-					}
-				})
-				.filter((sourcemap) => sourcemap !== null);
+				try {
+					return {
+						content: readFileSync(sourcemapLocation, 'utf8'),
+						sourcemap_url: sourcemapLocation,
+						original_file: `${base}${sourcePath}`,
+					};
+				} catch (error) {
+					console.error(`Error reading sourcemap file ${sourcemapLocation}: ${error}`, true);
+					return null;
+				}
+			})
+			.filter((sourcemap) => sourcemap !== null);
 
-			if (!sourcemaps.length) return;
+		if (!sourcemaps.length) return;
 
-			try {
-				await Promise.all(
-					sourcemaps.map((asset) => {
-						const form = new FormData();
+		try {
+			await Promise.all(
+				sourcemaps.map((asset) => {
+					const form = new FormData();
 
-						form.append('access_token', accessToken);
-						form.append('version', version);
+					form.append('access_token', accessToken);
+					form.append('version', version);
+
+					if (asset) {
 						form.append('minified_url', `${baseUrl}${asset.original_file}`);
 						form.append('source_map', asset.content, {
 							filename: asset.original_file,
 							contentType: 'application/json',
 						});
+					}
 
-						return uploadSourcemap(form, {
-							filename: asset.original_file,
-							rollbarEndpoint,
-							silent,
-							baseUrl,
-						});
-					})
-				);
-			} catch (error) {
-				if (ignoreUploadErrors) {
-					console.error('Uploading sourcemaps to Rollbar failed: ', error);
-					return;
-				}
-				throw error;
+					return uploadSourcemap(form, {
+						filename: asset?.original_file || '',
+						rollbarEndpoint,
+						silent,
+						baseUrl,
+					});
+				})
+			);
+		} catch (error) {
+			if (ignoreUploadErrors) {
+				console.error('Uploading sourcemaps to Rollbar failed: ', error);
+				return;
 			}
-		},
-	};
-}
+			throw error;
+		}
+	},
+});

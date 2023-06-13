@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { routes } from '$lib/config';
@@ -11,7 +12,7 @@
 		XMark,
 		InformationCircle,
 		BookOpen,
-		UserGroup
+		UserGroup,
 	} from '$components/Icons';
 	import MetaTags from '$components/MetaTags/index.svelte';
 	import Icon from '$components/Icons/index.svelte';
@@ -33,7 +34,7 @@
 	$: ({ edges, totalCount, pageInfo } = storeData?.postedMessages || {
 		edges: [],
 		totalCount: 0,
-		pageInfo: null
+		pageInfo: null,
 	});
 	$: pageFilter = getPageFilter($page.url);
 	$: pageQ = getPageQ($page.url);
@@ -68,7 +69,7 @@
 		return goto(newUrl, { invalidateAll: true });
 	};
 
-	let isRefetching: boolean = false;
+	let isRefetching = false;
 	let loadMore = async (afterCursor?: string) => {
 		isRefetching = true;
 		await store.fetchMore({
@@ -77,10 +78,10 @@
 					...queryOptions.feedInput,
 					pageInfo: {
 						...queryOptions.feedInput.pageInfo,
-						afterCursor
-					}
-				}
-			}
+						afterCursor,
+					},
+				},
+			},
 		});
 		isRefetching = false;
 	};

@@ -14,19 +14,13 @@ moment.updateLocale('en', {
 });
 
 
-function howFarFromNow(endsAt:Date) {
-  return moment(endsAt).toNow()
-}
+const howFarFromNow = (endsAt:Date) => moment(endsAt).toNow();
 
-function timeFormat(time: number | string, format: string = 'DD MMM YYYY') {
-	return moment(time).format(format);
-}
+const timeFormat = (time: number | string, format = 'DD MMM YYYY') => moment(time).format(format);
 
-function extendedTimeFormat(time: number | string) {
-	return timeFormat(time, 'MMM DD, YYYY HH:mm A Z');
-}
+const extendedTimeFormat = (time: number | string) => timeFormat(time, 'MMM DD, YYYY HH:mm A Z');
 
-function customFormat(time: any, format: string = '--') {
+const customFormat = (time: any, format = '--') => {
 	switch (true) {
 		case Math.floor(time / 31536000) >= 1:
 			return `${Math.floor(time / 31536000)} years`;
@@ -43,14 +37,14 @@ function customFormat(time: any, format: string = '--') {
 		default:
 			return format;
 	}
-}
+};
 
-function durationOf(time: number | string) {
+const durationOf = (time: number | string) => {
 	if (time === '0') {
 		return 'NA';
 	}
 	return moment.duration(Number(time), 'seconds').humanize();
-}
+};
 
 export type { unitOfTime, Moment }
 export { howFarFromNow, timeFormat, moment, customFormat, durationOf, extendedTimeFormat }

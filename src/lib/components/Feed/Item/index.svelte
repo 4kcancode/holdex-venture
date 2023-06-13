@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import Icon from '$components/Icons/index.svelte';
 	import TextParagraph from '$components/TextParagraph/index.svelte';
 
@@ -9,7 +10,7 @@
 
 	export let message: ParsedMessage;
 
-	let className: string = '';
+	let className = '';
 	export { className as class };
 </script>
 

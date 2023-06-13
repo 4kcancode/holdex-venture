@@ -13,6 +13,16 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
+
+	interface HTMLTemplateElement {
+		src?: string;
+	}
+
+	interface Window {
+		heap: any;
+		dataLayer: any[];
+		gtag: (...args) => void;
+	}
 }
 
 export {};

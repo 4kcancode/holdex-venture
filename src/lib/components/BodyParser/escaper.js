@@ -2,6 +2,7 @@ const escapeTest = /[&<>"']/;
 const escapeReplace = /[&<>"']/g;
 const escapeTestNoEncode = /[<>"']|&(?!#?\w+;)/;
 const escapeReplaceNoEncode = /[<>"']|&(?!#?\w+;)/g;
+/** @type {Record<string, string>} */
 const escapeReplacements = {
 	'&': '&amp;',
 	'<': '&lt;',
@@ -9,8 +10,19 @@ const escapeReplacements = {
 	'"': '&quot;',
 	"'": '&#39;',
 };
+
+/**
+ * @param {string} ch
+ * @returns
+ */
 const getEscapeReplacement = (ch) => escapeReplacements[ch];
-function escape(html, encode) {
+
+/**
+ * @param {string} html
+ * @param {boolean} encode
+ * @returns
+ */
+const escape = (html, encode) => {
 	if (encode) {
 		if (escapeTest.test(html)) {
 			return html.replace(escapeReplace, getEscapeReplacement);
@@ -22,13 +34,16 @@ function escape(html, encode) {
 	}
 
 	return html;
-}
+};
 
 const unescapeTest = /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/gi;
 
-function unescape(html) {
-	// explicitly match decimal, hex, and named HTML entities
-	return html.replace(unescapeTest, (_, n) => {
+/**
+ * @param {string} html
+ * @returns
+ */
+const unescape = (html) =>
+	html.replace(unescapeTest, (_, n) => {
 		n = n.toLowerCase();
 		if (n === 'colon') return ':';
 		if (n.charAt(0) === '#') {
@@ -38,15 +53,18 @@ function unescape(html) {
 		}
 		return '';
 	});
-}
 
-function cleanUrl(href) {
+/**
+ * @param {string} href
+ * @returns
+ */
+const cleanUrl = (href) => {
 	try {
 		href = encodeURI(href).replace(/%25/g, '%');
 	} catch (e) {
 		return null;
 	}
 	return href;
-}
+};
 
 export { unescape, escape, cleanUrl };

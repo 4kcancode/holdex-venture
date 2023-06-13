@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { escape } from '$components/BodyParser/escaper';
 	import { Switch, Case } from '$components/Switch';
 	import Embed from './Blocks/embed.svelte';
@@ -16,15 +17,14 @@
 	};
 
 	export let item: Item;
-	
-	export let parentWrapper: string;
-	setContext('wrapper',parentWrapper)
 
+	export let parentWrapper: string;
+	setContext('wrapper', parentWrapper);
 </script>
 
 <template lang="pug" src="./inline.pug">
-</template>
 
+</template>
 
 <style lang="sass">
 	:global(b),

@@ -10,7 +10,7 @@
 		"postinstall": "svelte-kit sync && sh ./apollo-client-patch.sh",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"lint": "npx eslint --ext js,ts,cjs,svelte --ignore-path .eslintignore --fix .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
@@ -27,6 +27,7 @@
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prefer-arrow-functions": "^3.1.4",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"form-data": "^4.0.0",
 		"fs-extra": "^11.1.1",

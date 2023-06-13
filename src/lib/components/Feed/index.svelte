@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import Parser from '$components/BodyParser';
 
 	import DefaultFeedItem from '$components/Feed/Item/index.svelte';
@@ -8,7 +9,7 @@
 		Message,
 		PostedMessagesConnectionEdge,
 		CommunityPostedMessagesConnectionEdge,
-		PageInfo
+		PageInfo,
 	} from '$lib/types/api';
 	import Button from '$components/Button/index.svelte';
 

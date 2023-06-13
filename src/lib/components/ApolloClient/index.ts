@@ -9,8 +9,8 @@ import cacheConfig from './cache';
  * Initialize new Client instance
  * @returns Apollo Client
  */
-function createServerClient(fetch: any) {
-	return new ApolloClient({
+const createServerClient = (fetch: any) =>
+	new ApolloClient({
 		credentials: 'include',
 		link: new HttpLink({
 			uri: config.apiUrl,
@@ -19,11 +19,9 @@ function createServerClient(fetch: any) {
 		ssrMode: true,
 		cache: new InMemoryCache(cacheConfig),
 	});
-}
 
-let browserClient = createBrowserClient();
-function createBrowserClient() {
-	return new ApolloClient({
+const createBrowserClient = () =>
+	new ApolloClient({
 		credentials: 'omit',
 		link: new HttpLink({
 			uri: config.apiUrl,
@@ -32,9 +30,10 @@ function createBrowserClient() {
 		ssrForceFetchDelay: 100,
 		connectToDevTools: isDev,
 	});
-}
 
-function hydrateApolloClient(client: any, context?: Record<string, string>) {
+const browserClient = createBrowserClient();
+
+const hydrateApolloClient = (client: any, context?: Record<string, string>) => {
 	browserClient.restore(client as any);
 	if (context) {
 		browserClient.setLink(
@@ -44,6 +43,6 @@ function hydrateApolloClient(client: any, context?: Record<string, string>) {
 		);
 	}
 	return browserClient;
-}
+};
 
 export { createServerClient, hydrateApolloClient, readQuery, subscribeQuery, query, mutation };

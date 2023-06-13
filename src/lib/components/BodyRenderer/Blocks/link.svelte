@@ -24,10 +24,6 @@
 			break;
 	}
 
-	$: text = item.text || item.href;
-	$: truncated = text.includes('http') ? truncateUrl(text) : text;
-	$: isHoldexLink = regExp.holdexLink.test(item.href);
-
 	let truncateUrl = (url: string) => {
 		let textWithoutPrefix = url.replace(/^https?:\/\//, '');
 		let domain = textWithoutPrefix.split('/')[0];
@@ -40,6 +36,10 @@
 				: textWithoutPrefix;
 		return truncatedUrl;
 	};
+
+	$: text = item.text || item.href;
+	$: truncated = text.includes('http') ? truncateUrl(text) : text;
+	$: isHoldexLink = regExp.holdexLink.test(item.href);
 </script>
 
 {' '}

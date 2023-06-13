@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { slide } from 'svelte/transition';
@@ -40,7 +41,7 @@
 		return tag && tag.slice(1) === item ? '!text-t1' : '';
 	};
 
-	let tocOpen: boolean = false;
+	let tocOpen = false;
 	let toggleToc = () => {
 		tocOpen = !tocOpen;
 	};

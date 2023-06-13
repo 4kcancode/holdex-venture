@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-unused-vars */
 	import { page } from '$app/stores';
 	import { routes } from '$lib/config';
 
@@ -7,27 +8,23 @@
 	import { regExp } from '$components/BodyParser/utils';
 	import { deserialize, applyAction } from '$app/forms';
 	import { scrollToElement } from '$lib/utils';
-	import Button from '$components/Button/index.svelte'
-	
-	
+	import Button from '$components/Button/index.svelte';
+
 	const pageTheme = 'dark';
 
-	$: path = $page.url.pathname;
-	$: form = $page.form;
 	let email = '';
 	let message = '';
 	let name = '';
 	let isError = false;
 	let success = false;
-	
-	const isActive = (currentUrl: string, path: string, deepEqual: boolean = false) => {
+
+	const isActive = (currentUrl: string, path: string, deepEqual = false) => {
 		if (deepEqual) {
 			return currentUrl === path;
 		}
 		return currentUrl.startsWith(path);
 	};
 
-	
 	const isFilterActive = (currentUrl: URL, path: string, filter: string) => {
 		const f = currentUrl.searchParams.get('filter');
 		return currentUrl.pathname === path && filter === f;
@@ -37,41 +34,38 @@
 		clbk && clbk();
 		return scrollToElement('contact-form', 64);
 	};
+
 	const displaySuccess = () => {
 		success = true;
 		setInterval(() => {
 			success = false;
-		}, 5000)
+		}, 5000);
+	};
 
-	} 
-	async function onContactFormSumbit(event: any) {
-		const data = new FormData(this);
-		
-		const response = await fetch(this.action, {
+	const onContactFormSumbit = async (event: Event) => {
+		const form = event.currentTarget as HTMLFormElement;
+		const data = new FormData(form);
+
+		const response = await fetch(form.action, {
 			method: 'POST',
 			body: data,
 			headers: {
-				'x-sveltekit-action': 'true'
-			}
+				'x-sveltekit-action': 'true',
+			},
 		});
 
 		const result = deserialize(await response.text());
-		event.target.reset();
+		form.reset();
 		name = '';
 		email = '';
 		message = '';
 		applyAction(result);
-		displaySuccess()
-	}
+		displaySuccess();
+	};
 
 	let scrollY: any;
 
-	let isBurgerDropdownShown: boolean = false;
-
-	const toggleBurger = (newStatus: boolean = false) => {
-		isBurgerDropdownShown = newStatus;
-		setBodyClass(newStatus);
-	};
+	let isBurgerDropdownShown = false;
 
 	const setBodyClass = (state: boolean) => {
 		if (state) {
@@ -81,13 +75,21 @@
 		}
 	};
 
-	const validateEmail =(email: string) => {
+	const toggleBurger = (newStatus = false) => {
+		isBurgerDropdownShown = newStatus;
+		setBodyClass(newStatus);
+	};
+
+	const validateEmail = (email: string) => {
 		return regExp.email.test(email);
-	}
+	};
 
 	const displayError = (email: string) => {
-		return !validateEmail(email) && email.length > 0 ? isError = true : isError = false
-	}
+		return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
+	};
+
+	$: path = $page.url.pathname;
+	$: form = $page.form;
 </script>
 
 <template lang="pug" src="./layout.pug">

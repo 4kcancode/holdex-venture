@@ -7,7 +7,7 @@ const skeleton = (urls: string) =>
 	`<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</sitemapindex>`;
 
 export const GET: RequestHandler = async ({ locals }) => {
-	let list = await getThreadsList(locals);
+	const list = await getThreadsList(locals);
 
 	if (list == null) {
 		return new Response('', {
@@ -37,11 +37,11 @@ export const GET: RequestHandler = async ({ locals }) => {
 
 async function getThreadsList(locals: App.Locals) {
 	let list = null;
-	let { pageInfo } = await getBatchCursor(undefined, locals);
+	const { pageInfo } = await getBatchCursor(undefined, locals);
 
 	if (pageInfo !== null) {
 		if (pageInfo.hasNextPage) {
-			let item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
+			const item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
 			if (item !== null) {
 				list = ['index', ...item];
 			}
@@ -78,9 +78,9 @@ async function getBatchCursor(nextCursor: string | undefined, locals: App.Locals
 async function getList(cursor: string, hasNextPage: boolean, locals: App.Locals) {
 	let list: any = null;
 	if (hasNextPage) {
-		let { pageInfo } = await getBatchCursor(cursor, locals);
+		const { pageInfo } = await getBatchCursor(cursor, locals);
 		if (pageInfo !== null) {
-			let item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
+			const item = await getList(pageInfo.endCursor, pageInfo.hasNextPage, locals);
 			if (item !== null) {
 				list = [cursor, ...item];
 			} else {
