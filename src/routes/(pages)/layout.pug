@@ -7,7 +7,7 @@ mixin social-link(href, content)
 	a(class="flex flex-col items-center justify-center w-8 h-8 p-1 text-t1 transition-colors hover:text-accent1-default" href=href target="_blank" rel="noopener noreferrer")&attributes(attributes)=content
 
 mixin main-nav
-	ul(class=" flex items-start gap-4 rwd-xl:gap-8" role="navigation")&attributes(attributes)
+	ul(class=" flex items-start gap-4 xl-up:gap-8" role="navigation")&attributes(attributes)
 		+link("{routes.about}", "About")(class!="{isActive(path,routes.about, true) ? 'before:!bg-accent1-default' : ''}")
 		+link("{routes.portfolio}", "Portfolio")(class!="{isActive(path,routes.portfolio, true) ? 'before:!bg-accent1-default' : ''}")
 		+link("{routes.forStartups}", "For Startups")(class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}")
@@ -21,8 +21,8 @@ mixin mobile-nav
 .app-container
 	header(class!="z-10 w-full block  relative {scrollY > 1 ? 'sticky top-0 border-b border-solid border-l4 bg-l1' : ''}")
 		.outer-container(class="relative xs:before:content['] xs:before:absolute xs:before:left-0 xs:before:w-16 xs:before:h-16 xs:before:z-10 xs:before:bg-gradient-to-r xs:after:bg-gradient-to-l from-l1 to-transparent xs:after:content['] xs:after:absolute xs:after:right-0 xs:after:w-16 xs:after:h-16 xs:after:z-10 xs:after:top-0")
-			.header-wrapper(class="flex px-4 py-3 justify-start items-center w-full overflow-x-auto whitespace-nowrap rwd-lg:justify-center")
-				div(class='flex items-center justify-between mx-auto gap-4 rwd-sm:w-full rwd-xl:max-w-screen-rwd-xl')
+			.header-wrapper(class="flex px-4 py-3 justify-start items-center w-full overflow-x-auto whitespace-nowrap lg-up:justify-center")
+				div(class='flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up')
 					.logo-wrapper.sticky.left-0.z-20
 						a(class="relative flex w-6.5 h-6.5  {isBurgerDropdownShown ? '!w-25' : ''}" href="{routes.index}")
 							+if('isBurgerDropdownShown')
@@ -30,15 +30,15 @@ mixin mobile-nav
 								+else()
 									img(alt="Home" src="/logo-w-o-text.svg")
 
-					.nav-wrapper(class="main-nav flex items-center gap-8 rwd-lg:ml-40")
-						+main-nav(class="gap-4 rwd-xl:gap-8")
+					.nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
+						+main-nav(class="gap-4 xl-up:gap-8")
 						.social-icons-nav(class="gap-5 flex items-start")
 							+social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(class="!h-5 !w-5 !p-0")
 							+social-link("https://github.com/holdex", "{@html socialIcons.github}")(class="!h-5 !w-5 !p-0")
 							+social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(class="!h-5 !w-5 !p-0")
 							+social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(class="!h-5 !w-5 !p-0")
 
-					.flex.items-center.gap-2.sticky.right-0.z-20(class='rwd-md:gap-4')
+					.flex.items-center.gap-2.sticky.right-0.z-20(class='md-up:gap-4')
 						+button-icon-default(type='button' on:click!="{onThemeToggle}")
 							SVGIcon(name='{themeIconName}' class='w-5 stroke-current')
 						+primary-button("Partner With Us")(class="sticky" type="button" on:click!="{() => handleClick(undefined)}")
