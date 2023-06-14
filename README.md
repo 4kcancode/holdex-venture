@@ -1,6 +1,6 @@
 # Welcome to Holdex
 
-Lean more about our DNA [here](https://holdex.io/about).
+Learn more about our DNA [here](https://holdex.io/about).
 
 ## Developing
 
