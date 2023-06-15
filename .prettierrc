@@ -7,7 +7,7 @@
   "printWidth": 100,
   "arrowParens": "always",
   "bracketSpacing": true,
-  "plugins": ["prettier-plugin-svelte"],
+  "plugins": ["prettier-plugin-svelte", "@prettier/plugin-pug"],
   "pluginSearchDirs": ["."],
   "overrides": [
     {
@@ -16,5 +16,9 @@
         "parser": "svelte"
       }
     }
-  ]
+  ],
+  "pugWrapAttributesThreshold": 10,
+  "pugSingleQuote": false,
+  "pugAttributeSeparator": "none",
+  "pugFramework": "svelte"
 }
