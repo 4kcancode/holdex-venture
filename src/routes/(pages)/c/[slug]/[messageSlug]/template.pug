@@ -20,7 +20,7 @@ mixin author
             +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
         +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
     +content-wrapper
-        .author-block(class="flex flex-col bg-l2 border border-solid border-l4 rounded-xl w-full")
+        .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
             .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
                 TextParagraph(textColor="text-t3")
                     time(
@@ -51,7 +51,7 @@ mixin author
                 open="false"
                 on:click|preventDefault="{toggleToc}"
                 class:active="{tocOpen}" 
-                class="flex w-full cursor-pointer flex-col items-start bg-l2 rounded-xl border border-solid border-l4")
+                class="flex w-full cursor-pointer flex-col items-start bg-l1 rounded-xl border border-solid border-l4 dark:bg-l2")
                 summary(class="flex items-center justify-between p-3.75")
                     TextParagraph(class="pointer-events-none" textColor="text-t3") Table of Contents
                     +if('tocOpen')
