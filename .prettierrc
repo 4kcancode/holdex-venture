@@ -15,11 +15,18 @@
       "options": {
         "parser": "svelte"
       }
+    },
+    {
+      "files": "*.pug",
+      "options": {
+        "parser": "pug"
+      }
     }
   ],
   "pugWrapAttributesThreshold": 10,
   "pugSingleQuote": false,
   "pugAttributeSeparator": "none",
   "pugFramework": "svelte",
-  "pugIdNotation": "as-is"
+  "pugIdNotation": "as-is",
+  "pugPreserveAttributeBrackets": true
 }
