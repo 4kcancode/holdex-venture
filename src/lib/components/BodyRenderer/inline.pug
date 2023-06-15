@@ -4,9 +4,7 @@ Switch(condition="{item.type}")
       TextWrapper(text="{text}")
         slot
   Case(value="hashtag")
-    Hashtag(
-      item="{item}"
-      link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
+    Hashtag(item="{item}" link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
       TextWrapper(text="{item.text}")
   Case(value="code")
     code.rounded-lg.bg-l2.py-0.px-2.text-code.font-mono
