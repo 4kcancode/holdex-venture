@@ -1,28 +1,33 @@
 a.transition-colors.text-t1.block(
   href="/c/{message.communitySlug}/{message.messageSlug}"
-  class!="hover:text-accent1-default {className}")
+  class!="hover:text-accent1-default {className}"
+)
   article.flex.items-center.gap-4
     .feed-icon.relative.block.w-32.h-24.border.border-solid.border-l4.rounded-xl.bg-l2(class="xs:w-24")
       img.relative.block.w-full.h-full.object-center.rounded-xl.object-cover(
         alt="{message.title}"
-        src="{message.cover || '/default-cover.png'}")
+        src="{message.cover || '/default-cover.png'}"
+      )
     .feed-content.flex.items-start.justify-center.flex-col
       TextParagraph.block.relative.w-full.whitespace-nowrap.overflow-hidden.text-ellipsis(
         element="h2"
         textColor="text-inherit"
-        class="!font-bold") { message.title }
+        class="!font-bold"
+      ) {message.title}
       +if('message.subtitle')
         TextParagraph.block.relative.w-full.whitespace-nowrap.overflow-hidden.text-ellipsis(
           textColor="text-t2"
-          class="xs:hidden") { message.subtitle }
+          class="xs:hidden"
+        ) {message.subtitle}
       TextParagraph.flex.gap-2(textColor="text-t3")
         time(
           datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
-          title="{extendedTimeFormat(message.createdAt)}") { timeFormat(message.createdAt) }
+          title="{extendedTimeFormat(message.createdAt)}"
+        ) {timeFormat(message.createdAt)}
         span.opacity-50(class="xs:hidden") •
         span.inline-flex.items-center.gap-1(class="xs:hidden")
           Icon(icon="{HandThumbUp}" width="{20}" height="{20}" colorInherit)
-          span { formatNumber(message.votesCount.up - message.votesCount.down, '0,0a') }
+          span {formatNumber(message.votesCount.up - message.votesCount.down, '0,0a')}
         span.inline-flex.items-center.gap-1(class="xs:hidden") 
           Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
-          span { formatNumber(message.allReplies.totalCount, '0,0a') }
+          span {formatNumber(message.allReplies.totalCount, '0,0a')}

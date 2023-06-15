@@ -26,7 +26,6 @@
   "pugUseTabs": false,
   "pugTabWidth": 2,
   "pugBracketSpacing": false,
-  "pugBracketSameLine": "true",
   "pugWrapAttributesThreshold": 5,
   "pugSingleQuote": false,
   "pugAttributeSeparator": "none",

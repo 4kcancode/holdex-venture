@@ -10,7 +10,8 @@
             svelte:element.heading.font-satoshi.py-4(
               this="{item.level}"
               class="{bindHeading(item.level)}"
-              id="{item.id}")
+              id="{item.id}"
+            )
               +each("item.items as hItem")
                 InlineBlock(item="{hItem}")
       Case(value="paragraph")
@@ -20,7 +21,8 @@
       Case(value="list")
         svelte:element.pl-7(
           class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'}"
-          this="{item.style === 'unordered' ? 'ul' : 'ol'}")
+          this="{item.style === 'unordered' ? 'ul' : 'ol'}"
+        )
           +each("item.items as liItem")
             li.text-paragraph-l.text-t2
               +each("liItem as lItem")
@@ -28,7 +30,8 @@
       Case(value="nestedList")
         svelte:element.pl-7.ml-4(
           class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'}"
-          this="{item.style === 'unordered' ? 'ul' : 'ol'}")
+          this="{item.style === 'unordered' ? 'ul' : 'ol'}"
+        )
           +each("item.items as liItem")
             NestedList(item="{liItem}" type="{item.style}" let:item="{lItem}")
               InlineBlock(item="{lItem}") 
@@ -36,7 +39,8 @@
       Case(value="quote")
         blockquote.relative.bg-l1.overflow-clip.rounded-xl.border.border-solid.border-l4.p-4.text-paragraph-s.text-t1(
           title="{item.text}"
-          class="pl-5.5 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2")
+          class="pl-5.5 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2"
+        )
           +each("item.items as QItem")
             InlineBlock(item="{QItem}") 
       Case(value="embed")
@@ -56,12 +60,14 @@
                 +each('row as cell, i')
                   +if('index === 0')
                     th.bg-l2.px-3.text-t1.text-footnote.font-bold.border-solid.border-l.border-t.border-l4(
-                      class="py-1.5 first:rounded-tl-xl last:rounded-tr-xl last:border-r")
+                      class="py-1.5 first:rounded-tl-xl last:rounded-tr-xl last:border-r"
+                    )
                       +each('parseTableCell(cell) as header')
                         InlineBlock(item="{header}")
                     +else
                       td.px-3.text-t2.text-footnote.border-solid.border-l.border-t.border-l4(
-                        class="py-1.5 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
+                        class="py-1.5 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}"
+                      )
                         +each('parseTableCell(cell) as cellItem')
                           InlineBlock(item="{cellItem}" parentWrapper="table")
 

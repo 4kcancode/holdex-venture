@@ -9,5 +9,11 @@
   "svelte.plugin.svelte.compilerWarnings": {
     "unused-export-let": "ignore"
   },
-  "scss.lint.unknownAtRules": "ignore"
+  "scss.lint.unknownAtRules": "ignore",
+  "[svelte]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[pug]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

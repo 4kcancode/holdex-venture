@@ -19,7 +19,8 @@
       data-tally-open="{item.id}"
       data-tally-emoji-animation="wave"
       data-tally-layout="modal"
-      data-tally-overlay="true")
+      data-tally-overlay="true"
+    )
 </template>
 
 <svelte:head>

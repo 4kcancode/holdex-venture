@@ -21,7 +21,8 @@ include ../mixins
               Hashtag(
                 tag="{'#'}{tag.node.id}"
                 class="{isHashtagActive(pageFilter, tag.node.id)}"
-                onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}")
+                onClick!="{() => handleSort($page.url, tag.node.id.toLowerCase())}"
+              )
         +feedRenderer
           Feed(
             feedType="{community.slug === 'jobs' ? 'job' : 'default'}"
@@ -29,4 +30,5 @@ include ../mixins
             totalCount="{totalCount}"
             isRefetching="{isRefetching}"
             pageInfo="{pageInfo}"
-            loadMore="{loadMore}")
+            loadMore="{loadMore}"
+          )

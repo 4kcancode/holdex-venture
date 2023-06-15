@@ -1,13 +1,15 @@
 a.transition-colors.text-t1.block(
   href="/c/{message.communitySlug}/{message.messageSlug}"
-  class!="hover:text-accent1-default {className}")
-  h3.relative.w-full.text-h3-l.mb-4.font-satoshi.whitespace-nowrap(class="xs:text-h3-s") { message.title }
-  TextParagraph.mb-4(class="!text-t2") { message.subtitle }
+  class!="hover:text-accent1-default {className}"
+)
+  h3.relative.w-full.text-h3-l.mb-4.font-satoshi.whitespace-nowrap(class="xs:text-h3-s") {message.title}
+  TextParagraph.mb-4(class="!text-t2") {message.subtitle}
   +if('message.hashtags && message.hashtags.length > 0')
     ul.relative.flex.items-start.gap-2.flex-wrap.w-full.list-none
       +each('message.hashtags as tag, index')
         +if('index !== 0')
           li.text-paragraph-l(class="text-t3/50") &bull;
         li.underline.underline-offset-4.text-accent1-default.text-inter.h-8.text-paragraph-l(
-          class="bg-accent1-default/15")
-          | { '#' }{ tag }
+          class="bg-accent1-default/15"
+        )
+          | {'#'}{tag}

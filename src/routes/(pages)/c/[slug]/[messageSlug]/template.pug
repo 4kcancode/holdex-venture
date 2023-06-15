@@ -9,8 +9,9 @@ mixin author
       +inline-link("{author.url}",'{author.name}')(
         class="xs:text-paragraph-s"
         target="_blank"
-        rel="noreferrer")
-    +else { message._author.name }
+        rel="noreferrer"
+      )
+    +else {message._author.name}
 
 +main-section
   +header-wrapper.flex-col.gap-8(class="xs:gap-4")
@@ -27,7 +28,8 @@ mixin author
         TextParagraph(textColor="text-t3")
           time(
             datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
-            title="{extendedTimeFormat(message.createdAt)}") { timeFormat(message.createdAt) } { message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : '' }
+            title="{extendedTimeFormat(message.createdAt)}"
+          ) {timeFormat(message.createdAt)} {message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
         TextParagraph.flex.flex-wrap(textColor="text-t3") #[span.mr-1 By] #[+author]
         //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
         //-     span(class="inline-flex items-center gap-1")
@@ -38,7 +40,8 @@ mixin author
         //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
       +if('message.isGoogleDoc')
         .edit-wrapper.flex.items-center.justify-between.gap-4.border-t.border-solid.border-l4(
-          class="p-3.75")
+          class="p-3.75"
+        )
           TextParagraph.flex(textColor="text-t3") Have a suggestion?
           Button(
             variant="secondary"
@@ -46,13 +49,15 @@ mixin author
             label="Edit Article"
             href="{message.isGoogleDoc}"
             target="_blank"
-            rel="noreferrer")
+            rel="noreferrer"
+          )
     +if('message.tocs && message.tocs.length > 0')
       details.flex.w-full.cursor-pointer.flex-col.items-start.bg-l1.rounded-xl.border.border-solid.border-l4(
         open="false"
         on:click|preventDefault="{toggleToc}"
         class:active="{tocOpen}"
-        class="dark:bg-l2")
+        class="dark:bg-l2"
+      )
         summary.flex.items-center.justify-between(class="p-3.75")
           TextParagraph.pointer-events-none(textColor="text-t3") Table of Contents
           +if('tocOpen')
@@ -63,10 +68,12 @@ mixin author
           .details-content.relative.border-t.border-solid.border-l4(
             transition:slide|local
             on:outroend="{handleOutroEnd}"
-            class="p-3.75")
+            class="p-3.75"
+          )
             ul.toc-block
               +each('message.tocs as item')
                 li.text-paragraph-l.text-t3.transition-colors(
                   on:click!="{() => handleClick($page.url, item.id)}"
-                  class!="xs:text-paragraph-s hover:text-t1 {renderTocPadding(item.level)}") ⏤ { @html item.cleanRef }
+                  class!="xs:text-paragraph-s hover:text-t1 {renderTocPadding(item.level)}"
+                ) ⏤ { @html item.cleanRef }
     BodyRenderer(blocks="{message.blocks}")

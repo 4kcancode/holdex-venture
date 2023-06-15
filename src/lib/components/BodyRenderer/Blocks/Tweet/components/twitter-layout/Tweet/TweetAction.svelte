@@ -41,24 +41,28 @@
         href="{tweetUrl}"
         title="Like"
         target="_blank"
-        rel="noopener noreferrer")
+        rel="noopener noreferrer"
+      )
         span.align-top.text-tw-tweet-color-red
           Icon(icon="{HeartIcon}" width="{24}" height="{24}" colorInherit)
         unless likeCount == 0
         span.inline-block.whitespace-nowrap.overflow-hidden.text-ellipsis.not-italic.font-bold.text-sm.leading-5.ml-2(
-          class="hover:text-tw-tweet-link-color-hover")
-          p { likeCount }
+          class="hover:text-tw-tweet-link-color-hover"
+        )
+          p {likeCount}
 
       a.text-tw-tweet-link-color.block.text-sm.no-underline.px-5.exclude(
         class="transition-[color] duration-[0.3s] ease-[ease-in-out] py-2.5 {$theme}"
         href="{tweetUrl}"
         title="Like"
         target="_blank"
-        rel="noopener noreferrer")
+        rel="noopener noreferrer"
+      )
         span.align-top
           Icon(icon="{ReplyIcon}" width="{24}" height="{24}" colorInherit)
         span.inline-block.whitespace-nowrap.overflow-hidden.text-ellipsis.not-italic.font-bold.text-sm.leading-5.ml-2(
-          class="hover:text-tw-tweet-link-color-hover")
+          class="hover:text-tw-tweet-link-color-hover"
+        )
           p Reply
 
       a.text-tw-tweet-link-color.block.text-sm.no-underline.px-5.exclude(
@@ -66,11 +70,13 @@
         href="{tweetUrl}"
         title="Like"
         target="_blank"
-        rel="noopener noreferrer")
+        rel="noopener noreferrer"
+      )
         span.align-top
           Icon(icon="{CopyLinkIcon}" width="{24}" height="{24}" colorInherit)
         span.inline-block.whitespace-nowrap.overflow-hidden.text-ellipsis.not-italic.font-bold.text-sm.leading-5.ml-2(
-          class="hover:text-tw-tweet-link-color-hover")
+          class="hover:text-tw-tweet-link-color-hover"
+        )
           p Copy Link
 
     .flex.items-center.justify-center
@@ -79,8 +85,9 @@
         href="{tweetUrl}"
         title="Read replies to tweet"
         target="_blank"
-        rel="noopener noreferrer")
-        p Read { replyCount } replies
+        rel="noopener noreferrer"
+      )
+        p Read {replyCount} replies
 </template>
 
 <style lang="sass">

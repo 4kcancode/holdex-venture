@@ -15,10 +15,10 @@ mixin crumbItemText(name)
 mixin filter-options
   ul.filter-options.relative.flex.items-start.my-3.border.border-solid.border-l4.rounded-xl
     +filter-option-item("{() => handleSort($page.url, 'CREATED_AT')}", "By Time").border-r.border-solid.border-l4.rounded-l-underbase(
-      class!="{ pageFilter !== 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : '' }"
+      class!="{pageFilter !== 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}"
     )
     +filter-option-item("{() => handleSort($page.url, 'NET_UP_VOTES')}", "By Rating").rounded-r-underbase(
-      class!="{ pageFilter === 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : '' }"
+      class!="{pageFilter === 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}"
     )
 
 mixin filter-option-item(onClick, title)
@@ -39,7 +39,7 @@ mixin short-link(href, icon, title)
     class="hover:text-accent1-default"
     href=href
   )
-    Icon(icon=icon width="{ 20 }" height="{ 20 }" colorInherit)
+    Icon(icon=icon width="{20}" height="{20}" colorInherit)
     span= title
 
 mixin inline-link(href, title)
@@ -65,7 +65,7 @@ mixin button-icon-small(icon)
     if block
       block
     else
-      Icon(icon=icon width="{ 20 }" height="{ 20 }" colorInherit)
+      Icon(icon=icon width="{20}" height="{20}" colorInherit)
 
 mixin messageHeader(title, subtitle)
   h1.text-title-l.font-satoshi.text-center(class="smDown:text-left xs:text-h1-s")&attributes(attributes)= title
@@ -76,12 +76,12 @@ mixin feedRenderer
   +if('isSearchMode')
     +if('totalCount > 0')
       .result-label-wrapper.flex.items-center.flex-wrap.gap-3
-        p.text-paragraph-l.font-bold #[span.text-t3.font-medium Showing results for] { pageQ || '#' + pageFilter }
+        p.text-paragraph-l.font-bold #[span.text-t3.font-medium Showing results for] {pageQ || '#' + pageFilter}
         +button-icon-small("{XMark}")(
-          on:click!="{ () => handleSort($page.url, 'CREATED_AT') }"
+          on:click!="{() => handleSort($page.url, 'CREATED_AT')}"
         )
       block
       +else
-        p.text-paragraph-l.text-t1.w-full.text-center.font-bold #[span.text-t3.font-medium No articles found for] { pageQ || '#' + pageFilter }.
+        p.text-paragraph-l.text-t1.w-full.text-center.font-bold #[span.text-t3.font-medium No articles found for] {pageQ || '#' + pageFilter}.
     +else
       block

@@ -5,7 +5,7 @@ mixin link(href, title)
     class="hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-4 before:w-full before:bg-transparent xs:before:!bg-transparent before:h-0.5"
   )&attributes(attributes): a.text-inherit(
     href=href
-    on:click!="{ () => toggleBurger(false) }"
+    on:click!="{() => toggleBurger(false)}"
   )= title
 
 mixin social-link(href, content)
@@ -19,16 +19,16 @@ mixin social-link(href, content)
 mixin main-nav
   ul.flex.items-start.gap-4(class="xl-up:gap-8" role="navigation")&attributes(attributes)
     +link("{routes.about}", "About")(
-      class!="{ isActive(path, routes.about, true) ? 'before:!bg-accent1-default' : '' }"
+      class!="{isActive(path, routes.about, true) ? 'before:!bg-accent1-default' : ''}"
     )
     +link("{routes.portfolio}", "Portfolio")(
-      class!="{ isActive(path, routes.portfolio, true) ? 'before:!bg-accent1-default' : '' }"
+      class!="{isActive(path, routes.portfolio, true) ? 'before:!bg-accent1-default' : ''}"
     )
     +link("{routes.forStartups}", "For Startups")(
-      class!="{ isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : '' }"
+      class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}"
     )
     +link("{routes.jobs}", "Jobs")(
-      class!="{ isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : '' }"
+      class!="{isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : ''}"
     )
     //- +link("/c?filter=partners", "Partners")(class!="{isFilterActive($page.url,'/c', 'partners') ? '!text-accent1-default before:!bg-accent1-default' : ''}")
 
@@ -38,7 +38,7 @@ mixin mobile-nav
 
 .app-container
   header.z-10.w-full.block.relative.top-0.border-b.border-solid.border-l4(
-    class!="{ scrollY > 1 ? 'sticky bg-l1' : '' }"
+    class!="{scrollY > 1 ? 'sticky bg-l1' : ''}"
   )
     .outer-container.relative.from-l1.to-transparent(
       class="xs:before:content['] xs:before:absolute xs:before:left-0 xs:before:w-16 xs:before:h-16 xs:before:z-10 xs:before:bg-gradient-to-r xs:after:bg-gradient-to-l xs:after:content['] xs:after:absolute xs:after:right-0 xs:after:w-16 xs:after:h-16 xs:after:z-10 xs:after:top-0"
@@ -50,7 +50,7 @@ mixin mobile-nav
           .logo-wrapper.sticky.left-0.z-20
             a.relative.flex(
               class="w-6.5 h-6.5 {isBurgerDropdownShown ? '!w-25' : ''}"
-              href="{ routes.index }"
+              href="{routes.index}"
             )
               +if('isBurgerDropdownShown')
                 img(alt="Home" src="/logo-white-w-text.svg")
@@ -74,11 +74,11 @@ mixin mobile-nav
               )
 
           .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
-            +button-icon-default(type="button" on:click!="{ onThemeToggle }")
-              SVGIcon.w-5.stroke-current(name="{ themeIconName }")
+            +button-icon-default(type="button" on:click!="{onThemeToggle}")
+              SVGIcon.w-5.stroke-current(name="{themeIconName}")
             +primary-button("Partner With Us").sticky(
               type="button"
-              on:click!="{ () => handleClick(undefined) }"
+              on:click!="{() => handleClick(undefined)}"
             )
 
   main: slot
@@ -91,15 +91,15 @@ mixin mobile-nav
         class="max-w-[604px]"
         method="POST"
         action="/"
-        on:submit|preventDefault="{ onContactFormSumbit }"
+        on:submit|preventDefault="{onContactFormSumbit}"
       )
         h4.text-h4-l.font-satoshi.mb-4(class="xs:text-h4-s") Contact Us
         p.text-paragraph-l.text-t2.mb-6(class="xs:text-paragraph-s") We’d love to hear from you on discussing potential projects, intriguing ideas, and new opportunities.
         .input-group.mb-4
           textarea.relative.w-full.border.border-solid.border-l4.block.min-h-32.h-32.bg-l1.shadow-input.rounded-xl.text-footnote.text-t1.transition-all(
-            rows="{ 5 }"
+            rows="{5}"
             required
-            bind:value="{ message }"
+            bind:value="{message}"
             class="p-2.5 placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2"
             name="message"
             placeholder="How can we help you?"
@@ -109,41 +109,41 @@ mixin mobile-nav
             type="text"
             name="name"
             required
-            bind:value="{ name }"
+            bind:value="{name}"
             class="w-1/2 xs:w-full p-2.25 placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2"
             placeholder="Your name and company"
           )
           input.relative.border.border-solid.border-l4.bg-l1.shadow-input.rounded-xl.text-footnote.text-t1.transition-all(
             type="email"
             required
-            pattern!="{ regExp.email.toString().slice(1, -1) }"
-            bind:value="{ email }"
+            pattern!="{regExp.email.toString().slice(1, -1)}"
+            bind:value="{email}"
             name="email"
-            on:blur="{ displayError(email) }"
+            on:blur="{displayError(email)}"
             class="w-1/2 xs:w-full p-2.25 placeholder:text-footnote placeholder:opacity-100 placeholder:text-t3 hover:border-accent1-default autofill:fill-t1 autofill:hover:text-t3 dark:bg-l2"
             placeholder="Your email address"
           )
         p.text-rating-c.text-footnote.font-inter.flex.items-center.mb-6.gap-2(
           class="xs:mb-4 py-2.5 {isError ? 'flex' : 'hidden'}"
         )
-          Icon(icon="{ ExclamationTriangle }" width="{ 17.26 }" height="{ 15.62 }" colorInherit)
+          Icon(icon="{ExclamationTriangle}" width="{17.26}" height="{15.62}" colorInherit)
           span() Invalid email address
         Button(
           label="Submit"
           class="dark:bg-l2 mobile:!w-full"
-          disabled="{ message == '' || name == '' || email == '' || !validateEmail(email) ? true : false }"
+          disabled="{message == '' || name == '' || email == '' || !validateEmail(email) ? true : false}"
           isSubmitBtn="true"
         )
         .feedback-toast.absolute.z-1.-bottom-4.h-12.border.border-solid.rounded-xl.bg-l2.border-l4.justify-center.items-center.gap-2.shadow-tag.text-accent1-default(
           class="xs:-bottom-2 left-1/2 -translate-x-1/2 px-2.75 py-1.75 {success ? 'flex' : 'hidden'}"
         )
-          Icon(icon="{ CheckCircle }" width="{ 24 }" height="{ 24 }" colorInherit)
+          Icon(icon="{CheckCircle}" width="{24}" height="{24}" colorInherit)
           span.succ.text-t1.text-cta Message sent!
     .footer-nav.flex.items-center.justify-between.py-4.px-4.w-full(
       class="xs:flex-col xs:items-start xs:py-6 xs:gap-6 max-w-[1240px]"
     )
       .logo-wrapper.z-1.relative
-        a.relative.flex.w-25(class="h-6.5 tbDown:w-30 tbDown:h-8" href="{ routes.index }"): SVGIcon.w-32(
+        a.relative.flex.w-25(class="h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon.w-32(
           name="logo"
         )
       ul.absolute.main-nav.flex.items-start.gap-8(
