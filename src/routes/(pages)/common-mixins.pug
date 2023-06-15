@@ -21,5 +21,5 @@ mixin primary-button(label)
         span= label
 
 mixin button-icon-default
-    button(class="relative inline-flex w-10 h-10 z-1 bg-l1 text-t3 border border-solid border-l5 shadow-secondary-button items-center justify-center p-1.75 rounded-2lg hover:text-t1 hover:!border-accent1-active dark:hover:shadow-secondary-button-hover focus:text-t1 focus:border-accent1-default dark:bg-l3 dark:border-l3")&attributes(attributes)
+    button(class="relative inline-flex w-10 h-10 z-1 bg-l1 text-t3 border border-solid border-l5 shadow-secondary-button items-center justify-center p-1.75 rounded-2lg hover:text-t1 hover:!border-accent1-active focus:text-t1 focus:!border-accent1-active dark:bg-l3 dark:border-l3 dark:hover:shadow-secondary-button-hover")&attributes(attributes)
         block
