@@ -44,7 +44,6 @@
 </script>
 
 <template lang="pug" src="./template.pug">
-
 </template>
 
 <style lang="sass" src="./style.sass">

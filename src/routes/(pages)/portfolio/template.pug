@@ -2,20 +2,20 @@ include ../common-mixins
 include ../c/mixins
 
 +if('storeData')
-    +main-section
-        +header-wrapper()(class="flex-col gap-8 xs:gap-4")
-            +nav-crumbs
-                +crumbItemLink("/", "Home")
-                +crumbDelimiter
-                +crumbItemText("Portfolio")
-            +messageHeader("Portfolio", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
-        +content-wrapper
-            +feedRenderer
-                Feed(
-                    feedType="portfolio"
-                    edges="{edges}"
-                    totalCount="{totalCount}"
-                    isRefetching="{isRefetching}"
-                    pageInfo="{pageInfo}"
-                    loadMore="{loadMore}"
-                )
+  +main-section
+    +header-wrapper.flex-col.gap-8(class="xs:gap-4")
+      +nav-crumbs
+        +crumbItemLink("/", "Home")
+        +crumbDelimiter
+        +crumbItemText("Portfolio")
+      +messageHeader("Portfolio", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
+    +content-wrapper
+      +feedRenderer
+        Feed(
+          feedType="portfolio"
+          edges="{ edges }"
+          totalCount="{ totalCount }"
+          isRefetching="{ isRefetching }"
+          pageInfo="{ pageInfo }"
+          loadMore="{ loadMore }"
+        )

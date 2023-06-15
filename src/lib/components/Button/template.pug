@@ -1,30 +1,36 @@
 mixin content
-    +if('icon')
-        Icon(icon="{icon}" width="{iconSize}" height="{iconSize}" colorInherit isOutlined="{$$restProps.isOutlined}")
-    +if('label')
-        span {label}
-    slot
+  +if('icon')
+    Icon(
+      icon="{ icon }"
+      width="{ iconSize }"
+      height="{ iconSize }"
+      colorInherit
+      isOutlined="{ $$restProps.isOutlined }"
+    )
+  +if('label')
+    span { label }
+  slot
 
 +if('href')
-    a(
-        {...$$restProps}
-        use:forwardAction
-        disabled="{disabled}"
-        style:width!="{fixedTo || 'auto'}"
-        bind:this="{forwardRef}"
-        class="no-underline {btnClass}"
-        href="{href}"
+  a.no-underline(
+    {...$$restProps}
+    use:forwardAction
+    disabled="{ disabled }"
+    style:width!="{ fixedTo || 'auto' }"
+    bind:this="{ forwardRef }"
+    class="{ btnClass }"
+    href="{ href }"
+  )
+    +content
+  +else
+    button(
+      {...$$restProps}
+      use:forwardAction
+      disabled="{ disabled }"
+      style:width!="{ fixedTo || 'auto' }"
+      bind:this="{ forwardRef }"
+      class="{ btnClass }"
+      type="{ btnType }"
+      on:click!="{ clickHandler }"
     )
-        +content
-    +else()
-        button(
-            {...$$restProps}
-            use:forwardAction
-            disabled="{disabled}"
-            style:width!="{fixedTo || 'auto'}"
-            bind:this="{forwardRef}"
-            class="{btnClass}"
-            type="{btnType}"
-            on:click!="{clickHandler}"
-        )
-            +content
+      +content

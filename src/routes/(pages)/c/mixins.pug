@@ -1,62 +1,87 @@
 mixin crumbItemLink(href, name)
-    li: a(class="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-accent1-default" href=href title=name): span= name
+  li: a.text-paragraph-l.text-t3.transition-colors(
+    class="xs:text-paragraph-s hover:text-accent1-default"
+    href=href
+    title=name
+  ): span= name
 
 mixin crumbDelimiter
-    li(class="crumb-delimiter text-paragraph-l xs:text-paragraph-s text-t3/50") / 
+  li.crumb-delimiter.text-paragraph-l(class="xs:text-paragraph-s text-t3/50") /
 
 mixin crumbItemText(name)
-    li: span(class="text-paragraph-l xs:text-paragraph-s text-t3")= name
+  li: span.text-paragraph-l.text-t3(class="xs:text-paragraph-s")= name
 
 //- Filter options
 mixin filter-options
-    ul.filter-options(class="relative flex items-start my-3 border border-solid border-l4 rounded-xl")
-        +filter-option-item("{() => handleSort($page.url, 'CREATED_AT')}", "By Time")(class!="border-r border-solid border-l4 rounded-l-underbase {pageFilter !== 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}")
-        +filter-option-item("{() => handleSort($page.url, 'NET_UP_VOTES')}", "By Rating")(class!="rounded-r-underbase {pageFilter === 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : ''}")
+  ul.filter-options.relative.flex.items-start.my-3.border.border-solid.border-l4.rounded-xl
+    +filter-option-item("{() => handleSort($page.url, 'CREATED_AT')}", "By Time").border-r.border-solid.border-l4.rounded-l-underbase(
+      class!="{ pageFilter !== 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : '' }"
+    )
+    +filter-option-item("{() => handleSort($page.url, 'NET_UP_VOTES')}", "By Rating").rounded-r-underbase(
+      class!="{ pageFilter === 'NET_UP_VOTES' ? '!bg-l3 !text-accent1-default' : '' }"
+    )
 
 mixin filter-option-item(onClick, title)
-    li.option-item(
-        on:click!=onClick
-        class!="flex items-center justify-center cursor-pointer bg-l2 transition-colors text-cta text-t3 hover:text-t1 py-0.75 px-2.75")&attributes(attributes)= title
+  li.option-item.flex.items-center.justify-center.cursor-pointer.bg-l2.transition-colors.text-cta.text-t3(
+    on:click!=onClick
+    class!="hover:text-t1 py-0.75 px-2.75"
+  )&attributes(attributes)= title
 
 //- Short links
 mixin short-links
-    ul.short-links(class="flex items-center justify-center gap-x-5 w-full max-w-[604px] smDown:justify-start smDown:flex-wrap")
-        block
+  ul.short-links.flex.items-center.justify-center.gap-x-5.w-full(
+    class="max-w-[604px] smDown:justify-start smDown:flex-wrap"
+  )
+    block
 
 mixin short-link(href, icon, title)
-    a.short-link(class="flex items-center gap-2 text-cta text-t1 transition-colors hover:text-accent1-default" href=href)
-        Icon(icon=icon width="{20}" height="{20}" colorInherit)
-        span= title
+  a.short-link.flex.items-center.gap-2.text-cta.text-t1.transition-colors(
+    class="hover:text-accent1-default"
+    href=href
+  )
+    Icon(icon=icon width="{ 20 }" height="{ 20 }" colorInherit)
+    span= title
 
 mixin inline-link(href, title)
-    a.short-link(class="relative underline underline-offset-4 bg-accent1-default/15 text-accent1-default text-paragraph-l transition-colors hover:bg-accent1-default/25 focus:bg-accent1-default/25" href=href)&attributes(attributes)
-        span= title
+  a.short-link.relative.underline.underline-offset-4.text-accent1-default.text-paragraph-l.transition-colors(
+    class="bg-accent1-default/15 hover:bg-accent1-default/25 focus:bg-accent1-default/25"
+    href=href
+  )&attributes(attributes)
+    span= title
 
 mixin button-secondary-small(label)
-    button(type="button" class="relative inline-flex z-1 bg-l3 text-t1 text-cta border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.75 px-3.75 rounded-xl transition-all focus:border-accent1-default hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
-        span= label
+  button.relative.inline-flex.z-1.bg-l3.text-t1.text-cta.border.border-solid.border-l3.shadow-secondary-button.items-center.justify-center.rounded-xl.transition-all(
+    type="button"
+    class="p-1.75 px-3.75 focus:border-accent1-default hover:border-accent1-active hover:shadow-secondary-button-hover"
+  )&attributes(attributes)
+    span= label
 
 //- Button Icon components
 mixin button-icon-small(icon)
-    button(type="button" class="relative inline-flex z-1 bg-l3 text-t1 border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.25 rounded-2lg transition-all focus:border-accent1-default hover:text-t1 hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
-        if block
-            block
-        else
-            Icon(icon=icon width="{20}" height="{20}" colorInherit)
+  button.relative.inline-flex.z-1.bg-l3.text-t1.border.border-solid.border-l3.shadow-secondary-button.items-center.justify-center.rounded-2lg.transition-all(
+    type="button"
+    class="p-1.25 focus:border-accent1-default hover:text-t1 hover:border-accent1-active hover:shadow-secondary-button-hover"
+  )&attributes(attributes)
+    if block
+      block
+    else
+      Icon(icon=icon width="{ 20 }" height="{ 20 }" colorInherit)
 
 mixin messageHeader(title, subtitle)
-    h1(class="text-title-l font-satoshi text-center smDown:text-left xs:text-h1-s")&attributes(attributes)=title
-    if subtitle
-        p(class="text-subtitle-l text-t2 text-center smDown:text-left xs:text-subtitle-s max-w-[604px] w-full")=subtitle
+  h1.text-title-l.font-satoshi.text-center(class="smDown:text-left xs:text-h1-s")&attributes(attributes)= title
+  if subtitle
+    p.text-subtitle-l.text-t2.text-center.w-full(class="smDown:text-left xs:text-subtitle-s max-w-[604px]")= subtitle
 
 mixin feedRenderer
-    +if('isSearchMode')
-        +if('totalCount > 0')
-            .result-label-wrapper(class="flex items-center flex-wrap gap-3")
-                p(class="text-paragraph-l font-bold") #[span(class="text-t3 font-medium") Showing results for] {pageQ || '#' + pageFilter} 
-                +button-icon-small("{XMark}")(on:click!="{() => handleSort($page.url, 'CREATED_AT')}")
-            block
-            +else()
-                p(class="text-paragraph-l text-t1 w-full text-center font-bold") #[span(class="text-t3 font-medium") No articles found for] {pageQ || '#' + pageFilter}.
-        +else()
-            block
+  +if('isSearchMode')
+    +if('totalCount > 0')
+      .result-label-wrapper.flex.items-center.flex-wrap.gap-3
+        p.text-paragraph-l.font-bold #[span.text-t3.font-medium Showing results for] { pageQ || '#' + pageFilter }
+        +button-icon-small("{XMark}")(
+          on:click!="{ () => handleSort($page.url, 'CREATED_AT') }"
+        )
+      block
+      +else
+        p.text-paragraph-l.text-t1.w-full.text-center.font-bold #[span.text-t3.font-medium No articles found for] { pageQ || '#' + pageFilter }.
+    +else
+      block

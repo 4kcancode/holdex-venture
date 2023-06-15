@@ -23,7 +23,6 @@
 </script>
 
 <template lang="pug" src="./inline.pug">
-
 </template>
 
 <style lang="sass">

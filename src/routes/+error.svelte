@@ -7,7 +7,6 @@
 </script>
 
 <template lang="pug">
-
 </template>
 
 <svelte:head>

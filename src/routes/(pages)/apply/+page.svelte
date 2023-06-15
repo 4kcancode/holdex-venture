@@ -8,7 +8,6 @@
 </script>
 
 <template lang="pug" src="./template.pug">
-
 </template>
 
 <MetaTags

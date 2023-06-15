@@ -12,15 +12,15 @@
 </script>
 
 <template lang="pug">
-    .btn-wrapper(class="flex flex-col items-start py-2")
-        Button(
-            label!="{item.title ? item.title : 'Apply Now'}" 
-            size="large" 
-            data-tally-open="{item.id}"
-            data-tally-emoji-animation="wave"
-            data-tally-layout="modal"
-            data-tally-overlay="true"
-        )
+  .btn-wrapper.flex.flex-col.items-start.py-2
+    Button(
+      label!="{ item.title ? item.title : 'Apply Now' }"
+      size="large"
+      data-tally-open="{ item.id }"
+      data-tally-emoji-animation="wave"
+      data-tally-layout="modal"
+      data-tally-overlay="true"
+    )
 </template>
 
 <svelte:head>

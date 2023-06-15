@@ -109,7 +109,6 @@
 </script>
 
 <template lang="pug" src="./layout.pug">
-
 </template>
 
 <svelte:window bind:scrollY />
