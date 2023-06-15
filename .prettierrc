@@ -20,5 +20,6 @@
   "pugWrapAttributesThreshold": 10,
   "pugSingleQuote": false,
   "pugAttributeSeparator": "none",
-  "pugFramework": "svelte"
+  "pugFramework": "svelte",
+  "pugIdNotation": "as-is"
 }
