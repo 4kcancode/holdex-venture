@@ -1,25 +1,25 @@
 <script lang="ts">
-	export let element = 'li';
+  export let element = 'li';
 
-	export let size: 'medium' | 'small' = 'medium';
+  export let size: 'medium' | 'small' = 'medium';
 
-	export let tag: string;
-	export let onClick: () => void;
+  export let tag: string;
+  export let onClick: () => void;
 
-	export let disabled = false;
+  export let disabled = false;
 
-	let className = '';
+  let className = '';
 
-	export { className as class };
+  export { className as class };
 
-	$: sizeClass = `tag--${size}`;
-	$: disabledClass = disabled ? 'tag__disabled' : '';
+  $: sizeClass = `tag--${size}`;
+  $: disabledClass = disabled ? 'tag__disabled' : '';
 
-	$: classNames = ['tag', sizeClass, disabledClass, className].join(' ');
+  $: classNames = ['tag', sizeClass, disabledClass, className].join(' ');
 </script>
 
 <svelte:element this={element} class={classNames} on:click={onClick}>
-	{tag}
+  {tag}
 </svelte:element>
 
 <style lang="sass" src="./style.sass">

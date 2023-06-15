@@ -1,11 +1,11 @@
 <script>
-	import { getContext } from 'svelte';
-	export let style = '';
-	let theme = getContext('theme');
+  import { getContext } from 'svelte';
+  export let style = '';
+  let theme = getContext('theme');
 </script>
 
 <span class="block {$theme}" {style}>
-	<slot />
+  <slot />
 </span>
 
 <style lang="sass">

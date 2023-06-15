@@ -1,16 +1,16 @@
 <script>
-	import { getContext } from 'svelte';
+  import { getContext } from 'svelte';
 
-	const { className, ...rest } = $$props;
+  const { className, ...rest } = $$props;
 
-	let theme = getContext('theme');
+  let theme = getContext('theme');
 </script>
 
 <code
-	class="mono text-tw-inline-code-color whitespace-pre-wrap text-sm {className} {$theme}"
-	{...rest}
+  class="mono text-tw-inline-code-color whitespace-pre-wrap text-sm {className} {$theme}"
+  {...rest}
 >
-	<slot />
+  <slot />
 </code>
 
 <style lang="sass">

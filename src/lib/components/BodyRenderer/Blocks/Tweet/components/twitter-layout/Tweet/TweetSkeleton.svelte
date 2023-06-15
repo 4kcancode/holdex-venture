@@ -1,38 +1,38 @@
 <script>
-	import { getContext } from 'svelte';
+  import { getContext } from 'svelte';
 
-	import Skeleton from '../skeleton/index.svelte';
+  import Skeleton from '../skeleton/index.svelte';
 
-	let theme = getContext('theme');
+  let theme = getContext('theme');
 </script>
 
 <div class="container rounded-[5px] bg-tw-tweet-bg-color border border-tw-tweet-border ${theme}">
-	<Skeleton>
-		<div class="flex justify-between p-4 border-tw-tweet-border">
-			<div class="flex justify-between mt-2">
-				<span class="avatar animation animate mr-2.5 exclude ${theme}" />
-				<span
-					class="flex flex-col no-underline transition-[color] duration-[0.3s] ease-[ease-in-out] exclude {$theme}"
-				>
-					<span class="author animation animate overflow-hidden ${theme}" title="name" />
-					<span class="username animation animate overflow-hidden ${theme}" title="username" />
-				</span>
-			</div>
-			<img
-				class="icon w-[1.25em] h-[1.25em] object-contain twicon brand exclude"
-				title="View on Twitter"
-				alt="twitter"
-				src="/tweet/twitter.png"
-			/>
-		</div>
-	</Skeleton>
-	<Skeleton>
-		<div class="content animation animate" />
-	</Skeleton>
-	<hr class="text-tw-tweet-border" />
-	<Skeleton style="margin: 1.25rem 0">
-		<div class="mt-2 action animation animate ${theme}" />
-	</Skeleton>
+  <Skeleton>
+    <div class="flex justify-between p-4 border-tw-tweet-border">
+      <div class="flex justify-between mt-2">
+        <span class="avatar animation animate mr-2.5 exclude ${theme}" />
+        <span
+          class="flex flex-col no-underline transition-[color] duration-[0.3s] ease-[ease-in-out] exclude {$theme}"
+        >
+          <span class="author animation animate overflow-hidden ${theme}" title="name" />
+          <span class="username animation animate overflow-hidden ${theme}" title="username" />
+        </span>
+      </div>
+      <img
+        class="icon w-[1.25em] h-[1.25em] object-contain twicon brand exclude"
+        title="View on Twitter"
+        alt="twitter"
+        src="/tweet/twitter.png"
+      />
+    </div>
+  </Skeleton>
+  <Skeleton>
+    <div class="content animation animate" />
+  </Skeleton>
+  <hr class="text-tw-tweet-border" />
+  <Skeleton style="margin: 1.25rem 0">
+    <div class="mt-2 action animation animate ${theme}" />
+  </Skeleton>
 </div>
 
 <style lang="sass">

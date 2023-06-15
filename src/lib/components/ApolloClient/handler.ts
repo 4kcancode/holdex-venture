@@ -2,29 +2,29 @@ import type { ApolloQueryResult } from '@apollo/client';
 import type { GraphQLError } from 'graphql';
 
 export type BaseHandler<T = any> = {
-	data?: T | null;
-	error?: GraphQLError | null;
+  data?: T | null;
+  error?: GraphQLError | null;
 };
 
 type Handler<T = any> = (handler: BaseHandler<T>) => BaseHandler<T> | any;
 
 const responseHandler = <QueryResponse>(
-	response: ApolloQueryResult<any>,
-	queryName?: string,
-	onSuccess?: Handler<QueryResponse>,
-	onError?: Handler<QueryResponse>
+  response: ApolloQueryResult<any>,
+  queryName?: string,
+  onSuccess?: Handler<QueryResponse>,
+  onError?: Handler<QueryResponse>
 ): BaseHandler<QueryResponse> => {
-	if (Array.isArray(response.errors)) {
-		if (onError) {
-			return onError({ error: response.errors[0] });
-		}
-		return { error: response.errors[0], data: null };
-	} else {
-		if (onSuccess) {
-			return onSuccess({ data: queryName ? response.data[queryName] : response.data });
-		}
-		return { error: null, data: queryName ? response.data[queryName] : response.data };
-	}
+  if (Array.isArray(response.errors)) {
+    if (onError) {
+      return onError({ error: response.errors[0] });
+    }
+    return { error: response.errors[0], data: null };
+  } else {
+    if (onSuccess) {
+      return onSuccess({ data: queryName ? response.data[queryName] : response.data });
+    }
+    return { error: null, data: queryName ? response.data[queryName] : response.data };
+  }
 };
 
 export default responseHandler;

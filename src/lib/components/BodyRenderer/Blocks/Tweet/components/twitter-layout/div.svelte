@@ -1,5 +1,5 @@
 <div dir="auto" class={$$props.className}>
-	<slot />
+  <slot />
 </div>
 
 <style lang="sass">

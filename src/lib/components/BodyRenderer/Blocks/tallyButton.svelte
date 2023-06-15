@@ -1,14 +1,14 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	import Button from '$components/Button/index.svelte';
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  import Button from '$components/Button/index.svelte';
 
-	type Item = {
-		type: string;
-		url: string;
-		id: string;
-		title?: string;
-	};
-	export let item: Item;
+  type Item = {
+    type: string;
+    url: string;
+    id: string;
+    title?: string;
+  };
+  export let item: Item;
 </script>
 
 <template lang="pug">
@@ -24,5 +24,5 @@
 </template>
 
 <svelte:head>
-	<script async src="https://tally.so/widgets/embed.js"></script>
+  <script async src="https://tally.so/widgets/embed.js"></script>
 </svelte:head>

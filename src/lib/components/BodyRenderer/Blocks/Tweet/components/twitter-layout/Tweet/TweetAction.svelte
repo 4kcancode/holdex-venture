@@ -1,36 +1,36 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	import { getContext } from 'svelte';
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  import { getContext } from 'svelte';
 
-	import { CopyLinkIcon, HeartIcon, ReplyIcon } from '../Icons';
-	import Icon from '$components/Icons/index.svelte';
-	export let tweet;
+  import { CopyLinkIcon, HeartIcon, ReplyIcon } from '../Icons';
+  import Icon from '$components/Icons/index.svelte';
+  export let tweet;
 
-	const theme = getContext('theme');
+  const theme = getContext('theme');
 
-	$: ({ author_id, users, public_metrics, id } = tweet);
+  $: ({ author_id, users, public_metrics, id } = tweet);
 
-	$: authorInfo = users.find((u) => u.id === author_id);
+  $: authorInfo = users.find((u) => u.id === author_id);
 
-	$: userUrl = `https://twitter.com/${authorInfo.username}`;
-	$: tweetUrl = `${userUrl}/status/${id}`;
+  $: userUrl = `https://twitter.com/${authorInfo.username}`;
+  $: tweetUrl = `${userUrl}/status/${id}`;
 
-	$: count = public_metrics.retweet_count + public_metrics.reply_count;
-	$: likeCount = public_metrics.like_count;
-	$: replyCount = public_metrics.reply_count;
+  $: count = public_metrics.retweet_count + public_metrics.reply_count;
+  $: likeCount = public_metrics.like_count;
+  $: replyCount = public_metrics.reply_count;
 
-	$: isConversation = count > 4;
+  $: isConversation = count > 4;
 
-	let chevronSrc = '/tweet/chevron.png';
-	let profileSrc = '/tweet/person.png';
-	let replySrc = '/tweet/reply.png';
-	let heartSrc = '/tweet/heart.png';
-	let likeUrl = `https://twitter.com/intent/like?tweet_id=${id}`;
-	let replyUrl = '';
+  let chevronSrc = '/tweet/chevron.png';
+  let profileSrc = '/tweet/person.png';
+  let replySrc = '/tweet/reply.png';
+  let heartSrc = '/tweet/heart.png';
+  let likeUrl = `https://twitter.com/intent/like?tweet_id=${id}`;
+  let replyUrl = '';
 
-	const gotoTweet = (tweetUrl: string) => {
-		window.open(tweetUrl, '_blank').focus();
-	};
+  const gotoTweet = (tweetUrl: string) => {
+    window.open(tweetUrl, '_blank').focus();
+  };
 </script>
 
 <template lang="pug">
