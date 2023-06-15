@@ -16,11 +16,11 @@
 	let parentWrapper = getContext('wrapper');
 
 	let classes =
-		'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25';
+		'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25 focus:bg-accent1-default/25';
 
 	switch (parentWrapper) {
 		default:
-			classes += 'text-paragraph-l';
+			classes += ' text-paragraph-l';
 			break;
 	}
 

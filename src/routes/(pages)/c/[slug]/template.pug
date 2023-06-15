@@ -11,7 +11,7 @@ include ../mixins
 				+crumbDelimiter
 				+crumbItemText("{community.name}")
 			+messageHeader("{community.name}", "{community.tagline}")(id="{community.id}")
-
+ 
 			+content-wrapper(class="xs:!px-0")
 				+if("community.slug !== 'jobs'")
 					+filter-options

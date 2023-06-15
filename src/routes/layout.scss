@@ -59,3 +59,10 @@ body {
 		flex-shrink: 0;
 	}
 }
+
+.debugger {
+	&,
+	* {
+		border: 1px solid red;
+	}
+}

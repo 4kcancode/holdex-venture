@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-
 /**
  * A ParagraphElement representing a spot in the text that is dynamically replaced with content that can change over time, like a page number.
  */

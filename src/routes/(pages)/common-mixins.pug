@@ -16,10 +16,10 @@ mixin main-section
 
 mixin primary-button(label)
     button(
-        class="relative z-1 bg-accent1-default text-t4 text-cta shadow-button flex items-center justify-center py-1 px-4 rounded-xl transition-all focus:bg-accent1-default hover:bg-accent1-active hover:shadow-button-hover disabled:cursor-not-allowed disabled:bg-l3 disabled:text-t3 disabled:shadow-none "
+        class="relative z-1 bg-accent1-default text-t4 text-cta shadow-button flex items-center justify-center py-1 px-4 rounded-xl transition-all focus:bg-accent1-default hover:bg-accent1-active dark:hover:shadow-button-hover disabled:cursor-not-allowed disabled:bg-l3 disabled:text-t3 disabled:shadow-none "
     )&attributes(attributes)
         span= label
 
 mixin button-icon-default
-    button(class="relative inline-flex z-1 bg-l3 text-t3 border border-solid border-l3 shadow-secondary-button items-center justify-center p-1.75 rounded-2lg transition-all focus:border-accent1-default hover:text-t1 hover:border-accent1-active hover:shadow-secondary-button-hover")&attributes(attributes)
+    button(class="relative inline-flex w-10 h-10 z-1 bg-l1 text-t3 border border-solid border-l5 shadow-secondary-button items-center justify-center p-1.75 rounded-2lg hover:text-t1 hover:!border-accent1-active focus:text-t1 focus:!border-accent1-active dark:bg-l3 dark:border-l3 dark:hover:shadow-secondary-button-hover")&attributes(attributes)
         block

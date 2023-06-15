@@ -4,6 +4,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{html,svelte,ts,sass,scss,pug}'],
+	darkMode: ['class', '[data-theme="dark"]'],
 	theme: {
 		borderRadius: {
 			...defaultTheme.borderRadius,
@@ -13,6 +14,13 @@ module.exports = {
 			underbase: '11px',
 		},
 		screens: {
+			// 'rwd' (now 'up') means "Responsive Web Design". And these breakpoints follow/match the breakpoints in the actual Figma while adhering to the Mobile-first RWD principle.
+			'xs-up': '375px',
+			'sm-up': '480px',
+			'md-up': '768px',
+			'lg-up': '992px',
+			'xl-up': '1200px',
+			'2xl-up': '1440px',
 			xl: {
 				min: '1680px',
 				limit: '1920px',
@@ -53,6 +61,7 @@ module.exports = {
 			},
 		},
 		colors: {
+			white: 'white',
 			inherit: 'inherit',
 			current: 'currentColor',
 			transparent: 'transparent',
@@ -104,6 +113,7 @@ module.exports = {
 			'tw-tweet-btn-border': 'rgb(var(--tweet-btn-border) / <alpha-value>)',
 		},
 		fontSize: {
+			...defaultTheme.fontSize,
 			'title-l': [
 				'56px',
 				{
@@ -306,21 +316,23 @@ module.exports = {
 			},
 			boxShadow: {
 				...defaultTheme.boxShadow,
-				input: '0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16)',
+				input:
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, var(--shadow-input-alpha))',
 				tag: '0px 4px 8px rgba(0, 0, 0, 0.16)',
-				'tag-active': ' 0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16)',
+				'tag-active':
+					' 0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, 0.16)',
 				button:
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 8px rgba(0, 0, 0, var(--shadow-input-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'button-hover':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'button-active':
-					'0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+					'0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
 				'secondary-button':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 8px rgba(0, 0, 0, 0.16), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 0px 8px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 				'secondary-button-hover':
-					'0px 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 				'secondary-button-active':
-					'0px 0px 0px 2px rgba(0, 204, 255, 0.2), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+					'0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
 			},
 			minHeight: {
 				32: '8rem',

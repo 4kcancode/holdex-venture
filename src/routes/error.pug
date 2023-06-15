@@ -13,7 +13,7 @@ mixin not-found
     p(class="text-paragraph-l max-w-[400px] w-full text-center mb-4") The page you’re looking for could have been deleted, moved or never existed.
     +primary-button('Take me to the base 🤦‍♂️')(on:click!="{() => goto('/')}")
 
-.app-container(data-theme="dark")
+.app-container
     main(class="flex flex-col items-center justify-center xs:my-10")
         +if("$page.error.message.includes('Not found')")
             +not-found

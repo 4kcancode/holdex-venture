@@ -1,22 +1,35 @@
 <script lang="ts">
 	/* eslint-disable @typescript-eslint/no-unused-vars */
+	/** external deps */
 	import { page } from '$app/stores';
-	import { routes } from '$lib/config';
+	import { isBrowser, routes } from '$lib/config';
+	import { onMount } from 'svelte';
 
+	/** internal deps */
 	import { socialIcons, Bars3, XMark, ExclamationTriangle, CheckCircle } from '$components/Icons';
 	import Icon from '$components/Icons/index.svelte';
+	import SVGIcon from '$components/Icons/SVGIcon.svelte';
 	import { regExp } from '$components/BodyParser/utils';
 	import { deserialize, applyAction } from '$app/forms';
 	import { scrollToElement } from '$lib/utils';
 	import Button from '$components/Button/index.svelte';
+	import type { SVGIconName } from '$components/Icons/types';
 
+	/** vars */
 	const pageTheme = 'dark';
-
 	let email = '';
 	let message = '';
 	let name = '';
 	let isError = false;
 	let success = false;
+	let scrollY: any;
+	let isBurgerDropdownShown = false;
+	let themeIconName: SVGIconName = 'sun';
+
+	/** funcs */
+	const onThemeToggle = () => {
+		themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
+	};
 
 	const isActive = (currentUrl: string, path: string, deepEqual = false) => {
 		if (deepEqual) {
@@ -63,10 +76,6 @@
 		displaySuccess();
 	};
 
-	let scrollY: any;
-
-	let isBurgerDropdownShown = false;
-
 	const setBodyClass = (state: boolean) => {
 		if (state) {
 			document?.body?.classList.add('menu-opened');
@@ -88,8 +97,15 @@
 		return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
 	};
 
+	/** lifecycles */
+	onMount(() => {
+		themeIconName = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sun' : 'moon';
+	});
+
+	/** react-ibles */
 	$: path = $page.url.pathname;
 	$: form = $page.form;
+	$: if (isBrowser) document.body.dataset.theme = themeIconName === 'moon' ? 'light' : 'dark';
 </script>
 
 <template lang="pug" src="./layout.pug">

@@ -16,7 +16,6 @@
 	$: disabledClass = disabled ? 'tag__disabled' : '';
 
 	$: classNames = ['tag', sizeClass, disabledClass, className].join(' ');
-
 </script>
 
 <svelte:element this={element} class={classNames} on:click={onClick}>
