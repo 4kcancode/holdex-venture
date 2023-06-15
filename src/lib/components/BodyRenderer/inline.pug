@@ -1,26 +1,27 @@
-Switch(condition="{ item.type }")
+Switch(condition="{item.type}")
   Case(value="link")
-    Link(item="{ item }" let:text)
-      TextWrapper(text="{ text }")
+    Link(item="{item}" let:text)
+      TextWrapper(text="{text}")
         slot
   Case(value="hashtag")
-    Hashtag(item="{ item }" link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
-      TextWrapper(text="{ item.text }")
+    Hashtag(
+      item="{item}"
+      link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
+      TextWrapper(text="{item.text}")
   Case(value="code")
     code.rounded-lg.bg-l2.py-0.px-2.text-code.font-mono
-      TextWrapper(text="{ item.text }") 
+      TextWrapper(text="{item.text}") 
   Case(value="price-ticker")
     span.underline-offset-4.relative.text-paragraph-l.text-accent1-default.underline.decoration-dashed(
-      class="xs:text-paragraph-s"
-    ) ${ item.text }
+      class="xs:text-paragraph-s") ${ item.text }
   //- Case(value="mention")
   //-     s handle mention
   //- possible removal of image
   Case(value="embed")
-    Embed(item="{ item }")
+    Embed(item="{item}")
   Case(value="image") 
-    Image(item="{ item }")
+    Image(item="{item}")
   Case(value="text")
-    TextWrapper(text!="{ escape(item.text) }")
+    TextWrapper(text!="{escape(item.text)}")
   Case(value="inline")
-    TextWrapper(text="{ item.text }")
+    TextWrapper(text="{item.text}")

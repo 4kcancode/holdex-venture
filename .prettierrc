@@ -32,5 +32,6 @@
   "pugAttributeSeparator": "none",
   "pugFramework": "svelte",
   "pugIdNotation": "as-is",
+  "pugClassNotation": "as-is",
   "pugPreserveAttributeBrackets": true
 }

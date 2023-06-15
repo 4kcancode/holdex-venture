@@ -1,21 +1,17 @@
 a.transition-colors.text-white.block(
   href="/c/{message.communitySlug}/{message.messageSlug}"
-  class!="hover:text-accent1-default {className}"
-)
+  class!="hover:text-accent1-default {className}")
   article.relative.flex.items-start.gap-4.flex-col.border.border-solid.border-l4.rounded-xl.h-96(
-    class="p-5.75 xs:p-3.75 xs:h-80"
-  )
+    class="p-5.75 xs:p-3.75 xs:h-80")
     img.absolute.block.w-full.h-full.left-0.top-0.object-center.rounded-xl.object-cover(
-      alt="{ message.title }"
-      src="{ message.cover || '/default-cover.png' }"
-    )
+      alt="{message.title}"
+      src="{message.cover || '/default-cover.png'}")
     +if('message.hashtags && message.hashtags.length > 0')
       ul.feed-body-tags.relative.z-1.flex.items-start.gap-3.flex-wrap.w-full
         +each('message.hashtags as tag')
           Hashtag(tag="{'#'}{tag}" disabled)
     .feed-body.flex.flex-col.gap-4.justify-end.relative.z-1.flex-grow(class="xs:gap-2")
       h2.relative.w-full.text-h2-l.font-satoshi.block.whitespace-nowrap.overflow-hidden.text-ellipsis(
-        class="xs:text-h2-s"
-      ) { message.title }
+        class="xs:text-h2-s") { message.title }
       +if('message.subtitle')
         p { message.subtitle }
