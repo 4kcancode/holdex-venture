@@ -12,7 +12,6 @@ import {
   PUB_HOLDEX_UTILS_API_URL,
 } from '$env/static/public';
 import { dev, browser } from '$app/environment';
-import Cookies from 'universal-cookie';
 
 type Config = {
   env: string;
@@ -70,5 +69,4 @@ export const routes = {
 
 export const isDev = dev;
 export const isBrowser = browser;
-export const clientCookie = new Cookies();
 export default config;

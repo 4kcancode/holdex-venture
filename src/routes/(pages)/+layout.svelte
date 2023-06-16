@@ -2,7 +2,7 @@
   /* eslint-disable @typescript-eslint/no-unused-vars */
   /** external deps */
   import { page } from '$app/stores';
-  import { clientCookie, isBrowser, routes } from '$lib/config';
+  import { isBrowser, routes } from '$lib/config';
   import { onMount } from 'svelte';
 
   /** internal deps */
@@ -23,7 +23,7 @@
   let success = false;
   let scrollY: any;
   let isBurgerDropdownShown = false;
-  let theme = clientCookie.get('theme') as 'dark' | 'light' | undefined;
+  let theme = globalThis.localStorage?.getItem('theme') as 'dark' | 'light' | undefined | null;
   let themeIconName: SVGIconName = theme
     ? theme === 'dark'
       ? 'sun'
@@ -35,7 +35,7 @@
   /** funcs */
   const onThemeToggle = () => {
     themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
-    clientCookie.set('theme', themeIconName === 'moon' ? 'light' : 'dark');
+    localStorage.setItem('theme', themeIconName === 'moon' ? 'light' : 'dark');
   };
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
@@ -107,7 +107,9 @@
   /** react-ibles */
   $: path = $page.url.pathname;
   $: form = $page.form;
-  $: if (isBrowser) document.body.dataset.theme = themeIconName === 'moon' ? 'light' : 'dark';
+  $: if (globalThis.document) {
+    document.documentElement.dataset.theme = themeIconName === 'moon' ? 'light' : 'dark';
+  }
 </script>
 
 <template lang="pug" src="./layout.pug">
@@ -117,4 +119,5 @@
 
 <svelte:head>
   <style lang="scss" src="./layout.scss"></style>
+  {@html `<script>document.documentElement.dataset.theme=localStorage.getItem('theme');</script>`}
 </svelte:head>
