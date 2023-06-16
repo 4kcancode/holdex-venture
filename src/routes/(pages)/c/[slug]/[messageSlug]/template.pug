@@ -11,10 +11,10 @@ mixin author
         target="_blank"
         rel="noreferrer"
       )
-    +else {message._author.name}
+    +else: {message._author.name}
 
 +main-section
-  +header-wrapper.flex-col.gap-8(class="xs:gap-4")
+  +header-wrapper(class="flex-col gap-8 xs:gap-4")
     +nav-crumbs
       +crumbItemLink("/", "Home")
       +crumbDelimiter
@@ -23,14 +23,14 @@ mixin author
       +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
     +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
   +content-wrapper
-    .author-block.flex.flex-col.bg-l1.border.border-solid.border-l4.rounded-xl.w-full(class="dark:bg-l2")
-      .text-content.flex.flex-col.items-start(class!="p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
+    .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
+      .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
         TextParagraph(textColor="text-t3")
           time(
             datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
             title="{extendedTimeFormat(message.createdAt)}"
           ) {timeFormat(message.createdAt)} {message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
-        TextParagraph.flex.flex-wrap(textColor="text-t3") #[span.mr-1 By] #[+author]
+        TextParagraph(class="flex flex-wrap" textColor="text-t3") #[span.mr-1 By] #[+author]
         //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
         //-     span(class="inline-flex items-center gap-1")
         //-         Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
@@ -39,10 +39,10 @@ mixin author
         //-         Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
         //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
       +if('message.isGoogleDoc')
-        .edit-wrapper.flex.items-center.justify-between.gap-4.border-t.border-solid.border-l4(
-          class="p-3.75"
+        .edit-wrapper(
+          class="flex items-center justify-between gap-4 border-t border-solid border-l4 p-3.75"
         )
-          TextParagraph.flex(textColor="text-t3") Have a suggestion?
+          TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
           Button(
             variant="secondary"
             size="small"
@@ -52,28 +52,28 @@ mixin author
             rel="noreferrer"
           )
     +if('message.tocs && message.tocs.length > 0')
-      details.flex.w-full.cursor-pointer.flex-col.items-start.bg-l1.rounded-xl.border.border-solid.border-l4(
+      details(
         open="false"
         on:click|preventDefault="{toggleToc}"
         class:active="{tocOpen}"
-        class="dark:bg-l2"
+        class="flex w-full cursor-pointer flex-col items-start bg-l1 rounded-xl border border-solid border-l4 dark:bg-l2"
       )
-        summary.flex.items-center.justify-between(class="p-3.75")
-          TextParagraph.pointer-events-none(textColor="text-t3") Table of Contents
+        summary(class="flex items-center justify-between p-3.75")
+          TextParagraph(class="pointer-events-none" textColor="text-t3") Table of Contents
           +if('tocOpen')
-            Button.pointer-events-none(variant="solo" size="small" icon="{BarsArrowUp}")
+            Button(class="pointer-events-none" variant="solo" size="small" icon="{BarsArrowUp}")
             +else
-              Button.pointer-events-none(variant="solo" size="small" icon="{BarsArrowDown}")
+              Button(class="pointer-events-none" variant="solo" size="small" icon="{BarsArrowDown}")
         +if('tocOpen')
-          .details-content.relative.border-t.border-solid.border-l4(
+          .details-content(
             transition:slide|local
             on:outroend="{handleOutroEnd}"
-            class="p-3.75"
+            class="relative p-3.75 border-t border-solid border-l4"
           )
             ul.toc-block
               +each('message.tocs as item')
-                li.text-paragraph-l.text-t3.transition-colors(
+                li(
                   on:click!="{() => handleClick($page.url, item.id)}"
-                  class!="xs:text-paragraph-s hover:text-t1 {renderTocPadding(item.level)}"
-                ) ⏤ { @html item.cleanRef }
+                  class!="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-t1 {renderTocPadding(item.level)}"
+                ) ⏤ {@html item.cleanRef}
     BodyRenderer(blocks="{message.blocks}")
