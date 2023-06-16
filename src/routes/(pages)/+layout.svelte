@@ -2,7 +2,7 @@
   /* eslint-disable @typescript-eslint/no-unused-vars */
   /** external deps */
   import { page } from '$app/stores';
-  import { isBrowser, routes } from '$lib/config';
+  import { clientCookie, isBrowser, routes } from '$lib/config';
   import { onMount } from 'svelte';
 
   /** internal deps */
@@ -16,7 +16,6 @@
   import type { SVGIconName } from '$components/Icons/types';
 
   /** vars */
-  const pageTheme = 'dark';
   let email = '';
   let message = '';
   let name = '';
@@ -24,11 +23,19 @@
   let success = false;
   let scrollY: any;
   let isBurgerDropdownShown = false;
-  let themeIconName: SVGIconName = 'sun';
+  let theme = clientCookie.get('theme') as 'dark' | 'light' | undefined;
+  let themeIconName: SVGIconName = theme
+    ? theme === 'dark'
+      ? 'sun'
+      : 'moon'
+    : globalThis.window?.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'moon'
+    : 'sun';
 
   /** funcs */
   const onThemeToggle = () => {
     themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
+    clientCookie.set('theme', themeIconName === 'moon' ? 'light' : 'dark');
   };
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
@@ -96,11 +103,6 @@
   const displayError = (email: string) => {
     return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
   };
-
-  /** lifecycles */
-  onMount(() => {
-    themeIconName = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sun' : 'moon';
-  });
 
   /** react-ibles */
   $: path = $page.url.pathname;
