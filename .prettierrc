@@ -1,20 +1,36 @@
 {
-	"useTabs": true,
-	"tabWidth": 2,
-	"semi": true,
-	"singleQuote": true,
-	"trailingComma": "es5",
-	"printWidth": 100,
-	"arrowParens": "always",
-	"bracketSpacing": true,
-	"plugins": ["prettier-plugin-svelte"],
-	"pluginSearchDirs": ["."],
-	"overrides": [
-		{
-			"files": "*.svelte",
-			"options": {
-				"parser": "svelte"
-			}
-		}
-	]
+  "useTabs": false,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "plugins": ["prettier-plugin-svelte", "@prettier/plugin-pug"],
+  "pluginSearchDirs": ["."],
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    },
+    {
+      "files": "*.pug",
+      "options": {
+        "parser": "pug"
+      }
+    }
+  ],
+  "pugUseTabs": false,
+  "pugTabWidth": 2,
+  "pugBracketSpacing": false,
+  "pugWrapAttributesThreshold": 5,
+  "pugSingleQuote": false,
+  "pugAttributeSeparator": "none",
+  "pugFramework": "svelte",
+  "pugIdNotation": "as-is",
+  "pugClassNotation": "as-is",
+  "pugPreserveAttributeBrackets": true
 }

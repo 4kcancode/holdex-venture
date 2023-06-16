@@ -1,5 +1,5 @@
 module.exports = {
-	client: {
-		service: 'My-Graph-thh3cl',
-	},
+  client: {
+    service: 'My-Graph-thh3cl',
+  },
 };

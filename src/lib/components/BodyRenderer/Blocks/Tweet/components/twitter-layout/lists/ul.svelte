@@ -1,13 +1,13 @@
 <script>
-	import { getContext } from 'svelte';
+  import { getContext } from 'svelte';
 
-	const { className, ...rest } = $$props;
+  const { className, ...rest } = $$props;
 
-	let theme = getContext('theme');
+  let theme = getContext('theme');
 </script>
 
 <ul class="list-none pl-4 text-[1.25rem_0] {className} {$theme}" {...rest}>
-	<slot />
+  <slot />
 </ul>
 
 <style lang="sass">

@@ -12,41 +12,41 @@ import LinkPreview from './LinkPreview/index.svelte';
 import TweetSkeleton from './Tweet/TweetSkeleton.svelte';
 
 export default {
-    div: Div,
+  div: Div,
 
-    h1: H1,
-    h2: H2,
-    h3: H3,
-    h4: H4,
-    h5: H5,
-    h6: H6,
+  h1: H1,
+  h2: H2,
+  h3: H3,
+  h4: H4,
+  h5: H5,
+  h6: H6,
 
-    p: P,
-    blockquote: Blockquote,
-    hr: Hr,
+  p: P,
+  blockquote: Blockquote,
+  hr: Hr,
 
-    code: Code,
-    pre: Pre,
+  code: Code,
+  pre: Pre,
 
-    a: A,
-    linkPreview: LinkPreview,
+  a: A,
+  linkPreview: LinkPreview,
 
-    ul: Ul,
-    ol: Ol,
-    li: Li,
+  ul: Ul,
+  ol: Ol,
+  li: Li,
 
-    table: Table,
-    th: Th,
-    td: Td,
+  table: Table,
+  th: Th,
+  td: Td,
 
-    img: Img,
+  img: Img,
 
-    Mention,
-    Hashtag,
-    Cashtag,
-    Emoji,
-    Poll,
+  Mention,
+  Hashtag,
+  Cashtag,
+  Emoji,
+  Poll,
 
-    Tweet,
-    TweetSkeleton,
+  Tweet,
+  TweetSkeleton,
 };

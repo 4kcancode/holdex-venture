@@ -10,39 +10,39 @@ import cacheConfig from './cache';
  * @returns Apollo Client
  */
 const createServerClient = (fetch: any) =>
-	new ApolloClient({
-		credentials: 'include',
-		link: new HttpLink({
-			uri: config.apiUrl,
-			fetch,
-		}),
-		ssrMode: true,
-		cache: new InMemoryCache(cacheConfig),
-	});
+  new ApolloClient({
+    credentials: 'include',
+    link: new HttpLink({
+      uri: config.apiUrl,
+      fetch,
+    }),
+    ssrMode: true,
+    cache: new InMemoryCache(cacheConfig),
+  });
 
 const createBrowserClient = () =>
-	new ApolloClient({
-		credentials: 'omit',
-		link: new HttpLink({
-			uri: config.apiUrl,
-		}),
-		cache: new InMemoryCache(cacheConfig),
-		ssrForceFetchDelay: 100,
-		connectToDevTools: isDev,
-	});
+  new ApolloClient({
+    credentials: 'omit',
+    link: new HttpLink({
+      uri: config.apiUrl,
+    }),
+    cache: new InMemoryCache(cacheConfig),
+    ssrForceFetchDelay: 100,
+    connectToDevTools: isDev,
+  });
 
 const browserClient = createBrowserClient();
 
 const hydrateApolloClient = (client: any, context?: Record<string, string>) => {
-	browserClient.restore(client as any);
-	if (context) {
-		browserClient.setLink(
-			new HttpLink({
-				uri: context.uri,
-			})
-		);
-	}
-	return browserClient;
+  browserClient.restore(client as any);
+  if (context) {
+    browserClient.setLink(
+      new HttpLink({
+        uri: context.uri,
+      })
+    );
+  }
+  return browserClient;
 };
 
 export { createServerClient, hydrateApolloClient, readQuery, subscribeQuery, query, mutation };

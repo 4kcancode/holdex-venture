@@ -1,79 +1,79 @@
 include ../../../common-mixins
 include ../../mixins
 
-
 mixin author
-    +if('message.docAuthors.length > 0')
-        +each('message.docAuthors as author, i')
-            +if('i !== 0')
-                span.mr-2 , 
-            +inline-link("{author.url}",'{author.name}')(class="xs:text-paragraph-s" target="_blank" rel="noreferrer")
-        +else(): | {message._author.name}
+  +if('message.docAuthors.length > 0')
+    +each('message.docAuthors as author, i')
+      +if('i !== 0')
+        span.mr-2 ,
+      +inline-link("{author.url}",'{author.name}')(
+        class="xs:text-paragraph-s"
+        target="_blank"
+        rel="noreferrer"
+      )
+    +else: {message._author.name}
 
 +main-section
-    +header-wrapper()(class="flex-col gap-8 xs:gap-4")
-        +nav-crumbs
-            +crumbItemLink("/", "Home")
-            +crumbDelimiter
-            +crumbItemLink("/c", "Studio")
-            +crumbDelimiter
-            +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
-        +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
-    +content-wrapper
-        .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
-            .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
-                TextParagraph(textColor="text-t3")
-                    time(
-                        datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
-                        title="{extendedTimeFormat(message.createdAt)}"
-                    ) {timeFormat(message.createdAt)} { message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
-                TextParagraph(class="flex flex-wrap" textColor="text-t3") #[span.mr-1 By ] #[+author()]
-                //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
-                //-     span(class="inline-flex items-center gap-1")
-                //-         Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
-                //-         span {formatNumber(message.viewsCount, '0,0a')}
-                //-     span(class="inline-flex items-center gap-1") 
-                //-         Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
-                //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
-            +if('message.isGoogleDoc')
-                .edit-wrapper(class="flex items-center justify-between gap-4 border-t border-solid border-l4 p-3.75")
-                    TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
-                    Button(
-                        variant="secondary"
-                        size="small"
-                        label="Edit Article"
-                        href="{message.isGoogleDoc}"
-                        target="_blank" 
-                        rel="noreferrer"
-                    )
-        +if('message.tocs && message.tocs.length > 0')
-            details(
-                open="false"
-                on:click|preventDefault="{toggleToc}"
-                class:active="{tocOpen}" 
-                class="flex w-full cursor-pointer flex-col items-start bg-l1 rounded-xl border border-solid border-l4 dark:bg-l2")
-                summary(class="flex items-center justify-between p-3.75")
-                    TextParagraph(class="pointer-events-none" textColor="text-t3") Table of Contents
-                    +if('tocOpen')
-                        Button(
-                            class="pointer-events-none" 
-                            variant="solo" 
-                            size="small"
-                            icon="{BarsArrowUp}"
-                        )
-                        +else()
-                            Button(
-                                class="pointer-events-none" 
-                                variant="solo" 
-                                size="small"
-                                icon="{BarsArrowDown}"
-                            )
-                +if('tocOpen')
-                    .details-content(transition:slide|local on:outroend="{handleOutroEnd}" class="relative p-3.75 border-t border-solid border-l4")
-                        ul.toc-block
-                            +each('message.tocs as item')
-                                li(
-                                    on:click!="{() => handleClick($page.url, item.id)}"
-                                    class!="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-t1 {renderTocPadding(item.level)}"
-                                ) ⏤ {@html item.cleanRef}
-        BodyRenderer(blocks="{message.blocks}")
+  +header-wrapper(class="flex-col gap-8 xs:gap-4")
+    +nav-crumbs
+      +crumbItemLink("/", "Home")
+      +crumbDelimiter
+      +crumbItemLink("/c", "Studio")
+      +crumbDelimiter
+      +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
+    +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
+  +content-wrapper
+    .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
+      .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
+        TextParagraph(textColor="text-t3")
+          time(
+            datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
+            title="{extendedTimeFormat(message.createdAt)}"
+          ) {timeFormat(message.createdAt)} {message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
+        TextParagraph(class="flex flex-wrap" textColor="text-t3") #[span.mr-1 By] #[+author]
+        //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
+        //-     span(class="inline-flex items-center gap-1")
+        //-         Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
+        //-         span {formatNumber(message.viewsCount, '0,0a')}
+        //-     span(class="inline-flex items-center gap-1") 
+        //-         Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
+        //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
+      +if('message.isGoogleDoc')
+        .edit-wrapper(
+          class="flex items-center justify-between gap-4 border-t border-solid border-l4 p-3.75"
+        )
+          TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
+          Button(
+            variant="secondary"
+            size="small"
+            label="Edit Article"
+            href="{message.isGoogleDoc}"
+            target="_blank"
+            rel="noreferrer"
+          )
+    +if('message.tocs && message.tocs.length > 0')
+      details(
+        open="false"
+        on:click|preventDefault="{toggleToc}"
+        class:active="{tocOpen}"
+        class="flex w-full cursor-pointer flex-col items-start bg-l1 rounded-xl border border-solid border-l4 dark:bg-l2"
+      )
+        summary(class="flex items-center justify-between p-3.75")
+          TextParagraph(class="pointer-events-none" textColor="text-t3") Table of Contents
+          +if('tocOpen')
+            Button(class="pointer-events-none" variant="solo" size="small" icon="{BarsArrowUp}")
+            +else
+              Button(class="pointer-events-none" variant="solo" size="small" icon="{BarsArrowDown}")
+        +if('tocOpen')
+          .details-content(
+            transition:slide|local
+            on:outroend="{handleOutroEnd}"
+            class="relative p-3.75 border-t border-solid border-l4"
+          )
+            ul.toc-block
+              +each('message.tocs as item')
+                li(
+                  on:click!="{() => handleClick($page.url, item.id)}"
+                  class!="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-t1 {renderTocPadding(item.level)}"
+                ) ⏤ {@html item.cleanRef}
+    BodyRenderer(blocks="{message.blocks}")
