@@ -16,7 +16,6 @@
   import type { SVGIconName } from '$components/Icons/types';
 
   /** vars */
-  const pageTheme = 'dark';
   let email = '';
   let message = '';
   let name = '';
@@ -24,11 +23,19 @@
   let success = false;
   let scrollY: any;
   let isBurgerDropdownShown = false;
-  let themeIconName: SVGIconName = 'sun';
+  let theme = globalThis.localStorage?.getItem('theme') as 'dark' | 'light' | undefined | null;
+  let themeIconName: SVGIconName = theme
+    ? theme === 'dark'
+      ? 'sun'
+      : 'moon'
+    : globalThis.window?.matchMedia('(prefers-color-scheme: light)').matches
+    ? 'moon'
+    : 'sun';
 
   /** funcs */
   const onThemeToggle = () => {
     themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
+    localStorage.setItem('theme', themeIconName === 'moon' ? 'light' : 'dark');
   };
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
@@ -97,15 +104,12 @@
     return !validateEmail(email) && email.length > 0 ? (isError = true) : (isError = false);
   };
 
-  /** lifecycles */
-  onMount(() => {
-    themeIconName = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sun' : 'moon';
-  });
-
   /** react-ibles */
   $: path = $page.url.pathname;
   $: form = $page.form;
-  $: if (isBrowser) document.body.dataset.theme = themeIconName === 'moon' ? 'light' : 'dark';
+  $: if (globalThis.document) {
+    document.documentElement.dataset.theme = themeIconName === 'moon' ? 'light' : 'dark';
+  }
 </script>
 
 <template lang="pug" src="./layout.pug">
@@ -115,4 +119,5 @@
 
 <svelte:head>
   <style lang="scss" src="./layout.scss"></style>
+  {@html `<script>document.documentElement.dataset.theme=localStorage.getItem('theme');</script>`}
 </svelte:head>

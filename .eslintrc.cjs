@@ -11,6 +11,9 @@ module.exports = {
       return warning.code === 'unused-export-let';
     },
   },
+  globals: {
+    globalThis: false, // means it is not writeable
+  },
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
