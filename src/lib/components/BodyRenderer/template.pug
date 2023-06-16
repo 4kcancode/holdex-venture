@@ -1,81 +1,78 @@
 +each('blocks as item, index')
-  +if("typeof item === 'object'")
-    Switch(condition="{item.type}")
-      Case(value="heading")
-        +if("item.level === 'h1'")
-          svelte:element.heading.font-satoshi(this="p" class="{bindHeading(item.level)}" id="{item.id}")
-            +each("item.items as hItem")
-              InlineBlock(item="{hItem}")
-          +else
-            svelte:element.heading.font-satoshi.py-4(
-              this="{item.level}"
-              class="{bindHeading(item.level)}"
-              id="{item.id}"
-            )
-              +each("item.items as hItem")
-                InlineBlock(item="{hItem}")
-      Case(value="paragraph")
-        svelte:element.p-el.text-paragraph-l.text-t2(this="p")
-          +each("item.items as pItem")
-            InlineBlock(item="{pItem}")
-      Case(value="list")
-        svelte:element.pl-7(
-          class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'}"
-          this="{item.style === 'unordered' ? 'ul' : 'ol'}"
-        )
-          +each("item.items as liItem")
-            li.text-paragraph-l.text-t2
-              +each("liItem as lItem")
-                InlineBlock(item="{lItem}") 
-      Case(value="nestedList")
-        svelte:element.pl-7.ml-4(
-          class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'}"
-          this="{item.style === 'unordered' ? 'ul' : 'ol'}"
-        )
-          +each("item.items as liItem")
-            NestedList(item="{liItem}" type="{item.style}" let:item="{lItem}")
-              InlineBlock(item="{lItem}") 
-      //- Case(value="linkTool")
-      Case(value="quote")
-        blockquote.relative.bg-l1.overflow-clip.rounded-xl.border.border-solid.border-l4.p-4.text-paragraph-s.text-t1(
-          title="{item.text}"
-          class="pl-5.5 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2"
-        )
-          +each("item.items as QItem")
-            InlineBlock(item="{QItem}") 
-      Case(value="embed")
-        +if("item.service !== 'twitter'")
-          Embed(item="{item}")
-          +else
-            TwitterEmbed(source="{item.source}")
-      Case(value="code")
-        pre.bg-l2.border.border-solid.border-l4.rounded-xl.py-4.px-6.w-full.overflow-auto
-          code.text-code.font-mono
-            TextWrapper(text="{item.data.code}")
-      Case(value="table")
-        table.table.w-full.border-separate.border-spacing-0.bg-l1.overflow-auto
-          tbody
-            +each('item.cells as row, index')
-              tr
-                +each('row as cell, i')
-                  +if('index === 0')
-                    th.bg-l2.px-3.text-t1.text-footnote.font-bold.border-solid.border-l.border-t.border-l4(
-                      class="py-1.5 first:rounded-tl-xl last:rounded-tr-xl last:border-r"
-                    )
-                      +each('parseTableCell(cell) as header')
-                        InlineBlock(item="{header}")
-                    +else
-                      td.px-3.text-t2.text-footnote.border-solid.border-l.border-t.border-l4(
-                        class="py-1.5 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}"
-                      )
-                        +each('parseTableCell(cell) as cellItem')
-                          InlineBlock(item="{cellItem}" parentWrapper="table")
+	+if("typeof item === 'object'")
+		Switch(condition="{item.type}")
+			Case(value="heading")
+				+if("item.level === 'h1'")
+					svelte:element(
+						this="p" 
+						class="heading font-satoshi {bindHeading(item.level)}" 
+						id="{item.id}")
+						+each("item.items as hItem")
+							InlineBlock(item="{hItem}")
+					+else()
+						svelte:element(
+							this="{item.level}" 
+							class="heading font-satoshi {bindHeading(item.level)} py-4" 
+							id="{item.id}")
+							+each("item.items as hItem")
+								InlineBlock(item="{hItem}")
+			Case(value="paragraph")
+				svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+					+each("item.items as pItem")
+						InlineBlock(item="{pItem}")
+			Case(value="list")
+				svelte:element(
+					class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'} pl-7"
+					this="{item.style === 'unordered' ? 'ul' : 'ol'}")
+					+each("item.items as liItem")
+						li(class="text-paragraph-l text-t2")
+							+each("liItem as lItem")
+								InlineBlock(item="{lItem}") 
+			Case(value="nestedList")
+				svelte:element(
+					class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'} pl-7 ml-4"
+					this="{item.style === 'unordered' ? 'ul' : 'ol'}")
+					+each("item.items as liItem")
+						NestedList(item="{liItem}" type="{item.style}" let:item="{lItem}")
+							InlineBlock(item="{lItem}") 
+			//- Case(value="linkTool")
+			Case(value="quote")
+				blockquote(
+					title="{item.text}" 
+					class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2")
+					+each("item.items as QItem")
+						InlineBlock(item="{QItem}") 
+			Case(value="embed")
+				+if("item.service !== 'twitter'")
+					Embed(item="{item}")
+					+else()
+						TwitterEmbed(source="{item.source}" )
+			Case(value="code")
+				pre(class="bg-l2 border border-solid border-l4 rounded-xl py-4 px-6 w-full overflow-auto")
+					code(class="text-code font-mono")
+						TextWrapper(text="{item.data.code}")
+			Case(value="table")
+				table(class="table w-full border-separate border-spacing-0 bg-l1 overflow-auto")
+					tbody
+						+each('item.cells as row, index')
+							tr
+								+each('row as cell, i')
+									+if('index === 0')
+										th(class="bg-l2 py-1.5 px-3 text-t1 text-footnote font-bold border-solid border-l border-t border-l4 first:rounded-tl-xl last:rounded-tr-xl last:border-r")
+											+each('parseTableCell(cell) as header')
+												InlineBlock(item="{header}")
+										+else()
+											td(
+												class="py-1.5 px-3 text-t2 text-footnote border-solid border-l border-t border-l4 last:border-r {index === item.cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
+												+each('parseTableCell(cell) as cellItem')
+													InlineBlock(item="{cellItem}" parentWrapper="table")
 
-      Case(value="image")
-        Image(item="{item}" index="{index}")
-      Case(value="tally")
-        TallyButton(item="{item}")
-      Case(value="chart")
-        Chart(item="{item}")
-    +else
-      TextWrapper(text="{item}")
+
+			Case(value="image")
+				Image(item="{item}" index="{index}")
+			Case(value="tally")
+				TallyButton(item="{item}")
+			Case(value="chart")
+				Chart(item="{item}")
+		+else()
+			TextWrapper(text="{item}")
