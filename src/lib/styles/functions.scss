@@ -1,7 +1,7 @@
 @function toSpacedRgb($hexColor) {
-    $red: red($hexColor);
-    $green: green($hexColor);
-    $blue: blue($hexColor);
+  $red: red($hexColor);
+  $green: green($hexColor);
+  $blue: blue($hexColor);
 
-    @return #{$red $green $blue};
+  @return #{$red $green $blue};
 }

@@ -1,537 +1,537 @@
 {
-    "version": 2,
-    "trailingSlash": false,
-    "headers": [
+  "version": 2,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
         {
-            "source": "/(.*)",
-            "headers": [
-                {
-                    "key": "Content-Security-Policy",
-                    "value": "frame-ancestors 'none'"
-                },
-                {
-                    "key": "Referrer-Policy",
-                    "value": "same-origin"
-                },
-                {
-                    "key": "X-Content-Type-Options",
-                    "value": "nosniff"
-                },
-                {
-                    "key": "X-Frame-Options",
-                    "value": "same-origin"
-                },
-                {
-                    "key": "X-XSS-Protection",
-                    "value": "1;mode=block"
-                }
-            ]
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'none'"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "same-origin"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1;mode=block"
         }
-    ],
-    "redirects": [
-        {
-            "source": "/(.*)/iamtoken",
-            "destination": "/c/learn/understanding-polkadot-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/lunie",
-            "destination": "/c/learn/understanding-cosmos-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/ren",
-            "destination": "/c/learn/understanding-pillar-protecting-your-data"
-        },
-        {
-            "source": "/(.*)/hedera-hashgraph",
-            "destination": "/"
-        },
-        {
-            "source": "/(.*)/pickle-finance",
-            "destination": "/c/learn/understanding-pickle-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/decentraland",
-            "destination": "/c/learn/understanding-decentraland-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/curve",
-            "destination": "/c/learn/understanding-curve-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/yearn",
-            "destination": "/c/learn/understanding-yearn-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/(.*)/solana",
-            "destination": "/portfolio/zebec-protocol"
-        },
-        {
-            "source": "/(.*)/zapper-fi",
-            "destination": "/c/learn/list-of-defi-tokens-apps-and-tools"
-        },
-        {
-            "source": "/(c|x|dapps|marketplace)/ethereum",
-            "destination": "/c/learn/what-is-defi"
-        },
-        {
-            "source": "/(.*)/(kraken|ripple)",
-            "destination": "/c/announcements/2020-crypto"
-        },
-        {
-            "source": "/(c|x|dapps|marketplace)/metamask",
-            "destination": "/c/learn/how-to-install-metamask"
-        },
-        {
-            "source": "/dapps(\/.*)?",
-            "destination": "/portfolio"
-        },
-        {
-            "source": "/(.*)/(gdax|smart-contracts|crypto-exchange-development-services|how-to-launch-a-crypto-exchange-like-wazirx|how-to-create-your-own-crypto-exchange-clone-script|bzx-dai-itoken)",
-            "destination": "/"
-        },
-        {
-            "source": "/(.*)(bitfinex|elastos|bithumb|bitstamp)",
-            "destination": "/c/learn/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it"
-        },
-        {
-            "source": "/(.*)(bitforex)",
-            "destination": "/c/learn/bitforex-exchange-a-review"
-        },
-        {
-            "source": "/(.*)(bitbns)",
-            "destination": "/c/learn/bitbns-exchange-a-review"
-        },
-        {
-            "source": "/(.*)(bitcoin)",
-            "destination": "/c/learn/trading-vs-yield-farming-making-money-with-defi-basics"
-        },
-        {
-            "source": "/marketplace",
-            "destination": "/portfolio"
-        },
-        {
-            "source": "/marketplace/(.*)",
-            "destination": "/c/$1"
-        },
-        {
-            "source": "/business(\/.*)?",
-            "destination": "/"
-        },
-        {
-            "source": "(/learn/ico-scope-of-work-and-milestones)|(/learn/how-to-run-an-ico)|(/x/holdex/guide-on-how-to-launch-your-own-token-generation-event)",
-            "destination": "/c/learn/guide-on-how-to-launch-your-own-token-generation-event"
-        },
-        {
-            "source": "/(learn|guides)",
-            "destination": "/c/learn"
-        },
-        {
-            "source": "/notifications/old/(.*)",
-            "destination": "/notifications/new"
-        },
-        {
-            "source": "/portfolio/new",
-            "destination": "/new-community"
-        },
-        {
-            "source": "/x/(.*)/invite-team",
-            "destination": "/settings/$1/team"
-        },
-        {
-            "source": "/(news|top-projects|leaders|h|home)",
-            "destination": "/"
-        },
-        {
-            "source": "/u/zolotokrylin/these-projects-are-changing-the-world",
-            "destination": "/x"
-        },
-        {
-            "source": "/p/(.*)",
-            "destination": "/$1"
-        },
-        {
-            "source": "/notifications",
-            "destination": "/notifications/new"
-        },
-        {
-            "source": "/notifications/inbox",
-            "destination": "/notifications/old/inbox"
-        },
-        {
-            "source": "/notifications/archived",
-            "destination": "/notifications/old/archived"
-        },
-        {
-            "source": "/home/(.*)",
-            "destination": "/$1"
-        },
-        {
-            "source": "x/steem/projecthope-a-great-multidisciplinary-team",
-            "destination": "/x/project-hope"
-        },
-        {
-            "source": "/(feed|x)",
-            "destination": "/c"
-        },
-        {
-            "source": "/feed/search",
-            "destination": "/c/search"
-        },
-        {
-            "source": "/projects/1c6bcfd83b6542268248f82ed79ae303",
-            "destination": "/portfolio/amplify"
-        },
-        {
-            "source": "/portfolio/zebec-protocol",
-            "destination": "/c/companies/zebec-protocol"
-        },
-        {
-            "source": "/portfolio/clearpool",
-            "destination": "/c/companies/clearpool"
-        },
-        {
-            "source": "/portfolio/amplify",
-            "destination": "/portfolio"
-        },
-        {
-            "source": "/portfolio/blockpass",
-            "destination": "/c/companies/pass-club"
-        },
-        {
-            "source": "/portfolio/pickle-finance",
-            "destination": "/c/companies/pickle-finance"
-        },
-        {
-            "source": "/projects/18f2ecd9cab94b408543ee58c8029fd4",
-            "destination": "/portfolio/clearpool"
-        },
-        {
-            "source": "/projects/f384f6b432fa4c6bb3274470cac9f16b",
-            "destination": "/portfolio/blockpass"
-        },
-        {
-            "source": "/projects/4191aeb3c4914665b12d2af250ed3e31",
-            "destination": "/portfolio/pickle-finance"
-        },
-        {
-            "source": "/projects/apply",
-            "destination": "/apply"
-        },
-        {
-            "source": "/projects/apply/signup",
-            "destination": "/apply"
-        },
-        {
-            "source": "/x/flipside-crypto/uniswap-v3-fee-calculator",
-            "destination": "/c/learn/uniswap-v3-fee-calculator"
-        },
-        {
-            "source": "/x/holdex/what-is-defi",
-            "destination": "/c/learn/what-is-defi"
-        },
-        {
-            "source": "/x/holdex/how-to-stake-tokens-with-uniswap-v3-staking-program",
-            "destination": "/c/learn/how-to-stake-tokens-with-uniswap-v3-staking-program"
-        },
-        {
-            "source": "/x/holdex/how-to-create-a-uniswap-v3-staking-program",
-            "destination": "/c/learn/how-to-create-a-uniswap-v3-staking-program"
-        },
-        {
-            "source": "/x/holdex/trading-vs-yield-farming-making-money-with-defi-basics",
-            "destination": "/c/learn/trading-vs-yield-farming-making-money-with-defi-basics"
-        },
-        {
-            "source": "/x/holdex/yield-farming-concepts-making-money-with-defi-basics",
-            "destination": "/c/learn/yield-farming-concepts-making-money-with-defi-basics"
-        },
-        {
-            "source": "/(.*)/chainlink",
-            "destination": "/c/wootrade/woo-network-and-chainlink"
-        },
-        {
-            "source": "/x/holdex/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it",
-            "destination": "/c/learn/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it"
-        },
-        {
-            "source": "/x/metamask/how-to-install-metamask",
-            "destination": "/c/learn/how-to-install-metamask"
-        },
-        {
-            "source": "/x/holdex/list-of-defi-tokens-apps-and-tools",
-            "destination": "/c/learn/list-of-defi-tokens-apps-and-tools"
-        },
-        {
-            "source": "/x/cosmos/understanding-cosmos-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-cosmos-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/mstable/understanding-mstable-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-mstable-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/cream-finance/understanding-cream-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/balancer/understanding-balancer-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-balancer-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/cardano/understanding-cardano-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-cardano-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/polkadot/understanding-polkadot-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-polkadot-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/aave/understanding-polkadot-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-aave-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/tezos/understanding-tezos-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-tezos-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/uniswap/understanding-uniswap-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-uniswap-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/orchid/understanding-orchid-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-orchid-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/selfkey/understanding-selfkey-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-selfkey-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/dfinity-iou/understanding-dfinity-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-dfinity-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/maker/understanding-maker-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-maker-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/pickle-finance/understanding-pickle-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-pickle-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/decentraland/understanding-decentraland-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-decentraland-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/sushiswap/understanding-sushiswap-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-sushiswap-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/pillar/understanding-pillar-protecting-your-data",
-            "destination": "/c/learn/understanding-pillar-protecting-your-data"
-        },
-        {
-            "source": "/x/curve/understanding-curve-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-curve-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/omisego/understanding-omg-network-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-omg-network-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/horizen/understanding-horizen-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-horizen-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/x/kyber-network/understanding-kyber-network-a-review",
-            "destination": "/c/learn/understanding-kyber-network-a-review"
-        },
-        {
-            "source": "/x/wyre/understanding-wyre-a-review",
-            "destination": "/c/learn/understanding-wyre-a-review"
-        },
-        {
-            "source": "/x/holdex/understanding-custonomy-product",
-            "destination": "/c/learn/understanding-custonomy-product"
-        },
-        {
-            "source": "/x/holdex/are-all-your-friends-getting-rich-with-nfts",
-            "destination": "/c/learn/are-all-your-friends-getting-rich-with-nfts"
-        },
-        {
-            "source": "/x/holdex/how-to-pitch-your-blockchain-idea",
-            "destination": "/c/learn/how-to-pitch-your-blockchain-idea"
-        },
-        {
-            "source": "/x/cryptoverse/liquidity-mining-to-launch-and-bootstrap-new-defi-apps",
-            "destination": "/c/learn/liquidity-mining-to-launch-and-bootstrap-new-defi-apps"
-        },
-        {
-            "source": "/x/airswap/airswap-vs-other-swaps-whats-the-difference",
-            "destination": "/c/learn/airswap-vs-other-swaps-whats-the-difference"
-        },
-        {
-            "source": "/x/coinjar/coinjar-exchange-a-review",
-            "destination": "/c/learn/coinjar-exchange-a-review"
-        },
-        {
-            "source": "/x/whitebit/whitebit-exchange-review",
-            "destination": "/c/learn/whitebit-exchange-review"
-        },
-        {
-            "source": "/x/holdex/full-stack-web3-developer",
-            "destination": "/c/jobs/full-stack-web3-developer"
-        },
-        {
-            "source": "/x/holdex/actuarial-advisor-decentro",
-            "destination": "/c/jobs/actuarial-advisor-decentro"
-        },
-        {
-            "source": "/x/holdex/lumiere-is-now-powered-by-holdex",
-            "destination": "/c/case-studies/lumiere-is-now-powered-by-holdex"
-        },
-        {
-            "source": "/(.*)/havven",
-            "destination": "/"
-        },
-        {
-            "source": "/(.*)/harvest-finance",
-            "destination": "/c/jarvis-network/weekly-newsletter-of-jarvis-network-issue-4?action=reply"
-        },
-        {
-            "source": "/(.*)/kyber-network",
-            "destination": "/c/announcements/community-articles-about-knc-aln-and-mana"
-        },
-        {
-            "source": "/(.*)/tron",
-            "destination": "/c/announcements/what-needs-to-be-expected-from-tron-in-the-future?action=reply"
-        },
-        {
-            "source": "/x/blockpass/pass-token-gets-its-own-home-on-the-web",
-            "destination": "/c/announcements/pass-token-gets-its-own-home-on-the-web"
-        },
-        {
-            "source": "/x/blockpass/liquidity-mining-of-blockpass-pass-token",
-            "destination": "/c/announcements/liquidity-mining-of-blockpass-pass-token"
-        },
-        {
-            "source": "/x/ethereum/what-is-erc20-compatible-wallet",
-            "destination": "/c/learn/what-is-erc20-compatible-wallet"
-        },
-        {
-            "source": "/c/cream-finance/understanding-cream-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/updates/aave/understanding-aave-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-aave-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/yearn-finance/understanding-yearn-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-yearn-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/celsius-degree-token/understanding-celsius-network-a-review",
-            "destination": "/c/learn/understanding-celsius-network-a-review"
-        },
-        {
-            "source": "/c/exmarkets/exmarkets-exchange-a-review",
-            "destination": "/c/learn/exmarkets-exchange-a-review"
-        },
-        {
-            "source": "/c/shapeshift/shapeshift-exchange-a-beginners-guide-and-review",
-            "destination": "/c/learn/shapeshift-exchange-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/quark-chain/understanding-quarkchain-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-quarkchain-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/aluna-social/understanding-aluna-social-a-review",
-            "destination": "/c/learn/understanding-aluna-social-a-review"
-        },
-        {
-            "source": "/c/bitbns/bitbns-exchange-a-review",
-            "destination": "/c/learn/bitbns-exchange-a-review"
-        },
-        {
-            "source": "/c/bitforex/bitforex-exchange-a-review",
-            "destination": "/c/learn/bitforex-exchange-a-review"
-        },
-        {
-            "source": "/c/coineal/coineal-exchange-review",
-            "destination": "/c/learn/coineal-exchange-review"
-        },
-        {
-            "source": "/c/swerve/understanding-swerve-a-beginners-guide-and-review",
-            "destination": "/c/learn/understanding-swerve-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/wirex/unpacking-wirex-a-user-review",
-            "destination": "/c/learn/unpacking-wirex-a-user-review"
-        },
-        {
-            "source": "/c/mithril",
-            "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
-        },
-        {
-            "source": "/c/announcements/how-long-does-it-take-time-to-develop-erc20-token",
-            "destination": "/c/learn/what-is-erc-20-token-standard"
-        },
-        {
-            "source": "/c/announcements/what-is-an-erc20-token-development",
-            "destination": "/c/learn/what-is-erc-20-token-standard"
-        },
-        {
-            "source": "/c/binance-smart-chain/binance-smart-chains-jointer-bridges-erc20-bep20",
-            "destination": "/c/learn/what-is-erc-20-token-standard"
-        },
-        {
-            "source": "/c/announcements/investment-in-erc20-token-will-profit-for-ur-business",
-            "destination": "/c/learn/what-is-erc-20-token-standard"
-        },
-        {
-            "source": "/c/announcements/why-apply",
-            "destination": "/c/announcements/for-startups"
-        },
-        {
-            "source": "/x/holdex",
-            "destination": "/c/announcements"
-        },
-        {
-            "source": "/x/holdex/(.*)",
-            "destination": "/c/announcements/$1"
-        },
-        {
-            "source": "/u/(.*)",
-            "destination": "/$1"
-        },
-        {
-            "source": "/x/(.*)",
-            "destination": "/c/$1"
-        },
-        {
-            "source": "/updates(/search)?",
-            "destination": "/c"
-        },
-        {
-            "source": "/updates/(.*)",
-            "destination": "/c/$1"
-        },
-        {
-            "source": "/projects",
-            "destination": "/portfolio"
-        },
-        {
-            "source": "/projects/(.*)",
-            "destination": "/portfolio/$1"
-        },
-        {
-            "source": "/login",
-            "destination": "/"
-        },
-        {
-            "source": "/login/(.*)",
-            "destination": "/"
-        }
-    ]
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)/iamtoken",
+      "destination": "/c/learn/understanding-polkadot-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/lunie",
+      "destination": "/c/learn/understanding-cosmos-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/ren",
+      "destination": "/c/learn/understanding-pillar-protecting-your-data"
+    },
+    {
+      "source": "/(.*)/hedera-hashgraph",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)/pickle-finance",
+      "destination": "/c/learn/understanding-pickle-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/decentraland",
+      "destination": "/c/learn/understanding-decentraland-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/curve",
+      "destination": "/c/learn/understanding-curve-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/yearn",
+      "destination": "/c/learn/understanding-yearn-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/(.*)/solana",
+      "destination": "/portfolio/zebec-protocol"
+    },
+    {
+      "source": "/(.*)/zapper-fi",
+      "destination": "/c/learn/list-of-defi-tokens-apps-and-tools"
+    },
+    {
+      "source": "/(c|x|dapps|marketplace)/ethereum",
+      "destination": "/c/learn/what-is-defi"
+    },
+    {
+      "source": "/(.*)/(kraken|ripple)",
+      "destination": "/c/announcements/2020-crypto"
+    },
+    {
+      "source": "/(c|x|dapps|marketplace)/metamask",
+      "destination": "/c/learn/how-to-install-metamask"
+    },
+    {
+      "source": "/dapps(/.*)?",
+      "destination": "/portfolio"
+    },
+    {
+      "source": "/(.*)/(gdax|smart-contracts|crypto-exchange-development-services|how-to-launch-a-crypto-exchange-like-wazirx|how-to-create-your-own-crypto-exchange-clone-script|bzx-dai-itoken)",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)(bitfinex|elastos|bithumb|bitstamp)",
+      "destination": "/c/learn/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it"
+    },
+    {
+      "source": "/(.*)(bitforex)",
+      "destination": "/c/learn/bitforex-exchange-a-review"
+    },
+    {
+      "source": "/(.*)(bitbns)",
+      "destination": "/c/learn/bitbns-exchange-a-review"
+    },
+    {
+      "source": "/(.*)(bitcoin)",
+      "destination": "/c/learn/trading-vs-yield-farming-making-money-with-defi-basics"
+    },
+    {
+      "source": "/marketplace",
+      "destination": "/portfolio"
+    },
+    {
+      "source": "/marketplace/(.*)",
+      "destination": "/c/$1"
+    },
+    {
+      "source": "/business(/.*)?",
+      "destination": "/"
+    },
+    {
+      "source": "(/learn/ico-scope-of-work-and-milestones)|(/learn/how-to-run-an-ico)|(/x/holdex/guide-on-how-to-launch-your-own-token-generation-event)",
+      "destination": "/c/learn/guide-on-how-to-launch-your-own-token-generation-event"
+    },
+    {
+      "source": "/(learn|guides)",
+      "destination": "/c/learn"
+    },
+    {
+      "source": "/notifications/old/(.*)",
+      "destination": "/notifications/new"
+    },
+    {
+      "source": "/portfolio/new",
+      "destination": "/new-community"
+    },
+    {
+      "source": "/x/(.*)/invite-team",
+      "destination": "/settings/$1/team"
+    },
+    {
+      "source": "/(news|top-projects|leaders|h|home)",
+      "destination": "/"
+    },
+    {
+      "source": "/u/zolotokrylin/these-projects-are-changing-the-world",
+      "destination": "/x"
+    },
+    {
+      "source": "/p/(.*)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/notifications",
+      "destination": "/notifications/new"
+    },
+    {
+      "source": "/notifications/inbox",
+      "destination": "/notifications/old/inbox"
+    },
+    {
+      "source": "/notifications/archived",
+      "destination": "/notifications/old/archived"
+    },
+    {
+      "source": "/home/(.*)",
+      "destination": "/$1"
+    },
+    {
+      "source": "x/steem/projecthope-a-great-multidisciplinary-team",
+      "destination": "/x/project-hope"
+    },
+    {
+      "source": "/(feed|x)",
+      "destination": "/c"
+    },
+    {
+      "source": "/feed/search",
+      "destination": "/c/search"
+    },
+    {
+      "source": "/projects/1c6bcfd83b6542268248f82ed79ae303",
+      "destination": "/portfolio/amplify"
+    },
+    {
+      "source": "/portfolio/zebec-protocol",
+      "destination": "/c/companies/zebec-protocol"
+    },
+    {
+      "source": "/portfolio/clearpool",
+      "destination": "/c/companies/clearpool"
+    },
+    {
+      "source": "/portfolio/amplify",
+      "destination": "/portfolio"
+    },
+    {
+      "source": "/portfolio/blockpass",
+      "destination": "/c/companies/pass-club"
+    },
+    {
+      "source": "/portfolio/pickle-finance",
+      "destination": "/c/companies/pickle-finance"
+    },
+    {
+      "source": "/projects/18f2ecd9cab94b408543ee58c8029fd4",
+      "destination": "/portfolio/clearpool"
+    },
+    {
+      "source": "/projects/f384f6b432fa4c6bb3274470cac9f16b",
+      "destination": "/portfolio/blockpass"
+    },
+    {
+      "source": "/projects/4191aeb3c4914665b12d2af250ed3e31",
+      "destination": "/portfolio/pickle-finance"
+    },
+    {
+      "source": "/projects/apply",
+      "destination": "/apply"
+    },
+    {
+      "source": "/projects/apply/signup",
+      "destination": "/apply"
+    },
+    {
+      "source": "/x/flipside-crypto/uniswap-v3-fee-calculator",
+      "destination": "/c/learn/uniswap-v3-fee-calculator"
+    },
+    {
+      "source": "/x/holdex/what-is-defi",
+      "destination": "/c/learn/what-is-defi"
+    },
+    {
+      "source": "/x/holdex/how-to-stake-tokens-with-uniswap-v3-staking-program",
+      "destination": "/c/learn/how-to-stake-tokens-with-uniswap-v3-staking-program"
+    },
+    {
+      "source": "/x/holdex/how-to-create-a-uniswap-v3-staking-program",
+      "destination": "/c/learn/how-to-create-a-uniswap-v3-staking-program"
+    },
+    {
+      "source": "/x/holdex/trading-vs-yield-farming-making-money-with-defi-basics",
+      "destination": "/c/learn/trading-vs-yield-farming-making-money-with-defi-basics"
+    },
+    {
+      "source": "/x/holdex/yield-farming-concepts-making-money-with-defi-basics",
+      "destination": "/c/learn/yield-farming-concepts-making-money-with-defi-basics"
+    },
+    {
+      "source": "/(.*)/chainlink",
+      "destination": "/c/wootrade/woo-network-and-chainlink"
+    },
+    {
+      "source": "/x/holdex/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it",
+      "destination": "/c/learn/what-is-crypto-arbitrage-and-how-to-make-the-most-of-it"
+    },
+    {
+      "source": "/x/metamask/how-to-install-metamask",
+      "destination": "/c/learn/how-to-install-metamask"
+    },
+    {
+      "source": "/x/holdex/list-of-defi-tokens-apps-and-tools",
+      "destination": "/c/learn/list-of-defi-tokens-apps-and-tools"
+    },
+    {
+      "source": "/x/cosmos/understanding-cosmos-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-cosmos-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/mstable/understanding-mstable-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-mstable-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/cream-finance/understanding-cream-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/balancer/understanding-balancer-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-balancer-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/cardano/understanding-cardano-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-cardano-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/polkadot/understanding-polkadot-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-polkadot-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/aave/understanding-polkadot-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-aave-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/tezos/understanding-tezos-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-tezos-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/uniswap/understanding-uniswap-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-uniswap-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/orchid/understanding-orchid-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-orchid-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/selfkey/understanding-selfkey-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-selfkey-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/dfinity-iou/understanding-dfinity-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-dfinity-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/maker/understanding-maker-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-maker-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/pickle-finance/understanding-pickle-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-pickle-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/decentraland/understanding-decentraland-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-decentraland-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/sushiswap/understanding-sushiswap-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-sushiswap-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/pillar/understanding-pillar-protecting-your-data",
+      "destination": "/c/learn/understanding-pillar-protecting-your-data"
+    },
+    {
+      "source": "/x/curve/understanding-curve-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-curve-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/omisego/understanding-omg-network-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-omg-network-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/horizen/understanding-horizen-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-horizen-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/x/kyber-network/understanding-kyber-network-a-review",
+      "destination": "/c/learn/understanding-kyber-network-a-review"
+    },
+    {
+      "source": "/x/wyre/understanding-wyre-a-review",
+      "destination": "/c/learn/understanding-wyre-a-review"
+    },
+    {
+      "source": "/x/holdex/understanding-custonomy-product",
+      "destination": "/c/learn/understanding-custonomy-product"
+    },
+    {
+      "source": "/x/holdex/are-all-your-friends-getting-rich-with-nfts",
+      "destination": "/c/learn/are-all-your-friends-getting-rich-with-nfts"
+    },
+    {
+      "source": "/x/holdex/how-to-pitch-your-blockchain-idea",
+      "destination": "/c/learn/how-to-pitch-your-blockchain-idea"
+    },
+    {
+      "source": "/x/cryptoverse/liquidity-mining-to-launch-and-bootstrap-new-defi-apps",
+      "destination": "/c/learn/liquidity-mining-to-launch-and-bootstrap-new-defi-apps"
+    },
+    {
+      "source": "/x/airswap/airswap-vs-other-swaps-whats-the-difference",
+      "destination": "/c/learn/airswap-vs-other-swaps-whats-the-difference"
+    },
+    {
+      "source": "/x/coinjar/coinjar-exchange-a-review",
+      "destination": "/c/learn/coinjar-exchange-a-review"
+    },
+    {
+      "source": "/x/whitebit/whitebit-exchange-review",
+      "destination": "/c/learn/whitebit-exchange-review"
+    },
+    {
+      "source": "/x/holdex/full-stack-web3-developer",
+      "destination": "/c/jobs/full-stack-web3-developer"
+    },
+    {
+      "source": "/x/holdex/actuarial-advisor-decentro",
+      "destination": "/c/jobs/actuarial-advisor-decentro"
+    },
+    {
+      "source": "/x/holdex/lumiere-is-now-powered-by-holdex",
+      "destination": "/c/case-studies/lumiere-is-now-powered-by-holdex"
+    },
+    {
+      "source": "/(.*)/havven",
+      "destination": "/"
+    },
+    {
+      "source": "/(.*)/harvest-finance",
+      "destination": "/c/jarvis-network/weekly-newsletter-of-jarvis-network-issue-4?action=reply"
+    },
+    {
+      "source": "/(.*)/kyber-network",
+      "destination": "/c/announcements/community-articles-about-knc-aln-and-mana"
+    },
+    {
+      "source": "/(.*)/tron",
+      "destination": "/c/announcements/what-needs-to-be-expected-from-tron-in-the-future?action=reply"
+    },
+    {
+      "source": "/x/blockpass/pass-token-gets-its-own-home-on-the-web",
+      "destination": "/c/announcements/pass-token-gets-its-own-home-on-the-web"
+    },
+    {
+      "source": "/x/blockpass/liquidity-mining-of-blockpass-pass-token",
+      "destination": "/c/announcements/liquidity-mining-of-blockpass-pass-token"
+    },
+    {
+      "source": "/x/ethereum/what-is-erc20-compatible-wallet",
+      "destination": "/c/learn/what-is-erc20-compatible-wallet"
+    },
+    {
+      "source": "/c/cream-finance/understanding-cream-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/updates/aave/understanding-aave-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-aave-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/yearn-finance/understanding-yearn-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-yearn-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/celsius-degree-token/understanding-celsius-network-a-review",
+      "destination": "/c/learn/understanding-celsius-network-a-review"
+    },
+    {
+      "source": "/c/exmarkets/exmarkets-exchange-a-review",
+      "destination": "/c/learn/exmarkets-exchange-a-review"
+    },
+    {
+      "source": "/c/shapeshift/shapeshift-exchange-a-beginners-guide-and-review",
+      "destination": "/c/learn/shapeshift-exchange-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/quark-chain/understanding-quarkchain-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-quarkchain-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/aluna-social/understanding-aluna-social-a-review",
+      "destination": "/c/learn/understanding-aluna-social-a-review"
+    },
+    {
+      "source": "/c/bitbns/bitbns-exchange-a-review",
+      "destination": "/c/learn/bitbns-exchange-a-review"
+    },
+    {
+      "source": "/c/bitforex/bitforex-exchange-a-review",
+      "destination": "/c/learn/bitforex-exchange-a-review"
+    },
+    {
+      "source": "/c/coineal/coineal-exchange-review",
+      "destination": "/c/learn/coineal-exchange-review"
+    },
+    {
+      "source": "/c/swerve/understanding-swerve-a-beginners-guide-and-review",
+      "destination": "/c/learn/understanding-swerve-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/wirex/unpacking-wirex-a-user-review",
+      "destination": "/c/learn/unpacking-wirex-a-user-review"
+    },
+    {
+      "source": "/c/mithril",
+      "destination": "/c/learn/understanding-cream-a-beginners-guide-and-review"
+    },
+    {
+      "source": "/c/announcements/how-long-does-it-take-time-to-develop-erc20-token",
+      "destination": "/c/learn/what-is-erc-20-token-standard"
+    },
+    {
+      "source": "/c/announcements/what-is-an-erc20-token-development",
+      "destination": "/c/learn/what-is-erc-20-token-standard"
+    },
+    {
+      "source": "/c/binance-smart-chain/binance-smart-chains-jointer-bridges-erc20-bep20",
+      "destination": "/c/learn/what-is-erc-20-token-standard"
+    },
+    {
+      "source": "/c/announcements/investment-in-erc20-token-will-profit-for-ur-business",
+      "destination": "/c/learn/what-is-erc-20-token-standard"
+    },
+    {
+      "source": "/c/announcements/why-apply",
+      "destination": "/c/announcements/for-startups"
+    },
+    {
+      "source": "/x/holdex",
+      "destination": "/c/announcements"
+    },
+    {
+      "source": "/x/holdex/(.*)",
+      "destination": "/c/announcements/$1"
+    },
+    {
+      "source": "/u/(.*)",
+      "destination": "/$1"
+    },
+    {
+      "source": "/x/(.*)",
+      "destination": "/c/$1"
+    },
+    {
+      "source": "/updates(/search)?",
+      "destination": "/c"
+    },
+    {
+      "source": "/updates/(.*)",
+      "destination": "/c/$1"
+    },
+    {
+      "source": "/projects",
+      "destination": "/portfolio"
+    },
+    {
+      "source": "/projects/(.*)",
+      "destination": "/portfolio/$1"
+    },
+    {
+      "source": "/login",
+      "destination": "/"
+    },
+    {
+      "source": "/login/(.*)",
+      "destination": "/"
+    }
+  ]
 }

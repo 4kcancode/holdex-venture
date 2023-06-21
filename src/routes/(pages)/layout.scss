@@ -1,6 +1,5 @@
-@import "../../lib/styles/theme.scss";
-
+@import '../../lib/styles/theme.scss';
 
 .mobile-dropdown ul li:before {
-    @apply hidden;
+  @apply hidden;
 }
