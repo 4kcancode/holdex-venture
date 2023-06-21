@@ -6,7 +6,7 @@
   import { Switch, Case } from '$components/Switch';
 </script>
 
-<template lang="pug">
+<template lang="pug" src="./error.pug">
 </template>
 
 <svelte:head>
