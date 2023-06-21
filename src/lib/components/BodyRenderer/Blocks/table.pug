@@ -1,0 +1,14 @@
+table(class="table w-full border-separate border-spacing-0 bg-l1 overflow-auto")
+  tbody
+    +each('cells as row, index')
+      tr
+        +each('row as cellContents, i')
+          +if('index === 0')
+            th(class="bg-l2 py-1.5 px-3 text-t1 text-footnote font-bold border-solid border-l border-t border-l4 first:rounded-tl-xl last:rounded-tr-xl last:border-r")
+              +each('cellContents as content')
+                Item(item="{content}" isTableCell)
+            +else()
+              td(
+                class="py-1.5 px-3 text-t2 text-footnote border-solid border-l border-t border-l4 last:border-r {index === cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
+                +each('cellContents as content')
+                  Item(item="{content}" isTableCell)
