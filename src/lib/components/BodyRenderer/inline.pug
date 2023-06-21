@@ -10,9 +10,7 @@ Switch(condition="{item.type}")
     code.rounded-lg.bg-l2.py-0.px-2.text-code.font-mono
       TextWrapper(text="{item.text}") 
   Case(value="price-ticker")
-    span.underline-offset-4.relative.text-paragraph-l.text-accent1-default.underline.decoration-dashed(
-      class="xs:text-paragraph-s"
-    ) ${item.text}
+    PriceTicker(ticker="{item.text}")
   //- Case(value="mention")
   //-     s handle mention
   //- possible removal of image

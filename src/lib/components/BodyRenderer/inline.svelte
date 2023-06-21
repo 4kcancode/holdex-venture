@@ -7,6 +7,7 @@
   import Image from './Blocks/image.svelte';
   import Link from './Blocks/link.svelte';
   import Hashtag from './Blocks/hashtag.svelte';
+  import PriceTicker from './Blocks/priceTicker.svelte';
   import { setContext } from 'svelte';
 
   type Item = {

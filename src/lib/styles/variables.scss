@@ -5,14 +5,14 @@ $common-colors: (
   accent2-active: toSpacedRgb(#53e6b9),
   accent3-default: toSpacedRgb(#ce7aff),
   accent3-active: toSpacedRgb(#dda3ff),
-  rating-a: toSpacedRgb(#00e5a1),
   rating-b: toSpacedRgb(#ffb35c),
-  rating-c: toSpacedRgb(#fe706f),
 );
 
 $light-colors: (
   accent1-default: toSpacedRgb(#2e83e5),
   accent1-active: toSpacedRgb(#4d97ea),
+  rating-a: toSpacedRgb(#36b28d),
+  rating-c: toSpacedRgb(#e57877),
   l1: toSpacedRgb(#f8f8fa),
   l2: toSpacedRgb(#f0f1f5),
   l3: toSpacedRgb(#e6e7eb),
@@ -28,6 +28,8 @@ $light-colors: (
 $dark-colors: (
   accent1-default: toSpacedRgb(#00ccff),
   accent1-active: toSpacedRgb(#5cd3ff),
+  rating-a: toSpacedRgb(#00e5a1),
+  rating-c: toSpacedRgb(#fe706f),
   l1: toSpacedRgb(#10141f),
   l2: toSpacedRgb(#1c1f29),
   l3: toSpacedRgb(#252933),
