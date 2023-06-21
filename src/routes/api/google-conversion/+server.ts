@@ -81,7 +81,7 @@ function convertToHoldexJson(document: Schema$Document) {
             const tCellContent: any[] = [];
             cellContent?.forEach(({ paragraph }, i) => {
               if (paragraph) {
-                parseParagraph(document, tableCell, tCellContent, paragraph, i);
+                parseParagraph(document, tableCell, tCellContent, paragraph, i, true);
               }
             });
             trowContent.push(tCellContent);
@@ -248,7 +248,8 @@ function parseParagraph(
   body: Schema$Body,
   content: any[],
   paragraph: Schema$Paragraph,
-  i: number
+  i: number,
+  wrappingTable: boolean = false
 ) {
   const { lists } = document;
   const tag = getParagraphTag(paragraph);
@@ -301,7 +302,7 @@ function parseParagraph(
   else if (tag) {
     const tagContent: any[] = [];
 
-    if (paragraph?.elements?.length === 2 && isLink(paragraph.elements)) {
+    if (paragraph?.elements?.length === 2 && isLink(paragraph.elements) && !wrappingTable) {
       const { textStyle, content } = paragraph.elements[0].textRun as Schema$TextRun;
 
       if (textStyle?.link?.url) {
