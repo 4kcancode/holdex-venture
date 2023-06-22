@@ -1,6 +1,7 @@
 mixin table-cell
   +if("typeof cellContents === 'object'")
     +each('cellContents as content')
+      Item(item="{content}" isTableCell)
     +else()
       Item(item="{cellContents}" isTableCell)
 
