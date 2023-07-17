@@ -9,9 +9,8 @@
   import Embed from './Blocks/embed.svelte';
   import TallyButton from './Blocks/tallyButton.svelte';
   import Chart from './Blocks/chart.svelte';
-  import TwitterEmbed from './Blocks/twitterEmbed.svelte';
   import Table from './Blocks/table.svelte';
-  import { parseTableCell } from '../BodyParser/blocks'
+  import { parseTableCell } from '../BodyParser/blocks';
 
   export let item: any;
   export let isTableCell: boolean = false;
