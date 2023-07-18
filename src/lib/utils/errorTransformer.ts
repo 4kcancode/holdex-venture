@@ -13,7 +13,7 @@ const transformError = (error: unknown, fallbackMessage: string) => {
     result = {
       code: '500',
       message: _error.message,
-      error: _error,
+      error: JSON.stringify(_error),
       stack: _error?.networkError || _error?.graphQLErrors || _error,
     };
   } else if (

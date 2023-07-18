@@ -1,0 +1,67 @@
++if("typeof item === 'object'")
+  Switch(condition="{item.type}")
+    Case(value="heading")
+      +if("item.level === 'h1'")
+        svelte:element(this="p" class="heading font-satoshi {bindHeading(item.level)}" id="{item.id}")
+          +each("item.items as hItem")
+            InlineBlock(item="{hItem}")
+        +else
+          svelte:element(
+            this="{item.level}"
+            class="heading font-satoshi {bindHeading(item.level)} py-4"
+            id="{item.id}"
+          )
+            +each("item.items as hItem")
+              InlineBlock(item="{hItem}")
+    Case(value="paragraph")
+      svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+        +each("item.items as pItem")
+          InlineBlock(item="{pItem}")
+    Case(value="list")
+      svelte:element(
+        class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'} pl-7"
+        this="{item.style === 'unordered' ? 'ul' : 'ol'}"
+      )
+        +each("item.items as liItem")
+          li(class="text-paragraph-l text-t2")
+            +each("liItem as lItem")
+              InlineBlock(item="{lItem}") 
+    Case(value="nestedList")
+      svelte:element(
+        class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'} pl-7 ml-4"
+        this="{item.style === 'unordered' ? 'ul' : 'ol'}"
+      )
+        +each("item.items as liItem")
+          NestedList(item="{liItem}" type="{item.style}" let:item="{lItem}")
+            InlineBlock(item="{lItem}") 
+    //- Case(value="linkTool")
+    Case(value="quote")
+      blockquote(
+        title="{item.text}"
+        class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2"
+      )
+        +each("item.items as QItem")
+          InlineBlock(item="{QItem}") 
+    Case(value="embed")
+      +if("item.service !== 'twitter'")
+        Embed(item="{item}")
+        +else
+          svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+            InlineBlock(item="{{type: 'link', href: item.source}}")
+    Case(value="code")
+      pre(class="bg-l2 border border-solid border-l4 rounded-xl py-4 px-6 w-full overflow-auto")
+        code(class="text-code font-mono")
+          TextWrapper(text="{item.data.code}")
+    Case(value="table")
+      Table(cells="{item.cells}")
+    Case(value="image")
+      Image(item="{item}" index="{index}")
+    Case(value="tally")
+      TallyButton(item="{item}")
+    Case(value="chart")
+      Chart(item="{item}")
+  +elseif("isTableCell")
+    +each('parseTableCell(item) as cell')
+      InlineBlock(item="{cell}")
+  +else
+    TextWrapper(text="{item}")

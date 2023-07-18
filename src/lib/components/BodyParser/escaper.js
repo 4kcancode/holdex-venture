@@ -22,7 +22,7 @@ const getEscapeReplacement = (ch) => escapeReplacements[ch];
  * @param {boolean} encode
  * @returns
  */
-const escape = (html, encode) => {
+const escape = (html, encode = false) => {
   if (encode) {
     if (escapeTest.test(html)) {
       return html.replace(escapeReplace, getEscapeReplacement);
