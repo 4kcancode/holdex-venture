@@ -360,59 +360,26 @@ function parseParagraph(
         }
       }
     } else {
-      paragraph?.elements?.forEach((el) => {
-        // EmbeddedObject
-
-        if (el.inlineObjectElement) {
-          const image = getImage(document, el);
-
-          if (image) {
-            tagContent.push({
-              type: 'image',
-              data: {
-                file: {
-                  url: image.source,
-                },
-                caption: image.alt,
-              },
-            });
-          }
-        } else if (
-          el.richLink &&
-          el.richLink?.richLinkProperties &&
-          videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
-        ) {
-          // support for each link
-          tagContent.push(getRichLink(el));
-        }
-
-        // quote
-        else if (isQuote(el)) {
-          tagContent.push({
-            type: 'quote',
-            data: {
-              text: getText(el, {
-                isHeader: tag !== 'p',
-              }).slice(2),
-              caption: '',
-              alignment: 'left',
-            },
-          });
-        }
-
-        // Headings, Texts
-        else if (
-          el.textRun &&
-          el.textRun.content !== '\n' &&
-          (el.textRun.content as string).trim().length > 0
-        ) {
-          tagContent.push({
-            [tag]: getText(el, {
-              isHeader: tag !== 'p',
-            }),
-          });
-        }
-      });
+      // trying to isolate the quote elements
+      if (paragraph?.elements && isQuote(paragraph.elements[0])) {
+        let quoteElements: any[] = [];
+        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, quoteElements, el))
+        tagContent.push({
+          type: 'quote',
+          data: {
+            text: quoteElements
+              .map((el) => el[tag])
+              .filter((el) => el.length > 0)
+              .join(' ')
+              .replace(' .', '.')
+              .replace(' ,', ',').slice(2),
+            caption: '',
+            alignment: 'left',
+          },
+        })
+      } else {
+        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, tagContent, el))
+      }
     }
 
     if (tagContent.every((el) => el[tag] !== undefined)) {
@@ -430,29 +397,16 @@ function parseParagraph(
           },
         });
       } else if (tag == 'p') {
-        const paragraphContent = tagContent
-          .map((el) => el[tag])
-          .join(' ')
-          .replace(' .', '.')
-          .replace(' ,', ',');
-
-        if (quoteExp.test(paragraphContent)) {
-          content.push({
-            type: 'quote',
-            data: {
-              text: paragraphContent.slice(2),
-              caption: '',
-              alignment: 'left',
-            },
-          });
-        } else {
-          content.push({
-            type: 'paragraph',
-            data: {
-              text: paragraphContent,
-            },
-          });
-        }
+        content.push({
+          type: 'paragraph',
+          data: {
+            text: tagContent
+              .map((el) => el[tag])
+              .join(' ')
+              .replace(' .', '.')
+              .replace(' ,', ',')
+          },
+        });
       } else {
         content.push({
           type: 'quote',
@@ -472,4 +426,46 @@ function parseParagraph(
       content.push(...tagContent);
     }
   }
+}
+
+function parseParagraphElement(
+  document: Schema$Document,
+  tag: string,
+  parentContent: any[],
+  el: Schema$ParagraphElement) {
+  if (el.inlineObjectElement) {
+    const image = getImage(document, el);
+
+    if (image) {
+      parentContent.push({
+        type: 'image',
+        data: {
+          file: {
+            url: image.source,
+          },
+          caption: image.alt,
+        },
+      });
+    }
+  } else if (
+    el.richLink &&
+    el.richLink?.richLinkProperties &&
+    videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
+  ) {
+    // support for each link
+    parentContent.push(getRichLink(el));
+  }
+  // Headings, Texts
+  else if (
+    el.textRun &&
+    el.textRun.content !== '\n' &&
+    (el.textRun.content as string).trim().length > 0
+  ) {
+    parentContent.push({
+      [tag]: getText(el, {
+        isHeader: tag !== 'p',
+      }),
+    });
+  }
+  return parentContent
 }
