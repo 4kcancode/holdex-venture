@@ -127,7 +127,7 @@ function parseBody(
       if (table) return parseTable(table, lists, document);
       if (tableOfContents) {
         return {
-          type: 'TOC',
+          type: 'toc',
           items: parseTOC(tableOfContents, lists, document),
         };
       }
@@ -356,7 +356,8 @@ function parseParagraph(
         }
       } else if (textStyle?.link?.headingId) {
         tagContent.push({
-          type: 'toc',
+          type: 'header',
+          id: textStyle.link.headingId.replace(/h./, ''),
           data: {
             text: content,
             caption: '',
