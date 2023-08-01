@@ -2,7 +2,7 @@ include ./common-mixins
 
 mixin link(href, title)
   li(
-    class="flex relative items-center text-cta text-t1 transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 before:-bottom-4 before:w-full before:bg-transparent xs:before:!bg-transparent before:h-0.5"
+    class="flex relative items-center text-cta transition-colors hover:text-accent1-default before:content-['] before:absolute before:left-0 sm-up:before:bottom-[-1rem] before:bottom-[-0.5rem] before:w-full before:bg-transparent before:h-0.5"
   )&attributes(attributes): a(
     class="text-inherit"
     href=href
@@ -11,7 +11,7 @@ mixin link(href, title)
 
 mixin social-link(href, content)
   a(
-    class="flex flex-col items-center justify-center w-8 h-8 p-1 text-t1 transition-colors hover:text-accent1-default"
+    class="flex flex-col items-center justify-center w-8 h-8 p-1 transition-colors hover:text-accent1-default"
     href=href
     target="_blank"
     rel="noopener noreferrer"
@@ -39,54 +39,52 @@ mixin mobile-nav
 
 .app-container
   header(
-    class!="z-10 w-full block  relative {scrollY > 1 ? 'sticky top-0 border-b border-solid border-l4 bg-l1' : ''}"
+    class!="z-10 w-full block relative sticky top-0"
   )
-    .outer-container(
-      class="relative xs:before:content['] xs:before:absolute xs:before:left-0 xs:before:w-16 xs:before:h-16 xs:before:z-10 xs:before:bg-gradient-to-r xs:after:bg-gradient-to-l from-l1 to-transparent xs:after:content['] xs:after:absolute xs:after:right-0 xs:after:w-16 xs:after:h-16 xs:after:z-10 xs:after:top-0"
+    .header-wrapper(
+      class="w-full whitespace-nowrap lg-up:justify-center"
     )
-      .header-wrapper(
-        class="flex px-4 py-3 justify-start items-center w-full overflow-x-auto whitespace-nowrap lg-up:justify-center"
-      )
-        div(class="flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up")
-          .logo-wrapper.sticky.left-0.z-20
-            a(
-              class="relative flex w-6.5 h-6.5  {isBurgerDropdownShown ? '!w-25' : ''}"
-              href="{routes.index}"
+      div(class="border-b border-solid border-l4 bg-l1 py-3 z-[99]")
+        div(class="px-4 flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up")
+          .logo-wrapper(class="z-1 relative")
+            a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(
+              name="logo"
+              class="w-24"
             )
-              +if('isBurgerDropdownShown')
-                img(alt="Home" src="/logo-white-w-text.svg")
-                +else
-                  img(alt="Home" src="/logo-w-o-text.svg")
-
-          .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
-            +main-nav(class="gap-4 xl-up:gap-8")
-            .social-icons-nav(class="gap-5 flex items-start")
-              +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
-                class="!h-5 !w-5 !p-0"
-              )
-              +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
-                class="!h-5 !w-5 !p-0"
-              )
-              +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
-                class="!h-5 !w-5 !p-0"
-              )
-              +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
-                class="!h-5 !w-5 !p-0"
-              )
-              +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(
-                class="!h-5 !w-5 !p-0"
-              )
 
           .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
             +button-icon-default(type="button" on:click!="{onThemeToggle}")
               SVGIcon(name="{themeIconName}" class="w-5 stroke-current")
             +primary-button("Partner With Us")(
-              class="sticky"
+              class="sticky hidden sm-up:block"
               type="button"
               on:click!="{() => handleClick(undefined)}"
             )
+      div(id="secondary-navbar" use:scrollAction class!="border-b border-solid border-l4 z-[98] bg-l1 {status ? 'opacity-1' : 'opacity-0 translate-y-[-57px]'} overflow-x-scroll scrollbar-hide")
+        div(id="secondary-navbar-section" class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}")
+          //- .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
+          +main-nav(class="gap-6")
+          .social-icons-nav(class!="gap-4 flex items-start {themeIconName === 'moon' ? 'text-tw-tweet-color-gray' : 'text-t3'}")
+            +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
+              class="!h-5 !w-5 !p-0"
+            )
+            +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
+              class="!h-5 !w-5 !p-0"
+            )
+            +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
+              class="!h-5 !w-5 !p-0"
+            )
+            +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
+              class="!h-5 !w-5 !p-0"
+            )
+            +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(
+              class="!h-5 !w-5 !p-0"
+          )
 
-  main: slot
+  main: slot 
+  button(class="w-[56px] h-[56px] sm-up:hidden bg-accent1-default text-t4 rounded-xl flex justify-center items-center fixed bottom-3 right-[14px] z-10" on:click!="{() => handleClick(undefined)}")
+    Icon(icon="{ChatBubbleBottomCenter}" width="{32}" height="{32}" isOutlined)
+
   footer(class="mt-16 xs:mt-8 flex flex-col items-center w-full")
     .contact-form(
       class="w-full relative flex flex-col items-center border-t border-b border-solid border-l4 py-8 px-4 xs:py-4"
