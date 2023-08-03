@@ -2,6 +2,7 @@ import {
   PUB_API_URL,
   PUB_VERCEL_ENV,
   PUB_APP_URL,
+  PUB_USE_PRODUCTION_API,
   PUB_ROLLBAR_ACCESS_TOKEN,
   PUB_ANALYTICS_KEY,
   PUB_GA4_KEY,
@@ -45,14 +46,13 @@ const baseConfig: Config = {
   },
 };
 
-const mockConfig: Config = {
+const prodConfig: Config = {
   ...baseConfig,
   env: 'development',
   apiUrl: 'https://stellate.holdex.io',
 };
 
-const previewMock = false;
-const config = previewMock ? mockConfig : baseConfig;
+const config = PUB_USE_PRODUCTION_API === "true" ? prodConfig : baseConfig;
 
 export const routes = {
   index: '/',

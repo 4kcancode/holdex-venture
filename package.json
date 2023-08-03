@@ -4,6 +4,7 @@
   "scripts": {
     "pre-dev": "node pull-env.js",
     "dev": "npm run pre-dev && npm run generate && vite dev",
+    "clean-dev": "npm run generate && vite dev",
     "build": "npm run generate && vite build",
     "preview": "npm run generate  && vite preview",
     "generate": "graphql-codegen --config codegen.yml -r dotenv/config",
