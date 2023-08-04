@@ -5,6 +5,7 @@ import type {
   Schema$List,
   Schema$Paragraph,
   Schema$ParagraphElement,
+  Schema$ParagraphStyle,
   Schema$RichLinkProperties,
   Schema$StructuralElement,
   Schema$Table,
@@ -38,6 +39,7 @@ interface NestedList {
 
 export const POST: RequestHandler = async ({ request }) => {
   const { data, updatedAt } = await request.json();
+
   const jsonData = convertToHoldexJson(data);
 
   return json(
@@ -293,12 +295,13 @@ function parseParagraph(
   const paragraphTag = getParagraphTag(paragraph);
   if (paragraphTag) {
     const tagContent: any[] = [];
-    const { elements } = paragraph;
+    const { elements, paragraphStyle } = paragraph;
 
     if (!elements) return [];
 
     if (elements.length === 2 && isLink(elements) && !isTable) {
       const { textStyle, content } = elements[0].textRun as Schema$TextRun;
+      const { indentFirstLine, indentStart } = paragraphStyle as Schema$ParagraphStyle;
 
       if (textStyle?.link?.url) {
         const link = textStyle?.link?.url as string;
@@ -355,15 +358,31 @@ function parseParagraph(
           }
         }
       } else if (textStyle?.link?.headingId) {
-        tagContent.push({
-          type: 'header',
-          id: textStyle.link.headingId.replace(/h./, ''),
-          data: {
-            text: content,
-            caption: '',
-            alignment: 'left',
-          },
-        });
+        if (indentFirstLine && indentStart) {
+          tagContent.push({
+            type: 'header',
+            id: textStyle.link.headingId.replace(/h./, ''),
+            data: {
+              text: content,
+              caption: '',
+              alignment: 'left',
+            },
+            indent: {
+              firstLine: indentFirstLine?.magnitude || 0,
+              start: indentStart?.magnitude || 0,
+            },
+          });
+        } else {
+          tagContent.push({
+            type: 'header',
+            id: textStyle.link.headingId.replace(/h./, ''),
+            data: {
+              text: content,
+              caption: '',
+              alignment: 'left',
+            },
+          });
+        }
       }
     } else {
       const contents = _.flatMap(
