@@ -211,18 +211,28 @@ function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
   return null;
 }
 
+function appendContentType(tag: string, data: any) {
+  if (tag !== 'p' && tag !== 'blockquote') {
+    return { type: 'header', tag, ...data };
+  } else if (tag === 'p') {
+    return { type: 'paragraph', tag, ...data };
+  } else {
+    return { type: 'quote', tag, ...data };
+  }
+}
+
 function parseParagraphElement(
   tag: string,
   el: Schema$ParagraphElement,
   document: Schema$Document
 ) {
-  const elementContent: any[] = [];
+  let elementContent: any = {};
 
   if (el.inlineObjectElement) {
     const image = getImage(document, el);
 
     if (image) {
-      elementContent.push({
+      elementContent = {
         type: 'image',
         data: {
           file: {
@@ -230,7 +240,7 @@ function parseParagraphElement(
           },
           caption: image.alt,
         },
-      });
+      };
     }
   } else if (
     el.richLink &&
@@ -238,7 +248,7 @@ function parseParagraphElement(
     videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
   ) {
     // support for each link
-    elementContent.push(getRichLink(el));
+    elementContent = getRichLink(el);
   }
   // Headings, Texts
   else if (
@@ -246,11 +256,11 @@ function parseParagraphElement(
     el.textRun.content !== '\n' &&
     (el.textRun.content as string).trim().length > 0
   ) {
-    elementContent.push({
+    elementContent = {
       [tag]: getText(el, {
         isHeader: tag !== 'p',
       }),
-    });
+    };
   }
 
   return elementContent;
@@ -358,31 +368,25 @@ function parseParagraph(
           }
         }
       } else if (textStyle?.link?.headingId) {
+        const defaultData = {
+          id: textStyle.link.headingId.replace(/h./, ''),
+          data: {
+            text: content,
+          },
+        };
+
+        let contentData: any = defaultData;
         if (indentFirstLine && indentStart) {
-          tagContent.push({
-            type: 'header',
-            id: textStyle.link.headingId.replace(/h./, ''),
-            data: {
-              text: content,
-              caption: '',
-              alignment: 'left',
-            },
+          contentData = {
+            ...defaultData,
             indent: {
               firstLine: indentFirstLine?.magnitude || 0,
               start: indentStart?.magnitude || 0,
             },
-          });
-        } else {
-          tagContent.push({
-            type: 'header',
-            id: textStyle.link.headingId.replace(/h./, ''),
-            data: {
-              text: content,
-              caption: '',
-              alignment: 'left',
-            },
-          });
+          };
         }
+
+        tagContent.push(appendContentType(paragraphTag, contentData));
       }
     } else {
       const contents = _.flatMap(
@@ -410,36 +414,21 @@ function parseParagraph(
     }
 
     if (tagContent.every((content) => content[paragraphTag] !== undefined)) {
+      const defaultData = {
+        text: sanitizeContent(
+          tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
+        ),
+      };
+
+      let contentData: any = defaultData;
       if (paragraphTag !== 'p' && paragraphTag !== 'blockquote') {
-        parsedContent.push({
-          type: 'header',
+        contentData = {
+          ...defaultData,
           id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
-          data: {
-            level: Number(paragraphTag.replace('h', '')),
-            text: sanitizeContent(tagContent.map((content) => content[paragraphTag])),
-          },
-        });
-      } else if (paragraphTag === 'p') {
-        parsedContent.push({
-          type: 'paragraph',
-          data: {
-            text: sanitizeContent(tagContent.map((content) => content[paragraphTag])),
-          },
-        });
-      } else {
-        parsedContent.push({
-          type: 'quote',
-          data: {
-            text: sanitizeContent(
-              tagContent
-                .map((content) => content[paragraphTag])
-                .filter((content) => content.length > 0)
-            ),
-            caption: '',
-            alignment: 'left',
-          },
-        });
+        };
       }
+
+      parsedContent.push(appendContentType(paragraphTag, contentData));
     } else {
       parsedContent.push(...tagContent);
     }
