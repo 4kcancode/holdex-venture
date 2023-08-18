@@ -134,7 +134,9 @@ function parseBody(
         };
       }
     })
-  ).filter((value) => Boolean(value));
+  ).filter((value) => {
+    return Boolean(value) && Object.keys(value).length
+  });
 
   const structuredBody = structureBullets(parsedBody);
 
