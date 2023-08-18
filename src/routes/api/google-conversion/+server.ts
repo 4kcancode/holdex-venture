@@ -307,13 +307,12 @@ function parseParagraph(
   const paragraphTag = getParagraphTag(paragraph);
   if (paragraphTag) {
     const tagContent: any[] = [];
-    const { elements, paragraphStyle } = paragraph;
+    const { elements } = paragraph;
 
     if (!elements) return [];
 
     if (elements.length === 2 && isLink(elements) && !isTable) {
       const { textStyle, content } = elements[0].textRun as Schema$TextRun;
-      const { indentFirstLine, indentStart } = paragraphStyle as Schema$ParagraphStyle;
 
       if (textStyle?.link?.url) {
         const link = textStyle?.link?.url as string;
@@ -370,25 +369,12 @@ function parseParagraph(
           }
         }
       } else if (textStyle?.link?.headingId) {
-        const defaultData = {
+        tagContent.push(appendContentType(paragraphTag, {
           id: textStyle.link.headingId.replace(/h./, ''),
           data: {
             text: content,
           },
-        };
-
-        let contentData: any = defaultData;
-        if (indentFirstLine && indentStart) {
-          contentData = {
-            ...defaultData,
-            indent: {
-              firstLine: indentFirstLine?.magnitude || 0,
-              start: indentStart?.magnitude || 0,
-            },
-          };
-        }
-
-        tagContent.push(appendContentType(paragraphTag, contentData));
+        }));
       }
     } else {
       const contents = _.flatMap(
