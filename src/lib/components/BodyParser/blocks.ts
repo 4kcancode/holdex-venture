@@ -71,8 +71,10 @@ type TableBlock = {
   };
 };
 
-type TableRowOfStrings = Array<Array<string>>
-type TableRowOfElements = Array<Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>>;
+type TableRowOfStrings = Array<Array<string>>;
+type TableRowOfElements = Array<
+  Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>
+>;
 
 type EmbedBlock = {
   type: string;
@@ -144,7 +146,7 @@ const replaceSymbols = (text: string) => {
 const tokeniseInlineEls = (inlineBlocks: string[]) => {
   const tokens: any[] = [];
 
-  inlineBlocks.forEach((b) => {
+  inlineBlocks.forEach((b, index) => {
     if (linkExp.test(b)) {
       switch (true) {
         case videoRegExp.test(b): {
@@ -413,8 +415,8 @@ const parseTable = (block: TableBlock) => {
   const tableContent: TableRowOfElements = [];
   (block.data.content as TableRowOfElements).forEach((row) => {
     let rowContent: any = [];
-    row.forEach(cell => rowContent.push(parseBlocks(cell)));
-    tableContent.push(rowContent)
+    row.forEach((cell) => rowContent.push(parseBlocks(cell)));
+    tableContent.push(rowContent);
   });
 
   return {

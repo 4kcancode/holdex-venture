@@ -21,7 +21,9 @@ mixin author
       +crumbItemLink("/c", "Studio")
       +crumbDelimiter
       +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
-    +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
+    +messageHeader("{message.title}", "{message.subtitle}", "{message.blocks[0].src}")(
+      id="{message.id}"
+    )
   +content-wrapper
     .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
       .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
