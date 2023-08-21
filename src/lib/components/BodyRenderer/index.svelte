@@ -1,12 +1,14 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-  import Item from './item.svelte'
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  import Item from './item.svelte';
 
   export let blocks: any[];
+
+  let allBlocks: any[] = blocks.slice(1, blocks.length);
 </script>
 
-{#each blocks as item, index}
-  <Item item={item} index={index} />
+{#each allBlocks as item, index}
+  <Item {item} {index} />
 {/each}
 
 <style lang="sass">
