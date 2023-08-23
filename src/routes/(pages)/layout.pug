@@ -54,7 +54,7 @@ mixin mobile-nav
           )
             div(
               id="secondary-navbar-section"
-              class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}"
+              class!="px-4 flex gap-x-8 items-center justify-start mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}"
             )
               //- .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
               +main-nav(class="gap-6")
