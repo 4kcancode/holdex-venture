@@ -38,12 +38,8 @@ mixin mobile-nav
   //-+primary-button("Partner With Us")(type="button" on:click!="{() => handleClick(toggleBurger)}")
 
 .app-container
-  header(
-    class!="z-10 w-full block relative sticky top-0"
-  )
-    .header-wrapper(
-      class="w-full whitespace-nowrap lg-up:justify-center"
-    )
+  header(class!="z-10 w-full block relative sticky top-0")
+    .header-wrapper(class="w-full whitespace-nowrap lg-up:justify-center")
       div(class="border-b border-solid border-l4 bg-l1 py-3 z-[99]")
         div(class="px-4 flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up")
           .logo-wrapper(class="z-1 relative")
@@ -51,6 +47,35 @@ mixin mobile-nav
               name="logo"
               class="w-24"
             )
+          div(
+            id="secondary-navbar"
+            use:scrollAction
+            class!=" border-solid border-l4 z-[98] bg-l1 {status ? 'opacity-1' : 'opacity-0 translate-y-[-57px]'} overflow-x-scroll scrollbar-hide w-full"
+          )
+            div(
+              id="secondary-navbar-section"
+              class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}"
+            )
+              //- .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
+              +main-nav(class="gap-6")
+              .social-icons-nav(
+                class!="gap-4 flex items-start {themeIconName === 'moon' ? 'text-tw-tweet-color-gray' : 'text-t3'}"
+              )
+                +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
+                  class="!h-5 !w-5 !p-0"
+                )
+                +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
+                  class="!h-5 !w-5 !p-0"
+                )
+                +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
+                  class="!h-5 !w-5 !p-0"
+                )
+                +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
+                  class="!h-5 !w-5 !p-0"
+                )
+                +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(
+                  class="!h-5 !w-5 !p-0"
+                )
 
           .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
             +button-icon-default(type="button" on:click!="{onThemeToggle}")
@@ -59,30 +84,13 @@ mixin mobile-nav
               class="sticky hidden sm-up:block"
               type="button"
               on:click!="{() => handleClick(undefined)}"
-            )
-      div(id="secondary-navbar" use:scrollAction class!="border-b border-solid border-l4 z-[98] bg-l1 {status ? 'opacity-1' : 'opacity-0 translate-y-[-57px]'} overflow-x-scroll scrollbar-hide")
-        div(id="secondary-navbar-section" class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}")
-          //- .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
-          +main-nav(class="gap-6")
-          .social-icons-nav(class!="gap-4 flex items-start {themeIconName === 'moon' ? 'text-tw-tweet-color-gray' : 'text-t3'}")
-            +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
-              class="!h-5 !w-5 !p-0"
-            )
-            +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
-              class="!h-5 !w-5 !p-0"
-            )
-            +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
-              class="!h-5 !w-5 !p-0"
-            )
-            +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
-              class="!h-5 !w-5 !p-0"
-            )
-            +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(
-              class="!h-5 !w-5 !p-0"
-          )
+            ) 
 
   main: slot 
-  button(class="w-[56px] h-[56px] sm-up:hidden bg-accent1-default text-t4 rounded-xl flex justify-center items-center fixed bottom-3 right-[14px] z-10" on:click!="{() => handleClick(undefined)}")
+  button(
+    class="w-[56px] h-[56px] sm-up:hidden bg-accent1-default text-t4 rounded-xl flex justify-center items-center fixed bottom-3 right-[14px] z-10"
+    on:click!="{() => handleClick(undefined)}"
+  )
     Icon(icon="{ChatBubbleBottomCenter}" width="{32}" height="{32}" isOutlined)
 
   footer(class="mt-16 xs:mt-8 flex flex-col items-center w-full")
