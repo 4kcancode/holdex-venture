@@ -6,7 +6,14 @@
   import { onMount } from 'svelte';
 
   /** internal deps */
-  import { socialIcons, Bars3, XMark, ExclamationTriangle, CheckCircle, ChatBubbleBottomCenter } from '$components/Icons';
+  import {
+    socialIcons,
+    Bars3,
+    XMark,
+    ExclamationTriangle,
+    CheckCircle,
+    ChatBubbleBottomCenter,
+  } from '$components/Icons';
   import Icon from '$components/Icons/index.svelte';
   import SVGIcon from '$components/Icons/SVGIcon.svelte';
   import { regExp } from '$components/BodyParser/utils';
@@ -39,45 +46,38 @@
   };
 
   let lastScrollTop = 0;
-  let secondaryNavScrollLeft = 0
-  let status = true
-  let isLeftEnd = true
-  let isRightEnd = false
+  let secondaryNavScrollLeft = 0;
+  let status = true;
+  let isLeftEnd = true;
+  let isRightEnd = false;
 
-  onMount(() => {
-    window.addEventListener("scroll", () => {
-      const st = window.scrollY || document.documentElement.scrollTop;
-      if (st > lastScrollTop) {
-          status = false
-      } else if (st < lastScrollTop) {
-          status = true
-      }
-
-      lastScrollTop = st <= 0 ? 0 : st;
-    }, false);
-  });
+  const scrollAdjust = 0.5;
 
   const scrollAction = (node: HTMLElement) => {
     const hasReachedRightEnd = () => {
-      const navbarSecionElement = document.getElementById("secondary-navbar-section");
+      const navbarSectionElement = document.getElementById('secondary-navbar-section');
 
-      if (!node || !navbarSecionElement) {
-        return 
+      if (!node || !navbarSectionElement) {
+        return;
       }
 
       secondaryNavScrollLeft = node?.scrollLeft;
-      isLeftEnd = secondaryNavScrollLeft === 0
-      isRightEnd = secondaryNavScrollLeft + node.clientWidth === navbarSecionElement.clientWidth ? true : false
-    }
+      isLeftEnd = secondaryNavScrollLeft === 0;
+      isRightEnd =
+        secondaryNavScrollLeft + node.clientWidth - scrollAdjust ===
+        navbarSectionElement.clientWidth
+          ? true
+          : false;
+    };
 
-    node.addEventListener("scroll", hasReachedRightEnd, false)
+    node.addEventListener('scroll', hasReachedRightEnd, false);
 
     return {
       destory() {
-        node.removeEventListener("scroll", hasReachedRightEnd)
-      }
-    }
-  }
+        node.removeEventListener('scroll', hasReachedRightEnd);
+      },
+    };
+  };
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
     if (deepEqual) {
