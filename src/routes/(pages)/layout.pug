@@ -40,17 +40,17 @@ mixin mobile-nav
 .app-container
   header(class!="z-10 w-full block relative sticky top-0")
     .header-wrapper(class="w-full whitespace-nowrap lg-up:justify-center")
-      div(class="border-b border-solid border-l4 bg-l1 py-3 z-[99]")
+      div(class="border-b border-solid border-l4 bg-l1  z-[99]")
         div(class="px-4 flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up")
           .logo-wrapper(class="z-1 relative")
-            a(class="relative flex w-25 h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(
-              name="logo"
+            a(class="relative flex h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(
+              name="only-logo"
               class="w-24"
             )
           div(
             id="secondary-navbar"
             use:scrollAction
-            class!=" border-solid border-l4 z-[98] bg-l1  overflow-x-scroll scrollbar-hide w-full -mb-1"
+            class!=" border-solid border-l4 z-[98] bg-l1  overflow-x-scroll scrollbar-hide w-full"
           )
             div(
               id="secondary-navbar-section"
@@ -62,19 +62,19 @@ mixin mobile-nav
                 class!="gap-4 flex items-start {themeIconName === 'moon' ? 'text-tw-tweet-color-gray' : 'text-t3'}"
               )
                 +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
-                  class="!h-5 !w-5 !p-0"
+                  class="!h-5 !w-5 !p-0 text-i1"
                 )
                 +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
-                  class="!h-5 !w-5 !p-0"
+                  class="!h-5 !w-5 !p-0 text-i1"
                 )
                 +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
-                  class="!h-5 !w-5 !p-0"
+                  class="!h-5 !w-5 !p-0 text-i1"
                 )
                 +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
-                  class="!h-5 !w-5 !p-0"
+                  class="!h-5 !w-5 !p-0 text-i1"
                 )
                 +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(
-                  class="!h-5 !w-5 !p-0"
+                  class="!h-5 !w-5 !p-0 text-i1"
                 )
 
           .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
