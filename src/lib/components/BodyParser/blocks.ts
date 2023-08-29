@@ -247,7 +247,7 @@ const tokeniseInlineEls = (inlineBlocks: string[]) => {
       const match = b.match(boldExp) as RegExpExecArray;
       tokens.push({
         type: 'inline',
-        text: `<b>${match[1]}</b>`,
+        text: `<b>${match[1]}</b>`, // redact here (this file)? (test)
       });
     } else if (strongExp.test(b)) {
       const match = b.match(strongExp) as RegExpExecArray;
@@ -271,7 +271,7 @@ const tokeniseInlineEls = (inlineBlocks: string[]) => {
       const match = b.match(underlineExp) as RegExpExecArray;
       tokens.push({
         type: 'inline',
-        text: `<b>${match[1]}</b>`,
+        text: `<b>${match[1]}</b>`, // redact here (this file)? (test)
       });
     } else if (b !== undefined) {
       const textTokens = bindTokens(unescape(replaceSymbols(b)), false, true);
