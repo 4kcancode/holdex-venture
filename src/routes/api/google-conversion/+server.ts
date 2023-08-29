@@ -212,11 +212,11 @@ function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
 
 function appendContentType(tag: string, data: any) {
   if (tag !== 'p' && tag !== 'blockquote') {
-    return { type: 'header', tag, ...data };
+    return { type: 'header', ...data };
   } else if (tag === 'p') {
-    return { type: 'paragraph', tag, ...data };
+    return { type: 'paragraph', ...data };
   } else {
-    return { type: 'quote', tag, ...data };
+    return { type: 'quote', ...data };
   }
 }
 
