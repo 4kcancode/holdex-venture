@@ -5,7 +5,6 @@ import type {
   Schema$List,
   Schema$Paragraph,
   Schema$ParagraphElement,
-  Schema$ParagraphStyle,
   Schema$RichLinkProperties,
   Schema$StructuralElement,
   Schema$Table,
@@ -85,33 +84,33 @@ function parseHeader(headers: Schema$Header) {
   };
 }
 
-function structureBullets(parsedData: any[]) {
-  const bullets = parsedData?.filter((block: any) => {
-    return block['type'] === 'nestedList' ? true : false;
-  });
+function structureBullets(parsedData: any[] = []) {
+  const structuredData: any = {}
+  let index = -1
+  parsedData.map((dataBlock: any) => {
+    const {type} = dataBlock
 
-  const paragraphData = parsedData?.filter((block: any) => {
-    return block['type'] === 'nestedList' ? false : true;
-  });
-
-  const nestedListMap: Map<string, NestedList> = new Map();
-  for (const nestedList of bullets) {
-    // If we've already seen this id, merge the items arrays
-    if (nestedListMap.has(nestedList.data.id)) {
-      const existingNestedList = nestedListMap.get(nestedList.data.id);
-      if (existingNestedList) {
-        existingNestedList.data.items.push(...nestedList.data.items);
+    if (type) {
+      if (type !== 'nestedList') {
+        ++index
+        structuredData[index] = dataBlock
+      } else {
+        if (!structuredData[index].data || dataBlock.data.id !== structuredData[index].data.id) {
+          ++index
+          structuredData[index] = dataBlock
+        } else {
+          structuredData[index].data.items = [
+            ...structuredData[index].data.items,
+            ...dataBlock.data.items
+          ]
+        }
       }
-    } else {
-      // If we haven't seen this id yet, add it to the map
-      nestedListMap.set(nestedList.data.id, nestedList);
     }
-  }
 
-  // Convert the map values back to an array
-  const mergedNestedListArray: NestedList[] = Array.from(nestedListMap.values());
+    console.log({index});
+  })
 
-  return [...paragraphData, mergedNestedListArray];
+  return Object.values(structuredData);
 }
 
 function parseBody(
@@ -173,7 +172,7 @@ function parseTOC(toc: Schema$TableOfContents, lists: Schema$List, document: Sch
   });
 }
 
-function sanitizeContent(content?: string[]) {
+function trimJoin(content?: string[]) {
   if (!content) return [];
   return content.join(' ').replaceAll(' .', '.').replaceAll(' ,', ',');
 }
@@ -283,7 +282,7 @@ function parseParagraph(
     const list = (lists as Record<string, Schema$List>)[listId as string];
     const listTag = getListTag(list, nestingLevel);
 
-    const bulletContent = sanitizeContent(
+    const bulletContent = trimJoin(
       elements?.map((element) => getBulletContent(document, element))
     );
 
@@ -296,129 +295,128 @@ function parseParagraph(
         items: [
           {
             content: bulletContent,
-            items: [],
           },
         ],
         id: listId,
       },
     });
-  }
+  } else {
+    const paragraphTag = getParagraphTag(paragraph);
+    if (paragraphTag) {
+      const tagContent: any[] = [];
+      const { elements } = paragraph;
 
-  const paragraphTag = getParagraphTag(paragraph);
-  if (paragraphTag) {
-    const tagContent: any[] = [];
-    const { elements } = paragraph;
+      if (!elements) return [];
 
-    if (!elements) return [];
+      if (elements.length === 2 && isLink(elements) && !isTable) {
+        const { textStyle, content } = elements[0].textRun as Schema$TextRun;
 
-    if (elements.length === 2 && isLink(elements) && !isTable) {
-      const { textStyle, content } = elements[0].textRun as Schema$TextRun;
+        if (textStyle?.link?.url) {
+          const link = textStyle?.link?.url as string;
 
-      if (textStyle?.link?.url) {
-        const link = textStyle?.link?.url as string;
-
-        switch (true) {
-          case twitterRegExp.test(link): {
-            const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
-              .exec(link)
-              ?.slice(2);
-            tagContent.push({
-              type: 'embed',
-              data: {
-                service: 'twitter',
-                source: link,
-                embed: `api/tweets.json?id=${match?.shift()}`,
-              },
-            });
-            break;
+          switch (true) {
+            case twitterRegExp.test(link): {
+              const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
+                .exec(link)
+                ?.slice(2);
+              tagContent.push({
+                type: 'embed',
+                data: {
+                  service: 'twitter',
+                  source: link,
+                  embed: `api/tweets.json?id=${match?.shift()}`,
+                },
+              });
+              break;
+            }
+            case videoRegExp.test(link): {
+              const match = link.match(videoRegExp) as RegExpMatchArray;
+              tagContent.push({
+                type: 'embed',
+                data: {
+                  service: getEmbedSource(match[0]),
+                  source: match[0],
+                  embed: getEmbedUrl(match[0]),
+                },
+              });
+              break;
+            }
+            case tallyRegExp.test(link): {
+              const match = link.match(tallyRegExp) as RegExpMatchArray;
+              tagContent.push({
+                type: 'embed',
+                data: {
+                  service: 'tally',
+                  source: match[0],
+                  embed: match[0],
+                },
+              });
+              break;
+            }
+            default: {
+              tagContent.push({
+                type: 'linkTool',
+                data: {
+                  url: link,
+                  title: content,
+                  embed: `api/link.json?url=${link}`,
+                },
+              });
+              break;
+            }
           }
-          case videoRegExp.test(link): {
-            const match = link.match(videoRegExp) as RegExpMatchArray;
-            tagContent.push({
-              type: 'embed',
-              data: {
-                service: getEmbedSource(match[0]),
-                source: match[0],
-                embed: getEmbedUrl(match[0]),
-              },
-            });
-            break;
-          }
-          case tallyRegExp.test(link): {
-            const match = link.match(tallyRegExp) as RegExpMatchArray;
-            tagContent.push({
-              type: 'embed',
-              data: {
-                service: 'tally',
-                source: match[0],
-                embed: match[0],
-              },
-            });
-            break;
-          }
-          default: {
-            tagContent.push({
-              type: 'linkTool',
-              data: {
-                url: link,
-                title: content,
-                embed: `api/link.json?url=${link}`,
-              },
-            });
-            break;
-          }
+        } else if (textStyle?.link?.headingId) {
+          tagContent.push(appendContentType(paragraphTag, {
+            id: textStyle.link.headingId.replace(/h./, ''),
+            data: {
+              text: content,
+            },
+          }));
         }
-      } else if (textStyle?.link?.headingId) {
-        tagContent.push(appendContentType(paragraphTag, {
-          id: textStyle.link.headingId.replace(/h./, ''),
-          data: {
-            text: content,
-          },
-        }));
-      }
-    } else {
-      const contents = _.flatMap(
-        elements.map((element: Schema$ParagraphElement) =>
-          parseParagraphElement(paragraphTag, element, document)
-        )
-      );
-
-      if (!isQuote(elements[0])) {
-        tagContent.push(...contents);
       } else {
-        tagContent.push({
-          type: 'quote',
-          data: {
-            text: sanitizeContent(
-              contents
-                .map((content) => content[paragraphTag])
-                .filter((content) => content.length > 0)
-            ),
-            caption: '',
-            alignment: 'left',
-          },
-        });
+        const contents = _.flatMap(
+          elements.map((element: Schema$ParagraphElement) =>
+            parseParagraphElement(paragraphTag, element, document)
+          )
+        );
+
+        if (!isQuote(elements[0])) {
+          tagContent.push(...contents);
+        } else {
+          tagContent.push({
+            type: 'quote',
+            data: {
+              text: trimJoin(
+                contents
+                  .map((content) => content[paragraphTag])
+                  .filter((content) => content.length > 0)
+              ),
+              caption: '',
+              alignment: 'left',
+            },
+          });
+        }
       }
-    }
 
-    if (tagContent.every((content) => content[paragraphTag] !== undefined)) {
-      const defaultData = {
-        text: sanitizeContent(
-          tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
-        ),
-      };
-
-      let contentData: any = defaultData;
-      if (paragraphTag !== 'p' && paragraphTag !== 'blockquote') {
-        contentData = {
-          ...defaultData,
-          id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
+      if (tagContent.every((content) => content[paragraphTag] !== undefined)) {
+        const defaultData = {
+          text: trimJoin(
+            tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
+          ),
         };
-      }
 
-      parsedContent.push(appendContentType(paragraphTag, contentData));
-    } else {
-      parsedContent.push(...tagContent);
+        let contentData: any = defaultData;
+        if (paragraphTag !== 'p' && paragraphTag !== 'blockquote') {
+          contentData = {
+            ...defaultData,
+            id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
+          };
+        }
+
+        parsedContent.push(appendContentType(paragraphTag, contentData));
+      } else {
+        parsedContent.push(...tagContent);
+      }
     }
   }
 
