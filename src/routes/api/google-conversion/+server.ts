@@ -106,8 +106,6 @@ function structureBullets(parsedData: any[] = []) {
         }
       }
     }
-
-    console.log({index});
   })
 
   return Object.values(structuredData);
@@ -295,6 +293,7 @@ function parseParagraph(
         items: [
           {
             content: bulletContent,
+            items: []
           },
         ],
         id: listId,
@@ -400,17 +399,20 @@ function parseParagraph(
 
       if (tagContent.every((content) => content[paragraphTag] !== undefined)) {
         const defaultData = {
-          text: trimJoin(
-            tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
-          ),
+            data: {
+              text: trimJoin(tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
+            ),
+          }
         };
 
         let contentData: any = defaultData;
         if (paragraphTag !== 'p' && paragraphTag !== 'blockquote') {
           contentData = {
-            ...defaultData,
             id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
+            ...defaultData,
           };
+
+          contentData.data['level'] = Number(paragraphTag.replace('h', ''))
         }
 
         parsedContent.push(appendContentType(paragraphTag, contentData));
