@@ -21,7 +21,7 @@ export type Parse$ParagraphElement = {
       url?: string;
     };
     caption?: string;
-    service?: 'youtube' | 'vimeo' | 'tally' | 'unknown';
+    service?: 'youtube' | 'vimeo' | 'tally' | 'twitter' | 'unknown';
     source?: any;
     embed?: string;
     url?: string;
