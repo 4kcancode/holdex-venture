@@ -31,8 +31,4 @@
   :global(em),
   :global(strong)
     @apply text-t1
-
-  :global(a),
-  :global(a *)
-    @apply text-accent1-default
 </style>
