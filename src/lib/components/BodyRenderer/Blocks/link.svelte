@@ -57,7 +57,6 @@
 </a>
 
 <style lang="sass">
-  :global(a),
   :global(a *)
-    @apply text-accent1-default
+    @apply text-inherit
 </style>
