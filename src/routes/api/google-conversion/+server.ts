@@ -1,458 +1,43 @@
-import type { Author } from '$components/BodyParser/blocks';
+import type { RequestHandler } from '@sveltejs/kit';
 import type {
+  Schema$Body,
+  Schema$Bullet,
   Schema$Document,
-  Schema$Header,
+  Schema$Headers,
+  Schema$InlineObjects,
+  Schema$InlineObjectElement,
   Schema$List,
+  Schema$Lists,
+  Schema$TextStyle,
   Schema$Paragraph,
   Schema$ParagraphElement,
+  Schema$ParagraphStyle,
   Schema$RichLinkProperties,
-  Schema$StructuralElement,
-  Schema$Table,
   Schema$TableOfContents,
+  Schema$Table,
   Schema$TextRun,
-  Schema$TextStyle,
 } from '$lib/types/googleDoc';
+import type {
+  Parse$HeaderElement,
+  Parse$Header,
+  Parse$Image,
+  Parse$ParagraphElement,
+  Parse$TableOfContents,
+} from '$lib/types/googleDocParser';
+
 import { json } from '@sveltejs/kit';
-
-import { getEmbedUrl, getEmbedSource, regExp } from '$components/BodyParser/utils';
-import type { RequestHandler } from './$types';
-
 import _ from 'lodash-es';
 
-// Define the types
-interface NestedListItem {
-  content: string;
-  items: NestedListItem[];
-}
+import { cleanLinebreaks, sanitizeTexts } from '$lib/utils';
 
-interface NestedListData {
-  style: string;
-  items: NestedListItem[];
-  id: string;
-}
+import { getEmbedUrl, getEmbedSource, regExp } from '$components/BodyParser/utils';
 
-interface NestedList {
-  type: string;
-  data: NestedListData;
-}
+const twitterRegExp = new RegExp(regExp.twitter, 'mi');
+const videoRegExp = new RegExp(regExp.video, 'mi');
+const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
+const quoteExp = new RegExp(/^> (.*$)/, 'im');
 
-export const POST: RequestHandler = async ({ request }) => {
-  const { data, updatedAt } = await request.json();
-
-  const jsonData = convertToHoldexJson(data);
-
-  return json(
-    {
-      blocks: jsonData,
-      time: updatedAt,
-      version: '2.20.0',
-    },
-    {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
-};
-
-function parseHeader(headers: Schema$Header) {
-  const headerValue = Object.values(headers);
-
-  if (headerValue.length === 0) {
-    return {
-      type: 'author',
-      items: [],
-    };
-  }
-
-  const items = headerValue.map(({ content }) =>
-    content.map((element: Schema$StructuralElement) => {
-      const { paragraph } = element;
-      if (!paragraph || !Array.isArray(paragraph.elements)) return false;
-
-      const { elements } = paragraph;
-      if (!elements || !elements[0].textRun?.content?.includes('Authors:')) return false;
-
-      return elements.map((element) => getHeaderRowAuthor(element)).filter(({ name }) => name);
-    })
-  );
-
-  return {
-    type: 'author',
-    items: _.flatMapDeep(items),
-  };
-}
-
-function structureBullets(parsedData: any[] = []) {
-  const structuredData: any = {}
-  let index = -1
-  parsedData.map((dataBlock: any) => {
-    const {type} = dataBlock
-
-    if (type) {
-      if (type !== 'nestedList') {
-        ++index
-        structuredData[index] = dataBlock
-      } else {
-        if (!structuredData[index].data || dataBlock.data.id !== structuredData[index].data.id) {
-          ++index
-          structuredData[index] = dataBlock
-        } else {
-          structuredData[index].data.items = [
-            ...structuredData[index].data.items,
-            ...dataBlock.data.items
-          ]
-        }
-      }
-    }
-  })
-
-  return Object.values(structuredData);
-}
-
-function parseBody(
-  contents: Schema$StructuralElement[],
-  lists: Schema$List,
-  document: Schema$Document
-) {
-  if (!contents) return [];
-
-  const parsedBody = _.flatMap(
-    contents.map((content) => {
-      const { paragraph, table, tableOfContents } = content;
-
-      if (paragraph) return parseParagraph(paragraph, lists, document);
-      if (table) return parseTable(table, lists, document);
-      if (tableOfContents) {
-        return {
-          type: 'toc',
-          items: parseTOC(tableOfContents, lists, document),
-        };
-      }
-    })
-  ).filter((value) => {
-    return Boolean(value) && Object.keys(value).length
-  });
-
-  const structuredBody = structureBullets(parsedBody);
-
-  return structuredBody;
-}
-
-function parseTable(table: Schema$Table, lists: Schema$List, document: Schema$Document) {
-  if (!table || !table.tableRows) return [];
-
-  return _.filter(
-    _.flatMap(
-      table.tableRows.map((row) =>
-        row.tableCells?.map((cell) =>
-          cell.content?.map(({ paragraph }) => {
-            if (!paragraph) return [];
-            return parseParagraph(paragraph, lists, document);
-          })
-        )
-      )
-    ),
-    (value) => !_.isNull(value)
-  );
-}
-
-function parseTOC(toc: Schema$TableOfContents, lists: Schema$List, document: Schema$Document) {
-  const { content } = toc;
-
-  if (!content) return [];
-
-  return content.map((contentEl) => {
-    const { paragraph } = contentEl;
-    if (!paragraph) return [];
-    return parseParagraph(paragraph, lists, document);
-  });
-}
-
-function trimJoin(content?: string[]) {
-  if (!content) return [];
-  return content.join(' ').replaceAll(' .', '.').replaceAll(' ,', ',');
-}
-
-function getParagraphTag(paragraph: Schema$Paragraph) {
-  const tags: Record<string, string> = {
-    NORMAL_TEXT: 'p',
-    SUBTITLE: 'blockquote',
-    HEADING_1: 'h1',
-    HEADING_2: 'h2',
-    HEADING_3: 'h3',
-    HEADING_4: 'h4',
-    HEADING_5: 'h5',
-  };
-
-  return tags[paragraph.paragraphStyle?.namedStyleType as string];
-}
-
-function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
-  const { inlineObjects } = document;
-
-  if (!inlineObjects || !element.inlineObjectElement) {
-    return null;
-  }
-
-  const inlineObject = inlineObjects[element.inlineObjectElement?.inlineObjectId as string];
-  const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
-
-  if (embeddedObject && embeddedObject.imageProperties) {
-    return {
-      source: embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri,
-      title: embeddedObject.title || '',
-      alt: embeddedObject.description || '',
-    };
-  }
-
-  return null;
-}
-
-function appendContentType(tag: string, data: any) {
-  if (tag !== 'p' && tag !== 'blockquote') {
-    return { type: 'header', ...data };
-  } else if (tag === 'p') {
-    return { type: 'paragraph', ...data };
-  } else {
-    return { type: 'quote', ...data };
-  }
-}
-
-function parseParagraphElement(
-  tag: string,
-  el: Schema$ParagraphElement,
-  document: Schema$Document
-) {
-  let elementContent: any = {};
-
-  if (el.inlineObjectElement) {
-    const image = getImage(document, el);
-
-    if (image) {
-      elementContent = {
-        type: 'image',
-        data: {
-          file: {
-            url: image.source,
-          },
-          caption: image.alt,
-        },
-      };
-    }
-  } else if (
-    el.richLink &&
-    el.richLink?.richLinkProperties &&
-    videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
-  ) {
-    // support for each link
-    elementContent = getRichLink(el);
-  }
-  // Headings, Texts
-  else if (
-    el.textRun &&
-    el.textRun.content !== '\n' &&
-    (el.textRun.content as string).trim().length > 0
-  ) {
-    elementContent = {
-      [tag]: getText(el, {
-        isHeader: tag !== 'p',
-      }),
-    };
-  }
-
-  return elementContent;
-}
-
-function parseParagraph(
-  paragraph: Schema$Paragraph,
-  lists: Schema$List,
-  document: Schema$Document,
-  isTable?: boolean
-) {
-  const parsedContent: any[] = [];
-
-  if (paragraph.bullet) {
-    const { bullet, elements } = paragraph;
-    const { nestingLevel, listId } = bullet;
-
-    const list = (lists as Record<string, Schema$List>)[listId as string];
-    const listTag = getListTag(list, nestingLevel);
-
-    const bulletContent = trimJoin(
-      elements?.map((element) => getBulletContent(document, element))
-    );
-
-    const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
-
-    parsedContent.push({
-      type: 'nestedList',
-      data: {
-        style: listStyle,
-        items: [
-          {
-            content: bulletContent,
-            items: []
-          },
-        ],
-        id: listId,
-      },
-    });
-  } else {
-    const paragraphTag = getParagraphTag(paragraph);
-    if (paragraphTag) {
-      const tagContent: any[] = [];
-      const { elements } = paragraph;
-
-      if (!elements) return [];
-
-      if (elements.length === 2 && isLink(elements) && !isTable) {
-        const { textStyle, content } = elements[0].textRun as Schema$TextRun;
-
-        if (textStyle?.link?.url) {
-          const link = textStyle?.link?.url as string;
-
-          switch (true) {
-            case twitterRegExp.test(link): {
-              const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
-                .exec(link)
-                ?.slice(2);
-              tagContent.push({
-                type: 'embed',
-                data: {
-                  service: 'twitter',
-                  source: link,
-                  embed: `api/tweets.json?id=${match?.shift()}`,
-                },
-              });
-              break;
-            }
-            case videoRegExp.test(link): {
-              const match = link.match(videoRegExp) as RegExpMatchArray;
-              tagContent.push({
-                type: 'embed',
-                data: {
-                  service: getEmbedSource(match[0]),
-                  source: match[0],
-                  embed: getEmbedUrl(match[0]),
-                },
-              });
-              break;
-            }
-            case tallyRegExp.test(link): {
-              const match = link.match(tallyRegExp) as RegExpMatchArray;
-              tagContent.push({
-                type: 'embed',
-                data: {
-                  service: 'tally',
-                  source: match[0],
-                  embed: match[0],
-                },
-              });
-              break;
-            }
-            default: {
-              tagContent.push({
-                type: 'linkTool',
-                data: {
-                  url: link,
-                  title: content,
-                  embed: `api/link.json?url=${link}`,
-                },
-              });
-              break;
-            }
-          }
-        } else if (textStyle?.link?.headingId) {
-          tagContent.push(appendContentType(paragraphTag, {
-            id: textStyle.link.headingId.replace(/h./, ''),
-            data: {
-              text: content,
-            },
-          }));
-        }
-      } else {
-        const contents = _.flatMap(
-          elements.map((element: Schema$ParagraphElement) =>
-            parseParagraphElement(paragraphTag, element, document)
-          )
-        );
-
-        if (!isQuote(elements[0])) {
-          tagContent.push(...contents);
-        } else {
-          tagContent.push({
-            type: 'quote',
-            data: {
-              text: trimJoin(
-                contents
-                  .map((content) => content[paragraphTag])
-                  .filter((content) => content.length > 0)
-              ),
-              caption: '',
-              alignment: 'left',
-            },
-          });
-        }
-      }
-
-      if (tagContent.every((content) => content[paragraphTag] !== undefined)) {
-        const defaultData = {
-            data: {
-              text: trimJoin(tagContent.map((content) => content[paragraphTag]).filter((content) => content.length > 0)
-            ),
-          }
-        };
-
-        let contentData: any = defaultData;
-        if (paragraphTag !== 'p' && paragraphTag !== 'blockquote') {
-          contentData = {
-            id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
-            ...defaultData,
-          };
-
-          contentData.data['level'] = Number(paragraphTag.replace('h', ''))
-        }
-
-        parsedContent.push(appendContentType(paragraphTag, contentData));
-      } else {
-        parsedContent.push(...tagContent);
-      }
-    }
-  }
-
-  return _.filter(parsedContent, (value) => !_.isNull(value));
-}
-
-function convertToHoldexJson(document: Schema$Document) {
-  const { headers, body, lists } = document;
-  const content: any[] = [];
-
-  if (headers) {
-    const headerData = parseHeader(headers);
-    content.push(JSON.parse(JSON.stringify(headerData)));
-  }
-
-  if (body && body.content && lists) {
-    const bodyData = parseBody(body.content, lists, document);
-    content.push(JSON.parse(JSON.stringify(bodyData)));
-  }
-
-  return _.filter(_.flatMap(content), (value) => !_.isNull(value));
-}
-
-function getHeaderRowAuthor(content: Schema$ParagraphElement) {
-  const author: Author = {} as Author;
-  if (content && content.textRun?.textStyle?.link) {
-    const textRun = content.textRun as Schema$TextRun;
-    author.name = cleanText(textRun.content as string);
-    author.url = textRun.textStyle?.link?.url || '';
-  }
-  return author;
-}
-
-function getListTag(list: Schema$List, nestingLevel: number | null | undefined) {
+const getListTag = (list: Schema$List, nestingLevel: number | null | undefined) => {
   const glyphType = _.get(list, [
     'listProperties',
     'nestingLevels',
@@ -464,63 +49,43 @@ function getListTag(list: Schema$List, nestingLevel: number | null | undefined) 
     return 'ul';
   }
   return glyphType !== undefined ? 'ol' : 'ul';
-}
+};
 
-const twitterRegExp = new RegExp(regExp.twitter, 'mi');
-const videoRegExp = new RegExp(regExp.video, 'mi');
-const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
-
-function isLink(elements: Schema$ParagraphElement[]) {
-  const [el1, el2] = elements;
-
-  const s2 = cleanText(el2?.textRun?.content as string) === '';
-  const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
-
-  return s1 && s2;
-}
-
-function getRichLink(el: Schema$ParagraphElement) {
-  const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
-
-  const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
-  return {
-    type: 'embed',
-    data: {
-      service: getEmbedSource(match[0]),
-      source: match[0],
-      embed: getEmbedUrl(match[0]),
-      caption: richLinkProperties.title || '',
-    },
+const getElementTags = (paragraphStyle: Schema$ParagraphStyle): string => {
+  const types: Record<string, string> = {
+    NORMAL_TEXT: 'paragraph',
+    SUBTITLE: 'quote',
+    HEADING_1: 'header1',
+    HEADING_2: 'header2',
+    HEADING_3: 'header3',
+    HEADING_4: 'header4',
+    HEADING_5: 'header5',
   };
-}
-const quoteExp = new RegExp(/^> (.*$)/, 'im');
-function isQuote(el: Schema$ParagraphElement) {
-  const { textRun } = el;
-  if (textRun && textRun.content) {
-    const txt = cleanText(textRun.content);
-    return quoteExp.test(txt);
-  } else {
-    return false;
-  }
-}
 
-function cleanText(text: string) {
-  return text.replace(/\n/g, '').trim();
-}
+  return types[paragraphStyle.namedStyleType as string];
+};
 
-function getBulletContent(document: Schema$Document, element: Schema$ParagraphElement) {
-  if (element.inlineObjectElement) {
-    const image = getImage(document, element);
-    if (image) {
-      return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
-    }
+const getElementImage = (
+  inlineObjectElement: Schema$InlineObjectElement,
+  inlineObjects: Schema$InlineObjects
+): Parse$Image | null => {
+  const inlineObject = inlineObjects[inlineObjectElement.inlineObjectId as string];
+  const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
+
+  if (embeddedObject && embeddedObject.imageProperties) {
+    return {
+      source:
+        embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri || '',
+      title: embeddedObject.title || '',
+      alt: embeddedObject.description || '',
+    };
   }
 
-  return getText(element);
-}
+  return null;
+};
 
-function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
-  let text = cleanText(element.textRun?.content as string);
+const getText = (element?: Schema$ParagraphElement, { isHeader = false } = {}) => {
+  let text = cleanLinebreaks(element?.textRun?.content as string);
   const { link, underline, strikethrough, bold, italic } = element?.textRun
     ?.textStyle as Schema$TextStyle;
 
@@ -547,4 +112,519 @@ function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
   }
 
   return text;
-}
+};
+
+const getBulletContent = (
+  element?: Schema$ParagraphElement,
+  inlineObjects?: Schema$InlineObjects | null
+) => {
+  const { inlineObjectElement } = element as Schema$ParagraphElement;
+
+  if (inlineObjectElement && inlineObjects) {
+    const image = getElementImage(inlineObjectElement, inlineObjects);
+    if (image) {
+      return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
+    }
+  }
+
+  return getText(element);
+};
+
+const parseParagraphElement = (
+  element: Schema$ParagraphElement,
+  paragraphStyle: Schema$ParagraphStyle,
+  inlineObjects?: Schema$InlineObjects | null
+): Parse$ParagraphElement => {
+  const { textRun, richLink, inlineObjectElement } = element;
+
+  if (textRun && textRun.content) {
+    if (getElementTags(paragraphStyle).includes('header')) {
+      return {
+        type: 'header',
+        id: paragraphStyle.headingId?.replace(/h./, ''),
+        data: {
+          level: Number(getElementTags(paragraphStyle).replace(/header/g, '')),
+          text: cleanLinebreaks(textRun.content),
+        },
+      };
+    } else {
+      return {
+        type: getElementTags(paragraphStyle),
+        data: {
+          text: cleanLinebreaks(textRun.content),
+        },
+      };
+    }
+  }
+
+  if (inlineObjectElement && inlineObjects) {
+    const image = getElementImage(inlineObjectElement, inlineObjects);
+
+    if (image) {
+      return {
+        type: 'image',
+        data: {
+          file: {
+            url: image.source,
+          },
+          caption: image.alt,
+        },
+      };
+    }
+  }
+
+  if (
+    richLink &&
+    richLink?.richLinkProperties &&
+    videoRegExp.test(richLink.richLinkProperties?.uri as string)
+  ) {
+    const richLinkProperties = richLink.richLinkProperties as Schema$RichLinkProperties;
+    const match = richLinkProperties.uri?.match(videoRegExp) as RegExpMatchArray;
+
+    return {
+      type: 'embed',
+      data: {
+        service: getEmbedSource(match[0]),
+        source: match[0],
+        embed: getEmbedUrl(match[0]),
+        caption: richLinkProperties.title || '',
+      },
+    };
+  }
+
+  return {
+    type: getElementTags(paragraphStyle),
+    data: {
+      text: '',
+    },
+  };
+};
+
+const isLink = (elements: Schema$ParagraphElement[]) => {
+  const [elementOne, elementTwo] = elements;
+
+  const s1 =
+    elementOne.textRun &&
+    elementOne.textRun.textStyle &&
+    elementOne.textRun.textStyle.link !== undefined;
+  const s2: boolean = cleanLinebreaks(elementTwo.textRun?.content as string) === '';
+
+  return s1 && s2;
+};
+
+const trimJoin = (content?: string[]) => {
+  if (!content) return [];
+
+  return sanitizeTexts(content.join(' ').replaceAll(' .', '.').replaceAll(' ,', ','));
+};
+
+const parseParagraphBullet = (
+  bullet: Schema$Bullet,
+  elements: Schema$ParagraphElement[],
+  lists?: Schema$Lists | null,
+  inlineObjects?: Schema$InlineObjects | null
+): Parse$ParagraphElement[] => {
+  const { nestingLevel, listId } = bullet;
+
+  const list = (lists as Record<string, Schema$List>)[listId as string];
+  const listTag = getListTag(list, nestingLevel);
+
+  const bulletContent = trimJoin(
+    elements?.map((element) => getBulletContent(element, inlineObjects))
+  );
+
+  const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
+
+  return [
+    {
+      type: 'nestedList',
+      data: {
+        style: listStyle,
+        id: listId as string,
+        items: [
+          {
+            content: bulletContent,
+            items: [],
+          },
+        ],
+      },
+    },
+  ];
+};
+
+const isQuote = (element: Schema$ParagraphElement): boolean => {
+  const { textRun } = element;
+
+  if (textRun && textRun.content) {
+    const txt = cleanLinebreaks(textRun.content);
+
+    return quoteExp.test(txt);
+  } else {
+    return false;
+  }
+};
+
+const parseParagraph = (
+  paragraph: Schema$Paragraph,
+  lists?: Schema$Lists | null,
+  inlineObjects?: Schema$InlineObjects | null
+): Parse$ParagraphElement[] => {
+  const { elements, bullet, paragraphStyle } = paragraph;
+
+  if (!elements || !paragraphStyle) {
+    return [];
+  }
+
+  if (elements && bullet) {
+    return parseParagraphBullet(bullet, elements, lists, inlineObjects);
+  }
+
+  if (elements.length === 2 && isLink(elements)) {
+    const { textStyle, content } = elements[0].textRun as Schema$TextRun;
+
+    if (textStyle?.link?.url) {
+      const link = textStyle?.link?.url as string;
+
+      switch (true) {
+        case twitterRegExp.test(link): {
+          const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
+            .exec(link)
+            ?.slice(2);
+
+          return [
+            {
+              type: 'embed',
+              data: {
+                service: 'twitter',
+                source: link,
+                embed: `api/tweets.json?id=${match?.shift()}`,
+              },
+            },
+          ];
+        }
+
+        case videoRegExp.test(link): {
+          const match = link.match(videoRegExp) as RegExpMatchArray;
+
+          return [
+            {
+              type: 'embed',
+              data: {
+                service: getEmbedSource(match[0]),
+                source: match[0],
+                embed: getEmbedUrl(match[0]),
+              },
+            },
+          ];
+        }
+
+        case tallyRegExp.test(link): {
+          const match = link.match(tallyRegExp) as RegExpMatchArray;
+
+          return [
+            {
+              type: 'embed',
+              data: {
+                service: 'tally',
+                source: match[0],
+                embed: match[0],
+              },
+            },
+          ];
+        }
+
+        default: {
+          return [
+            {
+              type: 'linkTool',
+              data: {
+                url: link,
+                title: content as string,
+                embed: `api/link.json?url=${link}`,
+              },
+            },
+          ];
+        }
+      }
+    }
+
+    if (textStyle?.link?.headingId) {
+      const type = getElementTags(paragraphStyle);
+
+      if (type.includes('header')) {
+        return [
+          {
+            type: getElementTags(paragraphStyle).replace(/(header)\d+/g, '$1'),
+            id: textStyle.link.headingId.replace(/h./, ''),
+            data: {
+              level: Number(getElementTags(paragraphStyle).replace(/header/g, '')),
+              text: content as string,
+            },
+          },
+        ];
+      }
+
+      const indentation = paragraphStyle.indentFirstLine?.magnitude;
+      return [
+        {
+          type: getElementTags(paragraphStyle).replace(/(header)\d+/g, '$1'),
+          data: {
+            level: ((indentation ? indentation : 0) / 18) as number,
+            text: content as string,
+            items: [],
+          },
+        },
+      ];
+    }
+
+    return [
+      {
+        type: getElementTags(paragraphStyle),
+        data: {
+          text: '',
+        },
+      },
+    ];
+  } else {
+    const paragraphData = elements
+      .map((element) => parseParagraphElement(element, paragraphStyle, inlineObjects))
+      .filter(({ data }) => Boolean(data?.text));
+
+    if (!isQuote(elements[0])) {
+      return paragraphData;
+    } else {
+      const targetType = getElementTags(paragraphStyle);
+      return [
+        {
+          type: 'quote',
+          data: {
+            text: trimJoin(
+              paragraphData
+                .map(({ type, data }) => {
+                  if (type === targetType) {
+                    return data.text || '';
+                  }
+
+                  return false;
+                })
+                .filter((content) => content !== false) as string[]
+            ) as string,
+          },
+        },
+      ];
+    }
+  }
+};
+
+const parseHeader = (headers?: Schema$Headers | null): Parse$Header => {
+  if (!headers) {
+    return {
+      type: 'author',
+      items: [],
+    };
+  }
+
+  const keys = Object.keys(headers);
+  if (keys.length === 0) {
+    return {
+      type: 'author',
+      items: [],
+    };
+  }
+
+  const authors: Parse$HeaderElement[][][] = keys.map((key: string) => {
+    const { content } = headers[key];
+
+    return (content ?? []).map(({ paragraph }) => {
+      const { elements } = paragraph as Schema$Paragraph;
+
+      const headerElements: Parse$HeaderElement[] = (elements ?? [])
+        .map(({ textRun }) => {
+          const { content, textStyle } = textRun as Schema$TextRun;
+
+          return {
+            name: content || '',
+            url: textStyle?.link?.url || '',
+          };
+        })
+        .filter(({ url }) => url);
+
+      return headerElements;
+    });
+  });
+
+  return {
+    type: 'author',
+    items: _.flattenDeep(authors),
+  };
+};
+
+const parseTable = (
+  table: Schema$Table,
+  lists?: Schema$Lists | null,
+  inlineObjects?: Schema$InlineObjects | null
+): Parse$ParagraphElement[] => {
+  if (!table.tableRows) return [];
+
+  return _.flattenDeep(
+    table.tableRows.map(
+      (row) =>
+        row.tableCells?.map(
+          (cell) =>
+            cell.content?.map(({ paragraph }) => {
+              if (!paragraph) return [];
+              return parseParagraph(paragraph, lists, inlineObjects) as Parse$ParagraphElement[];
+            }) as Parse$ParagraphElement[][]
+        ) as Parse$ParagraphElement[][][]
+    ) as Parse$ParagraphElement[][][][]
+  );
+};
+
+const parseTOC = (
+  toc: Schema$TableOfContents,
+  lists?: Schema$Lists | null,
+  inlineObjects?: Schema$InlineObjects | null
+): Parse$TableOfContents => {
+  const { content } = toc;
+
+  if (!content) {
+    return {
+      type: 'toc',
+      items: [],
+    };
+  }
+
+  return {
+    type: 'toc',
+    items: _.flattenDeep(
+      content.map((contentEl) => {
+        const { paragraph } = contentEl;
+        if (!paragraph) return [];
+        return parseParagraph(paragraph, lists, inlineObjects);
+      })
+    ),
+  };
+};
+
+const getStructuralTOC = (
+  parsedBody: (Parse$ParagraphElement | Parse$TableOfContents)[]
+): (Parse$ParagraphElement | Parse$TableOfContents)[] => {
+  const structuredBody: (Parse$ParagraphElement | Parse$TableOfContents)[] = [];
+
+  for (const dataBlock of parsedBody) {
+    const { type } = dataBlock;
+
+    if (type === 'toc') {
+      const { items } = dataBlock as Parse$TableOfContents;
+      const newItems: Parse$ParagraphElement[] = [];
+      let stack: Parse$ParagraphElement[] = [];
+
+      items.forEach((item) => {
+        if (item.data.level === 0) {
+          if (stack.length > 0) {
+            newItems.push(stack[0]);
+            stack = [];
+          }
+          const newItem = { ...item, data: { ...item.data, items: [] } };
+          stack.push(newItem);
+        } else {
+          const parent = stack[(item.data.level as number) - 1];
+          if (parent) {
+            parent.data.items?.push({ ...item, data: { ...item.data, items: [] } });
+            stack[item.data.level as number] = parent.data.items?.[parent.data.items.length - 1];
+          }
+        }
+      });
+
+      if (stack.length > 0) {
+        newItems.push(stack[0]);
+      }
+
+      structuredBody.push({
+        type: 'toc',
+        items: newItems,
+      });
+    } else {
+      structuredBody.push(dataBlock);
+    }
+  }
+
+  return structuredBody;
+};
+
+const getStructureBullets = (
+  parsedBody: (Parse$ParagraphElement | Parse$TableOfContents)[]
+): (Parse$ParagraphElement | Parse$TableOfContents)[] => {
+  const structuredData: any = {};
+
+  let index = -1;
+  for (const dataBlock of parsedBody) {
+    const { type, data } = dataBlock as Parse$ParagraphElement;
+
+    if (type !== 'nestedList') {
+      ++index;
+      structuredData[index] = dataBlock;
+    } else {
+      if (!structuredData[index].data || data.id !== structuredData[index].data.id) {
+        ++index;
+        structuredData[index] = dataBlock;
+      } else {
+        structuredData[index].data.items = [
+          ...structuredData[index].data.items,
+          ...(data.items as any[]),
+        ];
+      }
+    }
+  }
+
+  return Object.values(structuredData);
+};
+
+const parseBody = (
+  body?: Schema$Body | null,
+  lists?: Schema$Lists | null,
+  inlineObjects?: Schema$InlineObjects | null
+): (Parse$ParagraphElement | Parse$TableOfContents)[] => {
+  const { content } = body as Schema$Body;
+
+  const parsedBody = (content ?? [])
+    .map((element) => {
+      const { paragraph, tableOfContents, table } = element;
+
+      if (paragraph) return parseParagraph(paragraph, lists, inlineObjects);
+      if (table) return parseTable(table, lists, inlineObjects);
+      if (tableOfContents) return parseTOC(tableOfContents, lists, inlineObjects);
+    })
+    .filter((element) => element) as Parse$ParagraphElement[][];
+
+  return _.flattenDeep(parsedBody);
+};
+
+const parseGDocJson = (data: Schema$Document) => {
+  const { body, lists, headers, inlineObjects } = data;
+
+  const parsedHeader = parseHeader(headers);
+  const parsedBody = getStructureBullets(getStructuralTOC(parseBody(body, lists, inlineObjects)));
+
+  return [parsedHeader, ...parsedBody];
+};
+
+export const POST: RequestHandler = async ({ request }) => {
+  const { data, updatedAt } = await request.json();
+
+  const parsedData = parseGDocJson(data);
+
+  return json(
+    {
+      blocks: parsedData,
+      time: updatedAt,
+      version: '2.20.0',
+    },
+    {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+};

@@ -38,3 +38,11 @@ export function parseCommunityCoverImage(community: Community): string {
       return community?.logoUrl;
   }
 }
+
+export const cleanLinebreaks = (text: string) => {
+  return text.replace(/\n/g, '').trim();
+};
+
+export const sanitizeTexts = (text: string) => {
+  return text.replace(/>/g, '').trim();
+};
