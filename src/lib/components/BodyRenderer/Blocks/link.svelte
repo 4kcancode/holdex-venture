@@ -55,3 +55,8 @@
     <Icon icon={ArrowTopRightOnSquare} width={16} height={16} colorInherit />
   {/if}
 </a>
+
+<style lang="sass">
+  a :global(*)
+    @apply text-inherit
+</style>
