@@ -47,11 +47,9 @@
 
   let lastScrollTop = 0;
   let secondaryNavScrollLeft = 0;
-  let status = true;
+
   let isLeftEnd = true;
   let isRightEnd = false;
-
-  const scrollAdjust = 0.5;
 
   const scrollAction = (node: HTMLElement) => {
     const hasReachedRightEnd = () => {
@@ -62,12 +60,11 @@
       }
 
       secondaryNavScrollLeft = node?.scrollLeft;
+
+      const maxScroll = node?.scrollWidth;
+
       isLeftEnd = secondaryNavScrollLeft === 0;
-      isRightEnd =
-        secondaryNavScrollLeft + node.clientWidth - scrollAdjust ===
-        navbarSectionElement.clientWidth
-          ? true
-          : false;
+      isRightEnd = maxScroll - secondaryNavScrollLeft - node?.clientWidth <= 0;
     };
 
     node.addEventListener('scroll', hasReachedRightEnd, false);

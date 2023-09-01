@@ -18,7 +18,7 @@ mixin social-link(href, content)
   )&attributes(attributes)= content
 
 mixin main-nav
-  ul(class=" flex items-start gap-4 xl-up:gap-8" role="navigation")&attributes(attributes)
+  ul(class="flex items-start gap-4 xl-up:gap-8" role="navigation")&attributes(attributes)
     +link("{routes.about}", "About")(
       class!="{isActive(path, routes.about, true) ? 'before:!bg-accent1-default' : ''}"
     )
@@ -40,21 +40,23 @@ mixin mobile-nav
 .app-container
   header(class!="z-10 w-full block relative sticky top-0")
     .header-wrapper(class="w-full whitespace-nowrap lg-up:justify-center")
-      div(class="border-b border-solid border-l4 bg-l1  z-[99]")
+      div(class="tb:bg-l1 sm:bg-l1 xs:bg-l1 xs:border-b border-solid border-l4")
         div(class="px-4 flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up")
-          .logo-wrapper(class="z-1 relative")
+          .logo-wrapper(class="z-100 relative w-[64px] flex items-center justify-center")
             a(class="relative flex h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(
               name="only-logo"
               class="w-24"
             )
+
           div(
             id="secondary-navbar"
             use:scrollAction
-            class!=" border-solid border-l4 z-[98] bg-l1  overflow-x-scroll scrollbar-hide w-full"
+            class!=" border-solid border-l4 z-[21] bg-l1 overflow-x-scroll scrollbar-hide w-full"
           )
+            //- div(class="mobile:w-24 w-0 border h-[50px] absolute")
             div(
               id="secondary-navbar-section"
-              class!="px-4 flex gap-x-8 items-center justify-start mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'mobile:before:bg-gradient-to-r mobile:before:absolute mobile:before:left-0 mobile:before:w-24 mobile:before:h-10 mobile:before:z-10' : ''} { !isRightEnd ? 'mobile:after:bg-gradient-to-l mobile:after:absolute mobile:after:right-0 mobile:after:w-24 mobile:after:h-10 mobile:after:z-10' : ''}"
+              class!="sns px-4 flex gap-x-8 items-center justify-start mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'xs:before:bg-gradient-to-r xs:before:absolute xs:before:left-0 xs:before:w-24 xs:before:h-10 xs:before:z-10 xs:before:ml-24' : ''} { !isRightEnd ? 'xs:after:bg-gradient-to-l xs:after:absolute xs:after:right-0 xs:after:w-24 xs:after:h-10 xs:after:z-10 xs:after:mr-54 mobile:after:mr-0': ''}"
             )
               //- .nav-wrapper(class="main-nav flex items-center gap-8 lg-up:ml-40")
               +main-nav(class="gap-6")
@@ -77,14 +79,14 @@ mixin mobile-nav
                   class="!h-5 !w-5 !p-0 text-i1"
                 )
 
-          .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
+          .flex.items-center.gap-2.sticky.right-0(class="{isRightEnd?'':'mobile:hidden'} md-up:gap-4")
             +button-icon-default(type="button" on:click!="{onThemeToggle}")
               SVGIcon(name="{themeIconName}" class="w-5 stroke-current")
             +primary-button("Partner With Us")(
               class="sticky hidden sm-up:block"
               type="button"
               on:click!="{() => handleClick(undefined)}"
-            ) 
+            )
 
   main: slot 
   button(
