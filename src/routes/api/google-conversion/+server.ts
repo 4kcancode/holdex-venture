@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
 function convertToHoldexJson(document: Schema$Document) {
   const { body, headers } = document;
 
-  const content: any[] = [];
+  const newContent: any[] = [];
   const authorBlock = {
     type: 'author',
     items: [] as Author[],
@@ -64,13 +64,14 @@ function convertToHoldexJson(document: Schema$Document) {
         }
       });
     });
-    content.push(authorBlock);
+
+    newContent.push(authorBlock);
   }
 
   if (body && body.content) {
-    body.content.forEach(({ paragraph, table }, i) => {
+    body.content.forEach(({ paragraph, tableOfContents, table }, i) => {
       // Paragraphs
-      if (paragraph) parseParagraph(document, body, content, paragraph, i);
+      if (paragraph) parseParagraph(document, body, newContent, paragraph, i);
       // Table
       else if (table && table.tableRows && table.tableRows.length > 0) {
         const tableContent: any[] = [];
@@ -89,16 +90,35 @@ function convertToHoldexJson(document: Schema$Document) {
           tableContent.push(trowContent);
         });
 
-        content.push({
+        newContent.push({
           type: 'table',
           data: {
             content: tableContent,
           },
         });
       }
+      // Table Of Contents
+      else if (tableOfContents) {
+        const { content } = tableOfContents;
+
+        if (content && content.length > 0) {
+          const tocContent: any[] = [];
+          content.map((el, i) => {
+            if (el.paragraph) {
+              parseParagraph(document, tableOfContents, tocContent, el.paragraph, i);
+            }
+          });
+
+          newContent.push({
+            type: 'toc',
+            items: tocContent,
+          });
+        }
+      }
     });
   }
-  return content;
+
+  return newContent;
 }
 
 function getHeaderRowAuthor(content: Schema$ParagraphElement) {
@@ -249,7 +269,7 @@ function parseParagraph(
   content: any[],
   paragraph: Schema$Paragraph,
   i: number,
-  wrappingTable: boolean = false
+  wrappingTable = false
 ) {
   const { lists } = document;
   const tag = getParagraphTag(paragraph);
@@ -358,12 +378,30 @@ function parseParagraph(
             break;
           }
         }
+      } else if (textStyle?.link?.headingId) {
+        const level =
+          (paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            ? paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            : 0) /
+            18 +
+          2;
+
+        tagContent.push({
+          type: 'header',
+          id: textStyle.link.headingId.replace(/h./, ''),
+          data: {
+            level: level > 4 ? 4 : level,
+            text: content,
+          },
+        });
       }
     } else {
       // trying to isolate the quote elements
       if (paragraph?.elements && isQuote(paragraph.elements[0])) {
-        let quoteElements: any[] = [];
-        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, quoteElements, el))
+        const quoteElements: any[] = [];
+        paragraph?.elements?.forEach((el) =>
+          parseParagraphElement(document, tag, quoteElements, el)
+        );
         tagContent.push({
           type: 'quote',
           data: {
@@ -372,13 +410,14 @@ function parseParagraph(
               .filter((el) => el.length > 0)
               .join(' ')
               .replace(' .', '.')
-              .replace(' ,', ',').slice(2),
+              .replace(' ,', ',')
+              .slice(2),
             caption: '',
             alignment: 'left',
           },
-        })
+        });
       } else {
-        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, tagContent, el))
+        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, tagContent, el));
       }
     }
 
@@ -404,7 +443,7 @@ function parseParagraph(
               .map((el) => el[tag])
               .join(' ')
               .replace(' .', '.')
-              .replace(' ,', ',')
+              .replace(' ,', ','),
           },
         });
       } else {
@@ -432,7 +471,8 @@ function parseParagraphElement(
   document: Schema$Document,
   tag: string,
   parentContent: any[],
-  el: Schema$ParagraphElement) {
+  el: Schema$ParagraphElement
+) {
   if (el.inlineObjectElement) {
     const image = getImage(document, el);
 
@@ -467,5 +507,5 @@ function parseParagraphElement(
       }),
     });
   }
-  return parentContent
+  return parentContent;
 }
