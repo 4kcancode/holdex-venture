@@ -38,7 +38,7 @@
     Case(value="quote")
       blockquote(
         title="{item.text}"
-        class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2"
+        class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2 w-full"
       )
         +each("item.items as QItem")
           InlineBlock(item="{QItem}") 

@@ -67,9 +67,7 @@
 </script>
 
 <MetaTags
-  title={message.communitySlug === 'holdex'
-    ? message.title
-    : `${community.name} - ${message.title}`}
+  title={message.title}
   description={message.subtitle ? message.subtitle : ''}
   pageType="article"
   path={routes.message(message.communitySlug, message.messageSlug)}
