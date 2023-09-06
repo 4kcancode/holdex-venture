@@ -71,8 +71,10 @@ type TableBlock = {
   };
 };
 
-type TableRowOfStrings = Array<Array<string>>
-type TableRowOfElements = Array<Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>>;
+type TableRowOfStrings = Array<Array<string>>;
+type TableRowOfElements = Array<
+  Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>
+>;
 
 type EmbedBlock = {
   type: string;
@@ -110,6 +112,11 @@ export type Author = {
 type AuthorBlock = {
   type: string;
   items: Author[];
+};
+
+type TocBlock = {
+  type: string;
+  items: HeadingBlock[];
 };
 
 const videoRegExp = new RegExp(regExp.video, 'gmi');
@@ -333,6 +340,13 @@ const parseHeading = (block: HeadingBlock) => {
   };
 };
 
+const parseToc = (block: TocBlock) => {
+  return {
+    type: 'toc',
+    data: block.items.map((header) => parseHeading(header)),
+  };
+};
+
 const parseList = (block: ListBlock) => {
   const tokens: any[] = [];
   block.data.items.forEach((item) => {
@@ -412,9 +426,9 @@ const parseTable = (block: TableBlock) => {
   }
   const tableContent: TableRowOfElements = [];
   (block.data.content as TableRowOfElements).forEach((row) => {
-    let rowContent: any = [];
-    row.forEach(cell => rowContent.push(parseBlocks(cell)));
-    tableContent.push(rowContent)
+    const rowContent: any = [];
+    row.forEach((cell) => rowContent.push(parseBlocks(cell)));
+    tableContent.push(rowContent);
   });
 
   return {
@@ -489,6 +503,7 @@ const htmlParser = HTMLParser({
   subtitle: (b: any) => b,
   source: (b: any) => b,
   author: parseAuthor,
+  toc: parseToc,
 });
 
 const parseBlocks = (blocks: any[]) => htmlParser.parse({ blocks });

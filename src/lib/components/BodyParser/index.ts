@@ -28,7 +28,7 @@ type ParsedMessage = Partial<Message> & {
   _author: MessageAuthor;
   docAuthors: Author[];
   parsedBody: Record<string, any>;
-  tocs: any[];
+  tocs: any[] | null;
   cover?: string;
   isGoogleDoc: string;
 };
@@ -41,8 +41,8 @@ class Parser {
       parsedBody?.blocks
     );
     const blocks = Parser.parseBlocks(parsedBlocks);
-    const tocs = Parser.parseTocs(blocks);
     const cover = Parser.parseThreadCover(blocks);
+    const tocs = blocks.find((block) => block.type === 'toc');
 
     return {
       ...message,
@@ -51,7 +51,7 @@ class Parser {
       isGoogleDoc,
       blocks,
       parsedBody,
-      tocs,
+      tocs: tocs?.data,
       subtitle,
       cover,
     };
@@ -108,16 +108,6 @@ class Parser {
       };
     }
     return message?.author || ({} as MessageAuthor);
-  }
-
-  private static parseTocs(blocks: any[], allowedDepth: string[] = ['h2', 'h3', 'h4']): any[] {
-    const tocs = [];
-    for (const block of blocks) {
-      if (block.type === 'heading' && allowedDepth.includes(block.level)) {
-        tocs.push(block);
-      }
-    }
-    return tocs;
   }
 
   private static parseSubtitle(blocks: any[]): [any[], string, Author[], string] {
