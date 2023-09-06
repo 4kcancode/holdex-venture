@@ -1,19 +1,56 @@
+mixin table-header-cell
+  th(
+    class="text-left bg-l2 py-1.5 px-3 text-footnote font-bold border-solid border-l border-t border-l4 first:rounded-tl-xl"
+    scope="col"
+  )&attributes(attributes)
+    +table-cell
+
+mixin table-data-cell
+  td(
+    class="align-top col-mw bg-l1 py-1.5 px-3 text-footnote border-solid border-l border-t border-l4 last:border-r {rowIndex === cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}"
+  )&attributes(attributes)
+    +table-cell
+
+mixin table-row(rowIndex, colIndex, cellContents)
+  +if('colIndex === 0')
+    +table-data-cell.div(class!="z-20 left-0 sticky text-t2")
+    +else
+      +table-data-cell
+
+mixin table-head-row(rowIndex, colIndex, cellContents)
+  +if('colIndex === 0')
+    +table-header-cell.div(class!="col-fixed-width left-0 sticky")
+      +table-cell
+    +else
+      +table-header-cell.div(class!="col-mw last:rounded-tr-xl last:border-r")
+
 mixin table-cell
   +if("typeof cellContents === 'object'")
     +each('cellContents as content')
       Item(item="{content}" isTableCell)
-    +else()
+    +else
       Item(item="{cellContents}" isTableCell)
 
-table(class="table w-full border-separate border-spacing-0 bg-l1 overflow-auto")
-  tbody
-    +each('cells as row, index')
-      tr
-        +each('row as cellContents, i')
-          +if('index === 0')
-            th(class="bg-l2 py-1.5 px-3 text-t1 text-footnote font-bold border-solid border-l border-t border-l4 first:rounded-tl-xl last:rounded-tr-xl last:border-r")
-              +table-cell()
-            +else()
-              td(
-                class="py-1.5 px-3 text-t2 text-footnote border-solid border-l border-t border-l4 last:border-r {index === cells.length - 1 ? 'first:rounded-bl-xl last:rounded-br-xl border-b': ''}")
-                +table-cell()
+mixin table-scroll-shades
+  .div(class=" w-full flex absolute h-full")
+    .div(class="right-shade-spacer")
+    .div(
+      class="h-full w-24 {isLeftEnd ? 'hidden' : 'border-l4 border-l bg-gradient-to-r to-transparent from-l1'} z-40"
+      use:scrollAction
+    )
+    .div(
+      class="h-full rounded-xl border-r border-l4 right-0 w-24 absolute {isRightEnd ? 'bg-gradient-to-l to-transparent from-l1':'hidden' } z-40"
+      use:scrollAction
+    )
+
++table-scroll-shades
+.relative.overflow-auto(use:scrollAction class="rounded-xl" id="table-parent")
+  table(class="border-separate border-spacing-0" id="table-scroll")
+    tbody
+      +each('cells as row, rowIndex')
+        tr
+          +each('row as cellContents, colIndex')
+            +if('rowIndex===0')
+              +table-head-row(rowIndex, colIndex, cellContents)
+              +else
+                +table-row(rowIndex, colIndex, cellContents)
