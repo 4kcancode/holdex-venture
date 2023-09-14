@@ -62,28 +62,27 @@ mixin social
         div(
           class="px-4 flex items-center justify-between mx-auto gap-4 sm-up:w-full xl-up:max-w-screen-xl-up h-[64px]"
         )
-          .logo-wrapper(class="z-1 relative w-8 h-8 ")
+          .logo-wrapper(class="relative w-8 h-8 ")
             a(class="relative flex  h-6.5 tbDown:w-30 tbDown:h-8" href="{routes.index}"): SVGIcon(
               name="only-logo"
               class="w-8 h-8 "
             )
 
-          div(id="secondary-navbar" use:scrollAction class!=" z-[21] bg-l1 overflow-x-scroll scrollbar-hide w-full")
+          div(id="secondary-navbar" class!="relative z-[11] bg-l1 overflow-x-scroll scrollbar-hide w-full flex")
             div(
-              id="secondary-navbar-section"
-              class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4 { !isLeftEnd ? 'xs:before:bg-gradient-to-r xs:before:absolute xs:before:left-12 xs:before:w-24 xs:before:h-10 xs:before:z-10' : ''} { !isRightEnd ? 'xs:after:bg-gradient-to-l xs:after:absolute xs:after:right-[210px] mobile:xs:after:right-[56px]  xs:after:w-24 xs:after:h-10 xs:after:z-10' : ''}"
+              id="secondary-navbar-section h-full"
+              class!="px-4 flex gap-x-8 items-center justify-between mx-auto gap-4 w-max from-l1 to-transparent sm-up:w-full xl-up:max-w-screen-xl-up py-2 sm-up:py-4"
             )
               +main-nav(class="gap-6")
               +social
-
-          .flex.items-center.gap-2.sticky.right-0.z-20(class="md-up:gap-4")
-            +button-icon-default(type="button" on:click!="{onThemeToggle}")
-              SVGIcon(name="{themeIconName}" class="w-5 stroke-current")
-            +primary-button("Partner With Us")(
-              class="sticky hidden sm-up:block"
-              type="button"
-              on:click!="{() => handleClick(undefined)}"
-            )
+            .flex.items-center.gap-2(class="md-up:gap-4")
+              +button-icon-default(type="button" on:click!="{onThemeToggle}")
+                SVGIcon(name="{themeIconName}" class="w-5 stroke-current")
+              +primary-button("Partner With Us")(
+                class="sticky hidden sm-up:block"
+                type="button"
+                on:click!="{() => handleClick(undefined)}"
+              )
 
   main: slot 
   button(
