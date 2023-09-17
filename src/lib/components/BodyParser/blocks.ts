@@ -114,6 +114,11 @@ type AuthorBlock = {
   items: Author[];
 };
 
+type TocBlock = {
+  type: string;
+  items: HeadingBlock[];
+};
+
 const videoRegExp = new RegExp(regExp.video, 'gmi');
 const imageRegExp = new RegExp(regExp.image, 'gmi');
 const tallyLinkExp = new RegExp(regExp.tallyLink, 'mi');
@@ -335,6 +340,13 @@ const parseHeading = (block: HeadingBlock) => {
   };
 };
 
+const parseToc = (block: TocBlock) => {
+  return {
+    type: 'toc',
+    data: block.items.map((header) => parseHeading(header)),
+  };
+};
+
 const parseList = (block: ListBlock) => {
   const tokens: any[] = [];
   block.data.items.forEach((item) => {
@@ -414,7 +426,7 @@ const parseTable = (block: TableBlock) => {
   }
   const tableContent: TableRowOfElements = [];
   (block.data.content as TableRowOfElements).forEach((row) => {
-    let rowContent: any = [];
+    const rowContent: any = [];
     row.forEach((cell) => rowContent.push(parseBlocks(cell)));
     tableContent.push(rowContent);
   });
@@ -491,6 +503,7 @@ const htmlParser = HTMLParser({
   subtitle: (b: any) => b,
   source: (b: any) => b,
   author: parseAuthor,
+  toc: parseToc,
 });
 
 const parseBlocks = (blocks: any[]) => htmlParser.parse({ blocks });

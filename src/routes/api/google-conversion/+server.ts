@@ -1,11 +1,11 @@
-import { default as _last } from 'lodash-es/last';
-import { default as _get } from 'lodash-es/get';
+import _ from 'lodash-es';
 import { json } from '@sveltejs/kit';
 import { getEmbedUrl, getEmbedSource, regExp } from '$components/BodyParser/utils';
 
 import type {
   Schema$Body,
   Schema$Document,
+  Schema$Link,
   Schema$List,
   Schema$Paragraph,
   Schema$ParagraphElement,
@@ -17,6 +17,8 @@ import type {
 } from '$lib/types/googleDoc';
 import type { RequestHandler } from './$types';
 import type { Author } from '$components/BodyParser/blocks';
+import type { Parsed$Paragraph, Parsed$ParagraphElement } from '$lib/types/googleConversion';
+import { trimJoinArray } from '$lib/utils';
 
 export const POST: RequestHandler = async ({ request }) => {
   const { data, updatedAt } = await request.json();
@@ -39,7 +41,7 @@ export const POST: RequestHandler = async ({ request }) => {
 function convertToHoldexJson(document: Schema$Document) {
   const { body, headers } = document;
 
-  const content: any[] = [];
+  const newContent: any[] = [];
   const authorBlock = {
     type: 'author',
     items: [] as Author[],
@@ -64,13 +66,14 @@ function convertToHoldexJson(document: Schema$Document) {
         }
       });
     });
-    content.push(authorBlock);
+
+    newContent.push(authorBlock);
   }
 
   if (body && body.content) {
-    body.content.forEach(({ paragraph, table }, i) => {
+    body.content.forEach(({ paragraph, tableOfContents, table }, i) => {
       // Paragraphs
-      if (paragraph) parseParagraph(document, body, content, paragraph, i);
+      if (paragraph) parseParagraph(document, body, newContent, paragraph, i);
       // Table
       else if (table && table.tableRows && table.tableRows.length > 0) {
         const tableContent: any[] = [];
@@ -89,16 +92,35 @@ function convertToHoldexJson(document: Schema$Document) {
           tableContent.push(trowContent);
         });
 
-        content.push({
+        newContent.push({
           type: 'table',
           data: {
             content: tableContent,
           },
         });
       }
+      // Table Of Contents
+      else if (tableOfContents) {
+        const { content } = tableOfContents;
+
+        if (content && content.length > 0) {
+          const tocContent: any[] = [];
+          content.map((el, i) => {
+            if (el.paragraph) {
+              parseParagraph(document, tableOfContents, tocContent, el.paragraph, i);
+            }
+          });
+
+          newContent.push({
+            type: 'toc',
+            items: tocContent,
+          });
+        }
+      }
     });
   }
-  return content;
+
+  return newContent;
 }
 
 function getHeaderRowAuthor(content: Schema$ParagraphElement) {
@@ -126,7 +148,7 @@ function getParagraphTag(p: Schema$Paragraph) {
 }
 
 function getListTag(list: Schema$List, nestingLevel: number | null | undefined) {
-  const glyphType = _get(list, [
+  const glyphType = _.get(list, [
     'listProperties',
     'nestingLevels',
     nestingLevel ? nestingLevel : 0,
@@ -243,37 +265,81 @@ function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
   return text;
 }
 
-function parseParagraph(
+const parseParagraphElement = (
+  document: Schema$Document,
+  tag: string,
+  parentContent: (Parsed$Paragraph | Parsed$ParagraphElement)[],
+  element: Schema$ParagraphElement
+) => {
+  const { textRun, richLink, inlineObjectElement } = element;
+
+  if (inlineObjectElement) {
+    const image = getImage(document, element);
+
+    if (image) {
+      parentContent.push({
+        type: 'image',
+        data: {
+          file: {
+            url: image.source as string,
+          },
+          caption: image.alt,
+        },
+      });
+    }
+  } else if (
+    richLink &&
+    richLink?.richLinkProperties &&
+    videoRegExp.test(richLink.richLinkProperties?.uri as string)
+  ) {
+    // support for each link
+    parentContent.push(getRichLink(element));
+  }
+  // Headings, Texts
+  else if (textRun && textRun.content !== '\n' && (textRun.content as string).trim().length > 0) {
+    parentContent.push({
+      [tag]: getText(element, {
+        isHeader: tag !== 'p',
+      }),
+    });
+  }
+};
+
+const parseParagraph = (
   document: Schema$Document,
   body: Schema$Body,
-  content: any[],
+  contents: (Parsed$Paragraph | Parsed$ParagraphElement)[],
   paragraph: Schema$Paragraph,
   i: number,
-  wrappingTable: boolean = false
-) {
-  const { lists } = document;
-  const tag = getParagraphTag(paragraph);
-
+  wrappingTable = false
+): void => {
   if (!body || !body.content) return;
 
+  const { lists } = document;
+  const { bullet, elements } = paragraph;
+
+  const tag: string = getParagraphTag(paragraph);
+
   // Lists
-  if (paragraph.bullet) {
-    const { nestingLevel, listId } = paragraph.bullet;
+  if (bullet && elements) {
+    const { nestingLevel, listId } = bullet;
     const list = (lists as Record<string, Schema$List>)[listId as string];
     const listTag = getListTag(list, nestingLevel);
 
-    const bulletContent = paragraph.elements
-      ?.map((el) => getBulletContent(document, el))
-      .join(' ')
-      .replace(' .', '.')
-      .replace(' ,', ',');
+    const bulletContent = trimJoinArray(
+      elements.map((element) => getBulletContent(document, element))
+    );
+
+    if (!bulletContent) {
+      return;
+    }
 
     const prev = (body.content as Schema$StructuralElement[])[i - 1];
     const prevListId = prev?.paragraph?.bullet?.listId;
     const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
 
     if (prevListId === listId) {
-      const list = _last(content).data.items;
+      const list: Parsed$ParagraphElementItems[] = _.last(contents)?.data.items ?? [];
 
       if (nestingLevel !== undefined) {
         const lastIndex = list.length - 1;
@@ -282,36 +348,39 @@ function parseParagraph(
         list.push({ content: bulletContent, items: [] });
       }
     } else {
-      content.push({
+      contents.push({
         type: 'nestedList',
         data: {
           style: listStyle,
+          id: listId as string,
           items: [
             {
               content: bulletContent,
               items: [],
             },
           ],
-          id: listId,
         },
       });
     }
   }
 
   // Headings, Images, Texts
-  else if (tag) {
-    const tagContent: any[] = [];
+  else if (tag && elements) {
+    const tagContent: (Parsed$Paragraph | Parsed$ParagraphElement)[] = [];
 
-    if (paragraph?.elements?.length === 2 && isLink(paragraph.elements) && !wrappingTable) {
-      const { textStyle, content } = paragraph.elements[0].textRun as Schema$TextRun;
+    if (elements.length === 2 && isLink(elements) && !wrappingTable) {
+      const { textStyle, content } = elements[0].textRun as Schema$TextRun;
+      const { url, headingId } = textStyle?.link as Schema$Link;
 
-      if (textStyle?.link?.url) {
+      if (url) {
         const link = textStyle?.link?.url as string;
+
         switch (true) {
           case twitterRegExp.test(link): {
             const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
               .exec(link)
               ?.slice(2);
+
             tagContent.push({
               type: 'embed',
               data: {
@@ -320,22 +389,28 @@ function parseParagraph(
                 embed: `api/tweets.json?id=${match?.shift()}`,
               },
             });
+
             break;
           }
+
           case videoRegExp.test(link): {
             const match = link.match(videoRegExp) as RegExpMatchArray;
+
             tagContent.push({
               type: 'embed',
               data: {
                 service: getEmbedSource(match[0]),
                 source: match[0],
-                embed: getEmbedUrl(match[0]),
+                embed: getEmbedUrl(match[0]) as string,
               },
             });
+
             break;
           }
+
           case tallyRegExp.test(link): {
             const match = link.match(tallyRegExp) as RegExpMatchArray;
+
             tagContent.push({
               type: 'embed',
               data: {
@@ -344,9 +419,15 @@ function parseParagraph(
                 embed: match[0],
               },
             });
+
             break;
           }
+
           default: {
+            if (!content) {
+              break;
+            }
+
             tagContent.push({
               type: 'linkTool',
               data: {
@@ -355,117 +436,85 @@ function parseParagraph(
                 embed: `api/link.json?url=${link}`,
               },
             });
+
             break;
           }
         }
+      } else if (headingId && content) {
+        const level =
+          (paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            ? paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            : 0) /
+            18 +
+          2;
+
+        tagContent.push({
+          type: 'header',
+          id: headingId.replace(/h./, ''),
+          data: {
+            level: level > 4 ? 4 : level,
+            text: content,
+          },
+        });
       }
     } else {
       // trying to isolate the quote elements
-      if (paragraph?.elements && isQuote(paragraph.elements[0])) {
-        let quoteElements: any[] = [];
-        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, quoteElements, el))
+      if (elements && isQuote(elements[0])) {
+        const quoteElements: any[] = [];
+        elements?.forEach((element) =>
+          parseParagraphElement(document, tag, quoteElements, element)
+        );
+
         tagContent.push({
           type: 'quote',
           data: {
-            text: quoteElements
-              .map((el) => el[tag])
-              .filter((el) => el.length > 0)
-              .join(' ')
-              .replace(' .', '.')
-              .replace(' ,', ',').slice(2),
+            text: trimJoinArray(
+              quoteElements
+                .map((element) => element[tag])
+                .filter((element) => Boolean(element.length))
+            ).slice(2),
             caption: '',
             alignment: 'left',
           },
-        })
+        });
       } else {
-        paragraph?.elements?.forEach((el) => parseParagraphElement(document, tag, tagContent, el))
+        elements?.forEach((element) => parseParagraphElement(document, tag, tagContent, element));
       }
     }
 
-    if (tagContent.every((el) => el[tag] !== undefined)) {
+    if (tagContent.every((element) => (element as any)[tag] !== undefined)) {
       if (tag !== 'p' && tag !== 'blockquote') {
-        content.push({
+        contents.push({
           type: 'header',
           id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
           data: {
             level: Number(tag.replace('h', '')),
-            text: tagContent
-              .map((el) => el[tag])
-              .join(' ')
-              .replace(' .', '.')
-              .replace(' ,', ','),
+            text: trimJoinArray(tagContent.map((element) => (element as any)[tag]) as string[]),
           },
         });
       } else if (tag == 'p') {
-        content.push({
+        contents.push({
           type: 'paragraph',
           data: {
-            text: tagContent
-              .map((el) => el[tag])
-              .join(' ')
-              .replace(' .', '.')
-              .replace(' ,', ',')
+            text: trimJoinArray(tagContent.map((element) => (element as any)[tag]) as string[]),
           },
         });
       } else {
-        content.push({
+        contents.push({
           type: 'quote',
           data: {
-            text: tagContent
-              .map((el) => el[tag])
-              .filter((el) => el.length > 0)
-              .join(' ')
-              .replace(' .', '.')
-              .replace(' ,', ','),
+            text: trimJoinArray(
+              tagContent
+                .map((element) => (element as any)[tag])
+                .filter((element) => element.length > 0) as string[]
+            ),
             caption: '',
             alignment: 'left',
           },
         });
       }
     } else {
-      content.push(...tagContent);
+      contents.push(...tagContent);
     }
   }
-}
-
-function parseParagraphElement(
-  document: Schema$Document,
-  tag: string,
-  parentContent: any[],
-  el: Schema$ParagraphElement) {
-  if (el.inlineObjectElement) {
-    const image = getImage(document, el);
-
-    if (image) {
-      parentContent.push({
-        type: 'image',
-        data: {
-          file: {
-            url: image.source,
-          },
-          caption: image.alt,
-        },
-      });
-    }
-  } else if (
-    el.richLink &&
-    el.richLink?.richLinkProperties &&
-    videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
-  ) {
-    // support for each link
-    parentContent.push(getRichLink(el));
-  }
-  // Headings, Texts
-  else if (
-    el.textRun &&
-    el.textRun.content !== '\n' &&
-    (el.textRun.content as string).trim().length > 0
-  ) {
-    parentContent.push({
-      [tag]: getText(el, {
-        isHeader: tag !== 'p',
-      }),
-    });
-  }
-  return parentContent
-}
+};

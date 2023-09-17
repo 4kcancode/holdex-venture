@@ -6,7 +6,14 @@
   import { onMount } from 'svelte';
 
   /** internal deps */
-  import { socialIcons, Bars3, XMark, ExclamationTriangle, CheckCircle, ChatBubbleBottomCenter } from '$components/Icons';
+  import {
+    socialIcons,
+    Bars3,
+    XMark,
+    ExclamationTriangle,
+    CheckCircle,
+    ChatBubbleBottomCenter,
+  } from '$components/Icons';
   import Icon from '$components/Icons/index.svelte';
   import SVGIcon from '$components/Icons/SVGIcon.svelte';
   import { regExp } from '$components/BodyParser/utils';
@@ -21,7 +28,6 @@
   let name = '';
   let isError = false;
   let success = false;
-  let scrollY: any;
   let isBurgerDropdownShown = false;
   let theme = globalThis.localStorage?.getItem('theme') as 'dark' | 'light' | undefined | null;
   let themeIconName: SVGIconName = theme
@@ -39,45 +45,7 @@
   };
 
   let lastScrollTop = 0;
-  let secondaryNavScrollLeft = 0
-  let status = true
-  let isLeftEnd = true
-  let isRightEnd = false
-
-  onMount(() => {
-    window.addEventListener("scroll", () => {
-      const st = window.scrollY || document.documentElement.scrollTop;
-      if (st > lastScrollTop) {
-          status = false
-      } else if (st < lastScrollTop) {
-          status = true
-      }
-
-      lastScrollTop = st <= 0 ? 0 : st;
-    }, false);
-  });
-
-  const scrollAction = (node: HTMLElement) => {
-    const hasReachedRightEnd = () => {
-      const navbarSecionElement = document.getElementById("secondary-navbar-section");
-
-      if (!node || !navbarSecionElement) {
-        return 
-      }
-
-      secondaryNavScrollLeft = node?.scrollLeft;
-      isLeftEnd = secondaryNavScrollLeft === 0
-      isRightEnd = secondaryNavScrollLeft + node.clientWidth === navbarSecionElement.clientWidth ? true : false
-    }
-
-    node.addEventListener("scroll", hasReachedRightEnd, false)
-
-    return {
-      destory() {
-        node.removeEventListener("scroll", hasReachedRightEnd)
-      }
-    }
-  }
+  let secondaryNavScrollLeft = 0;
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
     if (deepEqual) {
@@ -155,8 +123,6 @@
 
 <template lang="pug" src="./layout.pug">
 </template>
-
-<svelte:window bind:scrollY />
 
 <svelte:head>
   <style lang="scss" src="./layout.scss"></style>

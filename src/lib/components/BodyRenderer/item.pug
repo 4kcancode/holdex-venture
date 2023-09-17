@@ -14,9 +14,13 @@
             +each("item.items as hItem")
               InlineBlock(item="{hItem}")
     Case(value="paragraph")
-      svelte:element(this="p" class="p-el text-paragraph-l text-t2")
-        +each("item.items as pItem")
-          InlineBlock(item="{pItem}")
+      +if('isTableCell')
+        +each('item.items as cell')
+          InlineBlock(item="{cell}" isTableCell)
+        +else
+          svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+            +each("item.items as pItem")
+              InlineBlock(item="{pItem}")
     Case(value="list")
       svelte:element(
         class="{item.style === 'unordered' ? 'list-disc' : 'list-decimal'} pl-7"
@@ -38,7 +42,7 @@
     Case(value="quote")
       blockquote(
         title="{item.text}"
-        class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2"
+        class="relative bg-l1 overflow-clip rounded-xl border border-solid border-l4 p-4 pl-5.5 text-paragraph-s text-t1 before:absolute before:content-[''] before:w-1.5 before:h-full before:left-0 before:top-0 before:bg-accent1-default dark:bg-l2 w-full"
       )
         +each("item.items as QItem")
           InlineBlock(item="{QItem}") 
@@ -60,8 +64,5 @@
       TallyButton(item="{item}")
     Case(value="chart")
       Chart(item="{item}")
-  +elseif("isTableCell")
-    +each('parseTableCell(item) as cell')
-      InlineBlock(item="{cell}")
   +else
     TextWrapper(text="{item}")
