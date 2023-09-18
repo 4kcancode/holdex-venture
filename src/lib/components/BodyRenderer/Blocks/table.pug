@@ -32,20 +32,20 @@ mixin table-cell
       Item(item="{cellContents}" isTableCell)
 
 mixin table-scroll-shades
-  .div(class=" w-full flex absolute h-full")
-    .div(class="right-shade-spacer")
+  .div(class="w-full flex absolute h-full")
+    .div(class="w-[200px]" use:scrollAction)
     .div(
-      class="h-full w-24 {isLeftEnd ? 'hidden' : 'border-l4 border-l bg-gradient-to-r to-transparent from-l1'} z-40"
+      class="h-full w-24 border-l4 border-l {isLeftEnd ? 'hidden' : 'bg-gradient-to-r to-transparent from-l1'} z-40"
       use:scrollAction
     )
     .div(
-      class="h-full rounded-xl border-r border-l4 right-0 w-24 absolute {isRightEnd ? 'bg-gradient-to-l to-transparent from-l1':'hidden' } z-40"
+      class="h-full w-24 rounded-xl border-r border-l4 right-0 absolute {isRightEnd ? 'hidden': 'bg-gradient-to-l to-transparent from-l1' }  z-40"
       use:scrollAction
     )
 
 +table-scroll-shades
-.relative.overflow-auto(use:scrollAction class="rounded-xl" id="table-parent")
-  table(class="border-separate border-spacing-0" id="table-scroll")
+.relative.overflow-auto(use:scrollAction class="rounded-xl scrollbar-hide" id="table-parent")
+  table(class="w-full border-separate border-spacing-0" id="table-scroll")
     tbody
       +each('cells as row, rowIndex')
         tr
