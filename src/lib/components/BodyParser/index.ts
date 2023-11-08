@@ -53,7 +53,7 @@ class Parser {
       parsedBody,
       tocs: tocs?.data,
       subtitle,
-      cover,
+      cover
     };
   }
 
@@ -142,16 +142,8 @@ class Parser {
   }
 
   private static parseThreadCover(blocks: any[]): string | undefined {
-    const block = blocks.find((b) => b.type === 'image' || b.type === 'embed');
-    if (block) {
-      if (block.type === 'image') {
-        return block.src;
-      }
-
-      if (block.type === 'embed') {
-        return getVideoCover(block.source);
-      }
-    }
+    const found = blocks.find(b => b.type === "cover");
+    if (found) return found.data.text;
     return undefined;
   }
 }

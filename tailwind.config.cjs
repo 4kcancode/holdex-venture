@@ -135,6 +135,13 @@ module.exports = {
           fontWeight: '500',
         },
       ],
+      'subtitle-xl': [
+        '24px',
+        {
+          lineHeight: '32px',
+          fontWeight: '500',
+        },
+      ],
       'subtitle-s': [
         '18px',
         {

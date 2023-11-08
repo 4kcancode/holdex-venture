@@ -36,6 +36,13 @@ type ImageBlock = {
   };
 };
 
+type CoverBlock = {
+  type: string;
+  data: {
+    text: string
+  }
+}
+
 type ListBlock = {
   type: 'list';
   data: {
@@ -417,6 +424,15 @@ const parseImage = (block: ImageBlock) => {
   };
 };
 
+const parseCoverBlock = (block: CoverBlock) => {
+  return {
+    type: 'cover',
+    data: {
+      text: getOptimizedUrl(block.data.text, '_1500x1500')
+    }
+  }
+}
+
 const parseTable = (block: TableBlock) => {
   if (typeof block.data.content[0][0] === 'string') {
     return {
@@ -493,6 +509,7 @@ const htmlParser = HTMLParser({
   quote: parseQuote,
   image: parseImage,
   list: parseList,
+  cover: parseCoverBlock,
   nestedList: parseNestedList,
   paragraph: parseParagraph,
   table: parseTable,
