@@ -443,7 +443,13 @@ const parseTable = (block: TableBlock) => {
   const tableContent: TableRowOfElements = [];
   (block.data.content as TableRowOfElements).forEach((row) => {
     const rowContent: any = [];
-    row.forEach((cell) => rowContent.push(parseBlocks(cell)));
+    row.forEach((cell) => {
+      if (Array.isArray(cell)) {
+        rowContent.push(parseBlocks(cell));
+      } else {
+        rowContent.push(parseBlocks([cell]));
+      }
+    })
     tableContent.push(rowContent);
   });
 
