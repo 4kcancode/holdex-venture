@@ -46,10 +46,6 @@
       "destination": "/"
     },
     {
-      "source": "/(.*)/pickle-finance",
-      "destination": "/c/learn/understanding-pickle-a-beginners-guide-and-review"
-    },
-    {
       "source": "/(.*)/decentraland",
       "destination": "/c/learn/understanding-decentraland-a-beginners-guide-and-review"
     },
