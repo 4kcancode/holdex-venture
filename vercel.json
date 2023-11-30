@@ -82,7 +82,7 @@
       "destination": "/portfolio"
     },
     {
-      "source": "/(.*)/(gdax|smart-contracts|crypto-exchange-development-services|how-to-launch-a-crypto-exchange-like-wazirx|how-to-create-your-own-crypto-exchange-clone-script|bzx-dai-itoken)",
+      "source": "/(.*)/(gdax|smart-contracts|crypto-exchange-development-services|how-to-launch-a-crypto-exchange-like-wazirx|how-to-create-your-own-crypto-exchange-clone-script|bzx-dai-itoken|cryptocurrency-exchange-script|pass-token-gets-its-own-home-on-the-web|clearpool-testnet-is-live|liquidity-mining-of-blockpass-pass-token|airswap-vs-other-swaps-whats-the-difference|claim-your-community-the-winners|community-articles-about-swrv-pickle-and-cream|community-articles-about-sushi-key-and-bal|community-articles-about-yfi-crv-and-mkr|community-articles-about-bns-bf-and-neal|community-articles-about-fox-cel-and-qkc|community-articles-about-dot-ada-and-zen|community-articles-about-wxt-omg-and-atom|community-articles-about-oxt-xtz-and-dfn|community-articles-about-knc-aln-and-mana|ask-questions-and-release-announcements|can-anyone-propose-a-new-token-project-or-do-moderators-only-approve-token-listings-from-the-owners|what-feature-would-you-like-to-see-next-on-holdex|user-profiles-and-automatic-draft-approvals|edit-listing-info-and-embeddable-kudos-badge|leaders-and-top-projects|crypto-olympics-thousands-of-xr-tokens-at-play|threads-with-markdown-write-in-style|holdex-partners-batch-i)",
       "destination": "/"
     },
     {
