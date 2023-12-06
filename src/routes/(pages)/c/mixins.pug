@@ -91,3 +91,12 @@ mixin feedRenderer
         p(class="text-paragraph-l text-t1 w-full text-center font-bold") #[span(class="text-t3 font-medium") No articles found for] {pageQ || '#' + pageFilter}.
     +else
       block
+
+mixin companyLogoStrip(logos)
+  if logos !== undefined
+    .company-logo-strip(
+      class="flex flex-wrap justify-center gap-x-8 gap-4 py-1 smDown:gap-x-6 smDown:justify-start align-middle"
+    )
+      each logo in logos
+        img(class="company-logo dark:hidden h-6 mobile:h-4" src=logo.lightPath alt=logo.name)
+        img(class="company-logo hidden dark:block h-6 mobile:h-4" src=logo.darkPath alt=logo.name)
