@@ -16,7 +16,7 @@
   export let totalLoansOriginated: number;
   export let totalValueLocked: number;
   export let founders: string;
-  export let investors: string;
+  export let investors: string[];
   export let totalFunding: number;
   export let fullyDilutedMarketCap: number;
   let className = '';
