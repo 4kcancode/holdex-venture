@@ -67,8 +67,6 @@ mixin metric(type, value)
   +if('JSON.parse(hashtags) && JSON.parse(hashtags).length > 0')
     ul.relative.flex.items-start.gap-2.flex-wrap.w-full.list-none
       +each('JSON.parse(hashtags) as tag, index')
-        +if('index !== 0')
-          li.text-paragraph-l(class="text-t3/50") &bull;
         li.underline.underline-offset-4.text-accent1-default.text-inter.h-8.text-paragraph-l(
           class="bg-accent1-default/15"
         )
