@@ -1,3 +1,9 @@
+mixin content-wrapper-portfolio
+  .content-wrapper(
+    class="flex flex-col gap-8 items-center justify-center mb-8 smDown:justify-start smDown:items-start max-w-[1028px] tb:max-w-[794px] smDown:max-w-[604px] xs:px-4 w-full"
+  )&attributes(attributes)
+    block
+
 mixin crumbItemLink(href, name)
   li: a(
     class="text-paragraph-l xs:text-paragraph-s text-t3 transition-colors hover:text-accent1-default"
@@ -76,7 +82,7 @@ mixin messageHeader(title, subtitle, cover=null)
       class="w-full h-auto object-contain box-border border border-solid border-l4 rounded-xl"
     )
   if subtitle
-    p(class="text-subtitle-xl text-t2 text-center smDown:text-left xs:text-subtitle-s  w-full")= subtitle
+    p(class="text-subtitle-xl text-t2 text-center smDown:text-left xs:text-subtitle-s w-full")= subtitle
 
 mixin feedRenderer
   +if('isSearchMode')
@@ -100,3 +106,11 @@ mixin companyLogoStrip(logos)
       each logo in logos
         img(class="company-logo dark:hidden h-6 mobile:h-4" src=logo.lightPath alt=logo.name)
         img(class="company-logo hidden dark:block h-6 mobile:h-4" src=logo.darkPath alt=logo.name)
+
+mixin subheadingText(text)
+  .subheadingWrapper(class="py-4")
+    h2(class="w-full text-h2-l xs:text-h2-s font-satoshi text-center smDown:text-left")= text
+
+mixin portfolio-product-wrapper
+  .portfolio-product-wrapper(class="w-full grid grid-cols-2 smDown:grid-cols-1 gap-8 smDown:gap-4")&attributes(attributes)
+    block

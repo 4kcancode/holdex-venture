@@ -17,8 +17,9 @@
   import MetaTags from '$components/MetaTags/index.svelte';
   import Icon from '$components/Icons/index.svelte';
 
-  import DefaultFeedItem from '$components/Feed/Item/index.svelte';
-  import Feed from '$components/Feed/index.svelte';
+  // import DefaultFeedItem from '$components/Feed/Item/index.svelte';
+  // import Feed from '$components/Feed/index.svelte';
+  import PortfolioItem from '$components/Portfolio/index.svelte';
 
   import { timeFormat, extendedTimeFormat } from '$components/DateManager';
   import { formatNumber } from '$components/NumbersManager';
