@@ -48,7 +48,9 @@
           InlineBlock(item="{QItem}") 
     Case(value="embed")
       +if("item.service !== 'twitter'")
-        Embed(item="{item}")
+        +if("item.service === 'gist'")
+          EmbedGist(item="{item}")
+          +else Embed(item="{item}")
         +else
           svelte:element(this="p" class="p-el text-paragraph-l text-t2")
             InlineBlock(item="{{type: 'link', href: item.source}}")
