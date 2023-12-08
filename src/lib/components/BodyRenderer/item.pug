@@ -47,13 +47,13 @@
         +each("item.items as QItem")
           InlineBlock(item="{QItem}") 
     Case(value="embed")
-      +if("item.service !== 'twitter'")
-        +if("item.service === 'gist'")
-          EmbedGist(item="{item}")
-          +else Embed(item="{item}")
-        +else
+      +if("item.service === 'gist'")
+        EmbedGist(item="{item}")
+        +elseif("item.service === 'twitter'")
           svelte:element(this="p" class="p-el text-paragraph-l text-t2")
             InlineBlock(item="{{type: 'link', href: item.source}}")
+        +else
+          Embed(item="{item}")
     Case(value="code")
       pre(class="bg-l2 border border-solid border-l4 rounded-xl py-4 px-6 w-full overflow-auto")
         code(class="text-code font-mono")
