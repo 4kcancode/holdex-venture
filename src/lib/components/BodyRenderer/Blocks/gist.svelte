@@ -9,10 +9,8 @@
   };
   export let item: Item;
 
-  export let src = '';
   export let title = '';
-  src = src.slice(src.length - 3) === '.js' ? src : src + '.js';
-  title = title === '' ? src : title;
+  title = 'Gist';
 
   let frame: any;
   let height = '30px';
@@ -24,9 +22,6 @@
 
       if (localStorage.getItem('theme') === 'dark') {
         new_style_element.textContent =
-          'body { margin: 0; }' +
-          'body::-webkit-scrollbar { width: 4px; }' +
-          'body::-webkit-scrollbar-thumb { background-color: white; }' +
           '.gist .gist-file { border: 1px solid #2F323D; }' +
           '.gist .gist-data { background-color: #1C1F29 !important; border-bottom: 1px solid #2F323D; }' +
           '.gist .gist-meta { background-color: #252933; color: #D7DAE0; }' +
@@ -83,6 +78,7 @@
       position: relative;
       width: 99.8%;
       left: 0;
+      align-self: stretch;
     }
   }
 </style>

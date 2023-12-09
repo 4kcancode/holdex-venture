@@ -18,7 +18,7 @@
         +each('item.items as cell')
           InlineBlock(item="{cell}" isTableCell)
         +else
-          svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+          svelte:element(this="p" class="w-full break-words p-el text-paragraph-l text-t2")
             +each("item.items as pItem")
               InlineBlock(item="{pItem}")
     Case(value="list")
