@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   type Item = {
     type: string;
     service: string;
@@ -12,7 +13,7 @@
   export let title = '';
   src = src.slice(src.length - 3) === '.js' ? src : src + '.js';
   title = title === '' ? src : title;
-  import { onMount } from 'svelte';
+
   let frame: any;
   let height = '30px';
   const barGistHeight = 30;
