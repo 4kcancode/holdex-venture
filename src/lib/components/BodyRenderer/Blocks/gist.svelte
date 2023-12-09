@@ -32,6 +32,7 @@
           '.gist .gist-meta { background-color: #252933; color: #D7DAE0; }' +
           '.gist .gist-meta a { color: #D7DAE0 }' +
           '.gist .blob-num { background: #1C1F29; }' +
+          '.gist .blob-num:hover { color: #D7DAE0; }' +
           '.gist .highlight { background: #1C1F29; }' +
           '.gist .blob-code-inner { color: #FFF }' +
           '.gist .pl-en { color: #fff; }' +
@@ -60,25 +61,27 @@
 </script>
 
 <iframe
+  class="gist"
   src="about:blank"
   bind:this={frame}
   {title}
   {height}
   scrolling="no"
   on:load={getInnerHeight}
+  loading="eager"
 />
 
 <style>
-  iframe {
+  iframe.gist {
     position: relative;
     border: 0;
     width: 710px;
     left: -53px;
   }
   @media screen and (min-width: 320px) and (max-width: 767px) {
-    iframe {
+    iframe.gist {
       position: relative;
-      width: 100%;
+      width: 99.8%;
       left: 0;
     }
   }
