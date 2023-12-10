@@ -17,7 +17,7 @@ export type Parsed$Paragraph = {
     id?: string;
     caption?: string;
     alignment?: 'left' | 'right';
-    service?: 'twitter' | 'tally' | string;
+    service?: 'twitter' | 'tally' | 'gist' | string;
     url?: string;
     source?: string;
     embed?: string;
