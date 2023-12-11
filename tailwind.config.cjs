@@ -333,13 +333,18 @@ module.exports = {
         'button-hover':
           '0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
         'button-active':
-          '0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+          '0px 0px 0px 2px rgba(0, 204, 255, 0.20), 0px 4px 12px rgba(0, 0, 0, var(--shadow-active-ring-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+        'button-active-light':
+          '0px 0px 0px 2px rgba(46, 131, 229, 0.20), inset 0px 2px 0px rgba(255, 255, 255, 0.24)',
+        'button-disabled': '0px 4px 8px 0px rgba(0, 0, 0, 0.16)',
         'secondary-button':
-          '0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 0px 8px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+          '0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 8px 0px rgba(0, 0, 0, var(--shadow-input-alpha)), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
         'secondary-button-hover':
           '0px 0px 0px 2px rgba(0, 0, 0, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
         'secondary-button-active':
           '0px 0px 0px 2px rgba(0, 204, 255, var(--shadow-button-ring-alpha)), 0px 4px 12px rgba(0, 0, 0, 0.24), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
+        'secondary-button-active-light':
+          '0px 0px 0px 2px rgba(46, 131, 229, 0.20), inset 0px 2px 0px rgba(255, 255, 255, 0.04)',
       },
       minHeight: {
         32: '8rem',
