@@ -19,6 +19,15 @@
 
   export let item: Item;
 
+  function trimText(text: string) {
+    if (text.endsWith('( ')) {
+      text = text.trim();
+    }
+    if (text.startsWith(' )')) {
+      text = text.trim();
+    }
+    return text;
+  }
   export let parentWrapper: string | undefined = undefined;
   setContext('wrapper', parentWrapper);
 </script>
