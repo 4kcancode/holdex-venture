@@ -66,5 +66,7 @@
       TallyButton(item="{item}")
     Case(value="chart")
       Chart(item="{item}")
+    Case(value="cta")
+      CTA(item="{item.data}")
   +else
     TextWrapper(text="{item}")

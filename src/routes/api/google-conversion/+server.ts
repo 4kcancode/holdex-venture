@@ -16,7 +16,7 @@ import type {
   Schema$TextStyle,
 } from '$lib/types/googleDoc';
 import type { RequestHandler } from './$types';
-import type { Author } from '$components/BodyParser/blocks';
+import type { Author, CTAElement } from '$components/BodyParser/blocks';
 import type { Parsed$Paragraph, Parsed$ParagraphElement } from '$lib/types/googleConversion';
 import { trimJoinArray } from '$lib/utils';
 
@@ -92,12 +92,19 @@ function convertToHoldexJson(document: Schema$Document) {
           tableContent.push(trowContent);
         });
 
-        newContent.push({
-          type: 'table',
-          data: {
-            content: tableContent,
-          },
-        });
+        const cta: CTAElement = parseCTASection(tableContent);
+        if (cta == ({} as CTAElement))
+          newContent.push({
+            type: 'table',
+            data: {
+              content: tableContent,
+            },
+          });
+        else
+          newContent.push({
+            type: 'cta',
+            data: cta,
+          });
       }
       // Table Of Contents
       else if (tableOfContents) {
@@ -121,6 +128,41 @@ function convertToHoldexJson(document: Schema$Document) {
   }
 
   return newContent;
+}
+
+function parseCTASection(content: any[]) {
+  const cta: CTAElement = {} as CTAElement;
+  if (content.length === 7 && (content[0] as any[]).length === 2) {
+    const contentHead = content[0];
+    if (
+      contentHead[0][0].type === 'paragraph' &&
+      contentHead[0][0].data.text === 'type' &&
+      contentHead[1][0].type === 'paragraph' &&
+      contentHead[1][0].data.text === 'cta'
+    ) {
+      const data: any = {};
+      content.forEach(([[first], [second]], i) => {
+        if (first === undefined || first.type !== 'paragraph') return;
+        if (second === undefined || second.type !== 'paragraph') data[first.data.text] = '';
+        else data[first.data.text] = second.data.text;
+      });
+      cta.title = data['title'];
+      cta.description = data['description'];
+      if (data['button1_title'] === undefined || data['button1_title'] === '') cta.link1 = null;
+      else
+        cta.link1 = {
+          text: data['button1_title'],
+          url: data['button1_url'],
+        };
+      if (data['button2_title'] === undefined || data['button2_title'] === '') cta.link2 = null;
+      else
+        cta.link2 = {
+          text: data['button2_title'],
+          url: data['button2_url'],
+        };
+    }
+  }
+  return cta;
 }
 
 function getHeaderRowAuthor(content: Schema$ParagraphElement) {
