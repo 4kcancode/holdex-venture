@@ -1,6 +1,6 @@
 # Welcome to Holdex
 
-> Before you begin, please get acquainted with our [contribution guidelines](CONTRIBUTING.md).
+> Before you begin align yourself with [contributing guidelines](https://github.com/holdex/developers/blob/main/.github/CONTRIBUTING.md).
 
 ## Developing
 
