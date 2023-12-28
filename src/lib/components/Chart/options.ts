@@ -254,6 +254,7 @@ const generateOptions = (data: any[] | null, isMock: boolean): ApexOptions => {
         return `
                     <span class="text-footnote mb-1 block">${timeFormat(
                       time,
+                      /// todo: correct here
                       'DD-MMM-YYYY, HH:mm'
                     )}</span>
                     <span class="text-footnote text-t3">
