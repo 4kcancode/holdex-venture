@@ -60,7 +60,7 @@ mixin legend-item(label, value)
   .chart-legend-item.relative.flex.flex-col.items-start.w-full(class="p-2.75")&attributes(attributes)
     if label === 'FDM'
       /// todo: correct the tooltip..
-      span.inline-block
+      span.flex.items-center.gap-1
         span.text-footnote.text-t3.block= label
         +information-circle
     else

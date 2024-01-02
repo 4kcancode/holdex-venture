@@ -1,0 +1,38 @@
+.tooltip
+    padding: calc(#{theme('spacing.6')} - 1px)
+    @apply block z-10 text-p2 text-gray-5 rounded-base-radius normal-case min-w-[250px] max-w-[346px] w-fit
+
+    &-arrow
+        position: absolute
+        height: 9px
+        width: 12px
+        @apply text-gray-70 stroke-gray-40
+
+        svg
+            position: relative
+            display: block
+            transform-origin: 50% 50%
+
+    &[data-placement^='top'] > &-arrow
+        bottom: -9px
+
+        svg
+            transform: rotate(0deg)
+
+    &[data-placement^='bottom'] > &-arrow
+        top: -9px
+
+        svg
+            transform: rotate(180deg)
+
+    &[data-placement^='left'] > &-arrow
+        right: -10.5px
+
+        svg
+            transform: rotate(-90deg)
+
+    &[data-placement^='right'] > &-arrow
+        left: -10.5px
+
+        svg
+            transform: rotate(90deg)
