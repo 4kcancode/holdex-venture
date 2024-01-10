@@ -1,13 +1,3 @@
-<script>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-nocheck
-  import { Meta, Template, Story } from '@storybook/addon-svelte-csf';
-
-  import Context from '../../../stories/Context.svelte';
-  import Tooltip from './index.svelte';
-  import Button from '../Button/index.svelte';
-</script>
-
 <Meta
   title="Example/Tooltip"
   component={Tooltip}
