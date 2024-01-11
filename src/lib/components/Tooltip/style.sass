@@ -1,6 +1,6 @@
 .tooltip
-    padding: calc(#{theme('spacing.6')} - 1px)
-    @apply block z-10 text-p2 text-gray-5 rounded-base-radius normal-case min-w-[250px] max-w-[346px] w-fit
+    padding: 8px
+    @apply block z-10 text-p2 text-gray-5 bg-accent1-default boxShadow-tag rounded-xl normal-case w-fit max-w-[376px]
 
     &-arrow
         position: absolute
@@ -12,14 +12,6 @@
             position: relative
             display: block
             transform-origin: 50% 50%
-    
-    &-circle
-        width: 13px
-        height: 13px
-        top: 1.5px
-        left: 1.5px
-        border-radius: 50%
-        @apply text-gray-70 stroke-gray-40
 
     &[data-placement^='top'] > &-arrow
         bottom: -9px
@@ -44,5 +36,3 @@
 
         svg
             transform: rotate(90deg)
-
-    &[data-placement^='circle'] > &-circle
