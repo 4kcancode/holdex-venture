@@ -68,5 +68,7 @@
       Chart(item="{item}")
     Case(value="cta")
       CTA(item="{item.data}")
+    Case(value="testimonial")
+      Testimonial(item="{item.data}")
   +else
     TextWrapper(text="{item}")

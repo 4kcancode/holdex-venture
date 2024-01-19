@@ -12,6 +12,7 @@
   import Chart from './Blocks/chart.svelte';
   import Table from './Blocks/table.svelte';
   import CTA from './Blocks/cta.svelte';
+  import Testimonial from './Blocks/testimonial.svelte';
   import { parseTableCell } from '../BodyParser/blocks';
 
   export let item: any;

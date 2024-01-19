@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore 
+// @ts-ignore
 import HTMLParser from 'editorjs-html';
 import { bindTokens } from './tokens';
 import { escape, unescape } from './escaper';
@@ -116,6 +116,11 @@ type CTA = {
   data: CTAElement;
 };
 
+type Testimonial = {
+  type: string;
+  data: TestimonialElement;
+};
+
 export type Author = {
   name: string;
   url: string;
@@ -124,11 +129,18 @@ export type Author = {
 export type CTAElement = {
   title: string;
   description: string;
-  link1: null | CTALink;
-  link2: null | CTALink;
+  link1: null | Link;
+  link2: null | Link;
 };
 
-type CTALink = {
+export type TestimonialElement = {
+  picture: null | Link;
+  name: string;
+  title: string;
+  content: string;
+};
+
+type Link = {
   url: string;
   text: string;
 };
@@ -552,6 +564,12 @@ const parseCTA = (block: CTA) => {
     data: block.data,
   };
 };
+const parseTestimonial = (block: Testimonial) => {
+  return {
+    type: 'testimonial',
+    data: block.data,
+  };
+};
 
 const htmlParser = HTMLParser({
   header: parseHeading,
@@ -571,6 +589,7 @@ const htmlParser = HTMLParser({
   author: parseAuthor,
   toc: parseToc,
   cta: parseCTA,
+  testimonial: parseTestimonial,
 });
 
 const parseBlocks = (blocks: any[]) => htmlParser.parse({ blocks });
