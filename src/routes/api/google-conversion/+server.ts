@@ -199,8 +199,8 @@ function parseTestimonialSection(content: any[]) {
       testimonial.title = data['title'];
       testimonial.content = data['content'];
       testimonial.picture = {
-        text: data['picture_title'],
-        url: data['picture_url'],
+        text: data['name'],
+        url: data['picture'],
       };
     }
   }
