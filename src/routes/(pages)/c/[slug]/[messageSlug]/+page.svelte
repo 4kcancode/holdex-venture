@@ -67,11 +67,11 @@
 </script>
 
 <MetaTags
-  title={message.title}
+  title="{message.title}{community.slug === 'jobs' ? ' - Job | Holdex' : ''}"
   description={message.subtitle ? message.subtitle : ''}
   pageType="article"
   path={routes.message(message.communitySlug, message.messageSlug)}
-  imageUrl={message.cover ? message.cover : '/default-cover.png'}
+  imagePath={message.cover ? message.cover : '/default-cover.png'}
 />
 
 <template lang="pug" src="./template.pug">
