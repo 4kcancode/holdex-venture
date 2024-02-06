@@ -28,6 +28,9 @@ mixin main-nav
     +link("{routes.forStartups}", "For Startups")(
       class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}"
     )
+    +link("{routes.guides}", "Guides")(
+      class!="{isActive(path, routes.guides, true) ? 'before:!bg-accent1-default' : ''}"
+    )
     +link("{routes.jobs}", "Jobs")(
       class!="{isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : ''}"
     )
