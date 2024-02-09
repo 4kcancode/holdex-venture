@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     # Job steps
     steps:
-      - name: Lint Pull Requests name
+      - name: Check Pull request cost
         id: check_pr_cost
         run: echo "cost=$COST" >> "$GITHUB_OUTPUT"
         env:
@@ -25,7 +25,7 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         # When the previous steps fails, the workflow would stop. By adding this
         # condition you can continue the execution with the populated error message.
-        if: always() && (steps.check_pr_cost.outputs.cost.length == 0)
+        if: ${{ steps.check_pr_cost.outputs.cost == '' }}
         with:
           header: pr-cost-error
           message: |
@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       # Delete a previous comment when the issue has been resolved
-      - if: ${{ steps.check_pr_cost.outputs.cost.length > 0 }}
+      - if: ${{ steps.check_pr_cost.outputs.cost != '' }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: pr-cost-error
@@ -48,5 +48,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           COST: ${{ inputs.cost }}
-          
-
