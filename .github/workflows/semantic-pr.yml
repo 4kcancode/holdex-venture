@@ -8,6 +8,9 @@ on:
       - labeled
       - unlabeled
       - synchronize
+  workflow_run:
+    workflows: [Pull request cost check]
+    types: [completed]
 
 permissions:
   pull-requests: write
@@ -58,3 +61,9 @@ jobs:
           delete: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: exit 1
