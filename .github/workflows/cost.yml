@@ -9,7 +9,7 @@ on:
       pr_number:
         description: 'Pull request number'
         required: true
-        type: number
+        type: string
 permissions:
   pull-requests: write
   contents: read
