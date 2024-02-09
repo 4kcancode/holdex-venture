@@ -32,7 +32,7 @@ jobs:
         if: ${{ steps.check_pr_cost.outputs.cost == '' }}
         with:
           header: pr-cost-error
-          number: $PR_NUMBER
+          number: ${{ inputs.pr_number }}
           message: |
             Hey there! 👋🏼
 
@@ -41,18 +41,16 @@ jobs:
             URL: https://invoice.holdex.io/prs
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          PR_NUMBER: ${{ inputs.pr_number }}
 
       # Delete a previous comment when the issue has been resolved
       - if: ${{ steps.check_pr_cost.outputs.cost != '' }}
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: pr-cost-error
-          number: $PR_NUMBER
+          number: ${{ inputs.pr_number }}
           recreate: true
           message: |
             Pull request cost submitted: $COST hours.
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           COST: ${{ inputs.cost }}
-          PR_NUMBER: ${{ inputs.pr_number }}
