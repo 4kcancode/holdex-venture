@@ -2,20 +2,20 @@ include ../common-mixins
 include ../c/mixins
 
 +main-section
-    +header-wrapper()(class="flex-col gap-8 xs:gap-4")
-        +nav-crumbs
-            +crumbItemLink("/", "Home")
-            +crumbDelimiter
-            +crumbItemText("Apply")
-        +messageHeader("Apply", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
-    +content-wrapper
-        .form-block(class="flex w-full h-[500px]")
-            iframe(
-                src="https://apply.holdex.io/acceleration?hideTitle=1"
-                width="100%"
-                height="100%"
-                frameborder="0"
-                marginheight="0"
-                marginwidth="0"
-                title="Holdex Acceleration" 
-            )
+  +header-wrapper.flex-col.gap-8(class="xs:gap-4")
+    +nav-crumbs
+      +crumbItemLink("/", "Home")
+      +crumbDelimiter
+      +crumbItemText("Apply")
+    +messageHeader("Apply", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
+  +content-wrapper
+    .form-block.flex.w-full(class="h-[500px]")
+      iframe(
+        src="https://apply.holdex.io/acceleration?hideTitle=1"
+        width="100%"
+        height="100%"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        title="Holdex Acceleration"
+      )

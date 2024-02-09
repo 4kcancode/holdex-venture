@@ -1,6 +1,6 @@
 # Welcome to Holdex
 
-Lean more about our DNA [here](https://holdex.io/about).
+> Before you begin align yourself with [contributing guidelines](https://github.com/holdex/developers/blob/main/.github/CONTRIBUTING.md).
 
 ## Developing
 
@@ -12,15 +12,26 @@ npm run dev
 npm run dev -- --open
 ```
 
-NOTE: Check if you link the repository with the Vercel project.
-Run `npx vercel link` to `link holdex-accelerator/holdex-venture-studio` on Vercel, make sure [Vercel](https://vercel.com/holdex-accelerator/holdex-venture-studio) have invited and, you have accepted the invite
-
-![image](https://github.com/holdex/holdex-venture-studio/assets/63777677/5f9f8ebe-0e53-4964-95ff-a814667f267b)
-
 ## Building
 
 To create a production version of your app:
 
 ```bash
 npm run build
+```
+
+## Environment Options
+
+Our localhost runs the stage environment by default. You can switch it to run the production environment as you test things out and then switch back to staging.
+
+You can do this in the `.env` file by setting the value to true:
+
+```bash
+PUB_USE_PRODUCTION_API=true;
+```
+
+and use the
+
+```bash
+npm run clean-dev
 ```

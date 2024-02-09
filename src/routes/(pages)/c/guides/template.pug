@@ -1,0 +1,24 @@
+include ../../common-mixins
+include ../../c/mixins
+
++if('storeData')
+  +main-section
+    +header-wrapper(class="flex-col gap-8 xs:gap-4")
+      +nav-crumbs
+        +crumbItemLink("/", "Home")
+        +crumbDelimiter
+        +crumbItemLink("/c", "Studio")
+        +crumbDelimiter
+        +crumbItemText("Guides")
+      +messageHeader("Guides", "Crypto made clear with beginner-friendly guides and insights.")()
+
+    +content-wrapper
+      +feedRenderer
+        Feed(
+          feedType="resource"
+          edges="{edges}"
+          totalCount="{totalCount}"
+          isRefetching="{isRefetching}"
+          pageInfo="{pageInfo}"
+          loadMore="{loadMore}"
+        )

@@ -4,7 +4,6 @@ about: An obstacle that blocks us from achieving a goal
 title: 'Problem: '
 labels: ''
 assignees: ''
-
 ---
 
 # Problem statement

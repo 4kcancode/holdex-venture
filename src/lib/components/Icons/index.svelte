@@ -1,59 +1,59 @@
 <script context="module" lang="ts">
-  type AllowedTags = 'path' | 'circle' | 'rect' | 'polygon' | 'polyline' | 'line'
+  type AllowedTags = 'path' | 'circle' | 'rect' | 'polygon' | 'polyline' | 'line';
   type IconThemeSource = {
-    a: { [attribute: string]: string }
+    a: { [attribute: string]: string };
   } & {
-    [tag in AllowedTags]?: Array<{ [attribute: string]: string }>
-  }
-  type IconSource = { solid: IconThemeSource } | { default: IconThemeSource }
+    [tag in AllowedTags]?: Array<{ [attribute: string]: string }>;
+  };
+  type IconSource = { solid: IconThemeSource } & { default: IconThemeSource };
 </script>
 
 <script lang="ts">
-  export let icon: IconSource
-  export let width: number = 24
-  export let height: number = 24
-  export let isOutlined: boolean = false
-  export let colorInherit: boolean = false
-  export let onClick: () => void = () => {}
+  export let icon: IconSource;
+  export let width = 24;
+  export let height = 24;
+  export let isOutlined = false;
+  export let colorInherit = false;
+  export let onClick: () => void = () => {};
 
-  // @ts-ignore
-  let iconProps = icon[isOutlined ? 'default' : 'solid']
+  let iconProps = icon[isOutlined ? 'default' : 'solid'];
 
-  export let forwardRef: SVGSVGElement | null = null
-  export let forwardAction: any = () => {}
+  export let forwardRef: SVGSVGElement | null = null;
+  export let forwardAction: any = () => {};
 
-  let className: string = ''
-  export { className as class }
+  let className = '';
+  export { className as class };
 </script>
 
 <svg
-  bind:this="{forwardRef}"
+  bind:this={forwardRef}
   use:forwardAction
   class="icon inline-flex relative {className}"
-  on:click="{onClick}"
-  class:icon-outline="{isOutlined}"
-  class:color-inherited="{colorInherit}"
+  on:click={onClick}
+  class:icon-outline={isOutlined}
+  class:color-inherited={colorInherit}
   {...iconProps?.a}
   {...$$restProps}
-  width="{width}"
-  height="{height}">
+  {width}
+  {height}
+>
   {#each iconProps?.path ?? [] as a}
-    <path {...a}></path>
+    <path {...a} />
   {/each}
   {#each iconProps?.rect ?? [] as a}
-    <rect {...a}></rect>
+    <rect {...a} />
   {/each}
   {#each iconProps?.circle ?? [] as a}
-    <circle {...a}></circle>
+    <circle {...a} />
   {/each}
   {#each iconProps?.polygon ?? [] as a}
-    <polygon {...a}></polygon>
+    <polygon {...a} />
   {/each}
   {#each iconProps?.polyline ?? [] as a}
-    <polyline {...a}></polyline>
+    <polyline {...a} />
   {/each}
   {#each iconProps?.line ?? [] as a}
-    <line {...a}></line>
+    <line {...a} />
   {/each}
 </svg>
 

@@ -1,24 +1,24 @@
 Switch(condition="{item.type}")
-    Case(value="link")
-        Link(item="{item}" let:text)
-            TextWrapper(text="{text}")
-                slot
-    Case(value="hashtag")
-        Hashtag(item="{item}" link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
-            TextWrapper(text="{item.text}")
-    Case(value="code")
-        code(class="rounded-lg bg-l2 py-0 px-2 text-code font-mono")
-            TextWrapper(text="{item.text}") 
-    Case(value="price-ticker")
-        span(class="underline-offset-4 relative text-paragraph-l xs:text-paragraph-s text-accent1-default underline decoration-dashed") ${item.text}
-    //- Case(value="mention")
-    //-     s handle mention
-    //- possible removal of image
-    Case(value="embed")
-        Embed(item="{item}")
-    Case(value="image") 
-        Image(item="{item}")
-    Case(value="text")
-        TextWrapper(text!="{escape(item.text)}")
-    Case(value="inline")
-        TextWrapper(text="{item.text}")
+  Case(value="link")
+    Link(item="{item}" let:text)
+      TextWrapper(text="{text}")
+        slot
+  Case(value="hashtag")
+    Hashtag(item="{item}" link="/c?filter={encodeURIComponent(item.text.toLowerCase().slice(1))}")
+      TextWrapper(text="{item.text}")
+  Case(value="code")
+    code.rounded-lg.bg-l2.py-0.px-2.text-code.font-mono
+      TextWrapper(text="{item.text}") 
+  Case(value="price-ticker")
+    PriceTicker(ticker="{item.text}")
+  //- Case(value="mention")
+  //-     s handle mention
+  //- possible removal of image
+  Case(value="embed")
+    Embed(item="{item}")
+  Case(value="image") 
+    Image(item="{item}")
+  Case(value="text")
+    TextWrapper(text!="{escape(trimText(item.text))}")
+  Case(value="inline")
+    TextWrapper(text="{item.text}")

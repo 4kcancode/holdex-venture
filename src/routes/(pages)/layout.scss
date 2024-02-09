@@ -1,6 +1,17 @@
-@import "../../lib/styles/theme.scss";
-
+@import '../../lib/styles/theme.scss';
 
 .mobile-dropdown ul li:before {
-    @apply hidden;
+  @apply hidden;
+}
+
+.tablescroll {
+  @apply xl:-left-[53px] lg:-left-[53px] md:-left-[53px] tb:-left-[53px];
+}
+
+.col-fixed-width {
+  @apply min-w-[200px];
+}
+
+.col-mw {
+  @apply min-w-[150px] max-w-[200px];
 }

@@ -1,475 +1,603 @@
-import { default as _last } from 'lodash-es/last';
-import { default as _get } from 'lodash-es/get';
-import { default as _repeat } from 'lodash-es/repeat';
+import _ from 'lodash-es';
 import { json } from '@sveltejs/kit';
 import { getEmbedUrl, getEmbedSource, regExp } from '$components/BodyParser/utils';
 
 import type {
-    Schema$Document,
-    Schema$List,
-    Schema$Paragraph,
-    Schema$ParagraphElement,
-    Schema$RichLinkProperties,
-    Schema$StructuralElement,
-    Schema$TableCell,
-    Schema$TextRun,
-    Schema$TextStyle
+  Schema$Body,
+  Schema$Document,
+  Schema$Link,
+  Schema$List,
+  Schema$Paragraph,
+  Schema$ParagraphElement,
+  Schema$RichLinkProperties,
+  Schema$StructuralElement,
+  Schema$TableCell,
+  Schema$TextRun,
+  Schema$TextStyle,
 } from '$lib/types/googleDoc';
 import type { RequestHandler } from './$types';
-import type { Author } from '$components/BodyParser/blocks';
+import type { Author, CTAElement, TestimonialElement } from '$components/BodyParser/blocks';
+import type { Parsed$Paragraph, Parsed$ParagraphElement } from '$lib/types/googleConversion';
+import { trimJoinArray } from '$lib/utils';
 
 export const POST: RequestHandler = async ({ request }) => {
-    const { data, updatedAt } = await request.json();
-    const jsonData = convertToHoldexJson(data);
-    return json(
-        {
-            blocks: jsonData,
-            time: updatedAt,
-            version: '2.20.0'
-        },
-        {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-    );
+  const { data, updatedAt } = await request.json();
+  const jsonData = convertToHoldexJson(data);
+  return json(
+    {
+      blocks: jsonData,
+      time: updatedAt,
+      version: '2.20.0',
+    },
+    {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };
 
 function convertToHoldexJson(document: Schema$Document) {
-    const { body, headers, lists } = document;
+  const { body, headers } = document;
 
-    let content: any[] = [];
-    let authorBlock = {
-        type: 'author',
-        items: [] as Author[]
-    };
+  const newContent: any[] = [];
+  const authorBlock = {
+    type: 'author',
+    items: [] as Author[],
+  };
 
-    if (headers) {
-        Object.values(headers).forEach(({ content }) => {
-            (content as Schema$StructuralElement[]).forEach(({ paragraph }, i) => {
-                if (
-                    paragraph &&
-                    Array.isArray(paragraph.elements) &&
-                    (paragraph.elements as Schema$ParagraphElement[])[0].textRun?.content?.includes(
-                        'Authors:'
-                    )
-                ) {
-                    paragraph.elements.forEach((element) => {
-                        const author = getHeaderRowAuthor(element);
-                        if (author.name) {
-                            authorBlock.items.push(author);
-                        }
-                    });
-                }
+  if (headers) {
+    Object.values(headers).forEach(({ content }) => {
+      (content as Schema$StructuralElement[]).forEach(({ paragraph }) => {
+        if (
+          paragraph &&
+          Array.isArray(paragraph.elements) &&
+          (paragraph.elements as Schema$ParagraphElement[])[0].textRun?.content?.includes(
+            'Authors:'
+          )
+        ) {
+          paragraph.elements.forEach((element) => {
+            const author = getHeaderRowAuthor(element);
+            if (author.name) {
+              authorBlock.items.push(author);
+            }
+          });
+        }
+      });
+    });
+
+    newContent.push(authorBlock);
+  }
+
+  if (body && body.content) {
+    body.content.forEach(({ paragraph, tableOfContents, table }, i) => {
+      // Paragraphs
+      if (paragraph) parseParagraph(document, body, newContent, paragraph, i);
+      // Table
+      else if (table && table.tableRows && table.tableRows.length > 0) {
+        const tableContent: any[] = [];
+        table.tableRows.forEach((row) => {
+          const trowContent: any[] = [];
+          (row.tableCells as Schema$TableCell[]).forEach((tableCell) => {
+            const { content: cellContent } = tableCell;
+            const tCellContent: any[] = [];
+            cellContent?.forEach(({ paragraph }, i) => {
+              if (paragraph) {
+                parseParagraph(document, tableCell, tCellContent, paragraph, i, true);
+              }
             });
+            trowContent.push(tCellContent);
+          });
+          tableContent.push(trowContent);
         });
-        content.push(authorBlock);
-    }
 
-    if (body && body.content) {
-        body.content.forEach(({ paragraph, table }, i) => {
-            // Paragraphs
-            if (paragraph) {
-                const tag = getParagraphTag(paragraph);
+        const cta: CTAElement = parseCTASection(tableContent);
+        const testimonial: TestimonialElement = parseTestimonialSection(tableContent);
 
-                // Lists
-                if (paragraph.bullet) {
-                    const { nestingLevel, listId } = paragraph.bullet;
-                    const list = (lists as Record<string, Schema$List>)[listId as string];
-                    const listTag = getListTag(list, nestingLevel);
+        if (testimonial != ({} as TestimonialElement)) {
+          /// This logic is for parsing testimonial data
+          /// It will be tested after deployment
+          newContent.push({
+            type: 'testimonial',
+            data: testimonial,
+          });
+        } else if (cta != ({} as CTAElement)) {
+          newContent.push({
+            type: 'cta',
+            data: cta,
+          });
+        } else {
+          {
+            newContent.push({
+              type: 'table',
+              data: {
+                content: tableContent,
+              },
+            });
+          }
+        }
+      }
+      // Table Of Contents
+      else if (tableOfContents) {
+        const { content } = tableOfContents;
 
-                    const bulletContent = paragraph.elements
-                        ?.map((el) => getBulletContent(document, el))
-                        .join(' ')
-                        .replace(' .', '.')
-                        .replace(' ,', ',');
-
-                    const prev = (body.content as Schema$StructuralElement[])[i - 1];
-                    const prevListId = prev.paragraph?.bullet?.listId;
-                    const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
-
-                    if (prevListId === listId) {
-                        let list = _last(content).data.items;
-
-                        if (nestingLevel !== undefined) {
-                            const lastIndex = list.length - 1;
-                            list[lastIndex].items.push({ content: bulletContent, items: [] });
-                        } else {
-                            list.push({ content: bulletContent, items: [] });
-                        }
-                    } else {
-                        content.push({
-                            type: 'nestedList',
-                            data: {
-                                style: listStyle,
-                                items: [
-                                    {
-                                        content: bulletContent,
-                                        items: []
-                                    }
-                                ],
-                                id: listId
-                            }
-                        });
-                    }
-                }
-
-                // Headings, Images, Texts
-                else if (tag) {
-                    let tagContent: any[] = [];
-
-                    if (paragraph?.elements?.length === 2 && isLink(paragraph.elements)) {
-                        let { textStyle, content } = paragraph.elements[0].textRun as Schema$TextRun;
-
-                        if (textStyle?.link?.url) {
-                            const link = textStyle?.link?.url as string;
-                            switch (true) {
-                                case twitterRegExp.test(link): {
-                                    let match =
-                                        /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
-                                            .exec(link)
-                                            ?.slice(2);
-                                    tagContent.push({
-                                        type: 'embed',
-                                        data: {
-                                            service: 'twitter',
-                                            source: link,
-                                            embed: `api/tweets.json?id=${match?.shift()}`
-                                        }
-                                    });
-                                    break;
-                                }
-                                case videoRegExp.test(link): {
-                                    let match = link.match(videoRegExp) as RegExpMatchArray;
-                                    tagContent.push({
-                                        type: 'embed',
-                                        data: {
-                                            service: getEmbedSource(match[0]),
-                                            source: match[0],
-                                            embed: getEmbedUrl(match[0])
-                                        }
-                                    });
-                                    break;
-                                }
-                                case tallyRegExp.test(link): {
-                                    let match = link.match(tallyRegExp) as RegExpMatchArray;
-                                    tagContent.push({
-                                        type: 'embed',
-                                        data: {
-                                            service: 'tally',
-                                            source: match[0],
-                                            embed: match[0]
-                                        }
-                                    });
-                                    break;
-                                }
-                                default: {
-                                    tagContent.push({
-                                        type: 'linkTool',
-                                        data: {
-                                            url: link,
-                                            title: content,
-                                            embed: `api/link.json?url=${link}`
-                                        }
-                                    });
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        paragraph?.elements?.forEach((el) => {
-                            // EmbeddedObject
-
-                            if (el.inlineObjectElement) {
-                                const image = getImage(document, el);
-
-                                if (image) {
-                                    tagContent.push({
-                                        type: 'image',
-                                        data: {
-                                            file: {
-                                                url: image.source
-                                            },
-                                            caption: image.alt
-                                        }
-                                    });
-                                }
-                            } else if (
-                                el.richLink &&
-                                el.richLink?.richLinkProperties &&
-                                videoRegExp.test(el.richLink.richLinkProperties?.uri as string)
-                            ) {
-                                // support for each link
-                                tagContent.push(getRichLink(el));
-                            }
-
-                            // quote
-                            else if (isQuote(el)) {
-                                tagContent.push({
-                                    type: 'quote',
-                                    data: {
-                                        text: getText(el, {
-                                            isHeader: tag !== 'p'
-                                        }).slice(2),
-                                        caption: '',
-                                        alignment: 'left'
-                                    }
-                                });
-                            }
-
-                            // Headings, Texts
-                            else if (
-                                el.textRun &&
-                                el.textRun.content !== '\n' &&
-                                (el.textRun.content as string).trim().length > 0
-                            ) {
-                                tagContent.push({
-                                    [tag]: getText(el, {
-                                        isHeader: tag !== 'p'
-                                    })
-                                });
-                            }
-                        });
-                    }
-
-                    if (tagContent.every((el) => el[tag] !== undefined)) {
-                        if (tag !== 'p' && tag !== 'blockquote') {
-                            content.push({
-                                type: 'header',
-                                id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
-                                data: {
-                                    level: Number(tag.replace('h', '')),
-                                    text: tagContent
-                                        .map((el) => el[tag])
-                                        .join(' ')
-                                        .replace(' .', '.')
-                                        .replace(' ,', ',')
-                                }
-                            });
-                        } else if (tag == 'p') {
-                            let paragraphContent = tagContent
-                                .map((el) => el[tag])
-                                .join(' ')
-                                .replace(' .', '.')
-                                .replace(' ,', ',');
-
-                            if (quoteExp.test(paragraphContent)) {
-                                content.push({
-                                    type: 'quote',
-                                    data: {
-                                        text: paragraphContent.slice(2),
-                                        caption: '',
-                                        alignment: 'left'
-                                    }
-                                });
-                            } else {
-                                content.push({
-                                    type: 'paragraph',
-                                    data: {
-                                        text: paragraphContent
-                                    }
-                                });
-                            }
-                        } else {
-                            content.push({
-                                type: 'quote',
-                                data: {
-                                    text: tagContent
-                                        .map((el) => el[tag])
-                                        .filter((el) => el.length > 0)
-                                        .join(' ')
-                                        .replace(' .', '.')
-                                        .replace(' ,', ','),
-                                    caption: '',
-                                    alignment: 'left'
-                                }
-                            });
-                        }
-                    } else {
-                        content.push(...tagContent);
-                    }
-                }
+        if (content && content.length > 0) {
+          const tocContent: any[] = [];
+          content.map((el, i) => {
+            if (el.paragraph) {
+              parseParagraph(document, tableOfContents, tocContent, el.paragraph, i);
             }
+          });
 
-            // Table
-            else if (table && table.tableRows && table.tableRows.length > 0) {
-                const [thead, ...tbody] = table.tableRows;
-                content.push({
-                    type: 'table',
-                    data: {
-                        content: [
-                            (thead.tableCells as Schema$TableCell[]).map(({ content }) =>
-                                getTableCellContent(content as Schema$StructuralElement[])
-                            ),
-                            ...tbody.map((row) =>
-                                (row.tableCells as Schema$TableCell[]).map(({ content }) =>
-                                    getTableCellContent(content as Schema$StructuralElement[])
-                                )
-                            )
-                        ]
-                    }
-                });
-            }
-        });
-    }
-    return content;
+          newContent.push({
+            type: 'toc',
+            items: tocContent,
+          });
+        }
+      }
+    });
+  }
+
+  return newContent;
 }
 
-function getHeaderRowAuthor(content: Schema$ParagraphElement) {
-    let author: Author = {} as Author;
-    if (content && content.textRun?.textStyle?.link) {
-        const textRun = content.textRun as Schema$TextRun;
-        author.name = cleanText(textRun.content as string);
-        author.url = textRun.textStyle?.link?.url || '';
+function parseCTASection(content: any[]) {
+  const cta: CTAElement = {} as CTAElement;
+  if (content.length === 7 && (content[0] as any[]).length === 2) {
+    const contentHead = content[0];
+    if (
+      contentHead[0][0].type === 'paragraph' &&
+      contentHead[0][0].data.text === 'type' &&
+      contentHead[1][0].type === 'paragraph' &&
+      contentHead[1][0].data.text === 'cta'
+    ) {
+      const data: any = {};
+      content.forEach(([[first], [second]], i) => {
+        if (first === undefined || first.type !== 'paragraph') return;
+        if (second === undefined || second.type !== 'paragraph') data[first.data.text] = '';
+        else data[first.data.text] = second.data.text;
+      });
+      cta.title = data['title'];
+      cta.description = data['description'];
+      if (data['button1_title'] === undefined || data['button1_title'] === '') cta.link1 = null;
+      else {
+        cta.link1 = {
+          text: data['button1_title'],
+          url: data['button1_url'],
+        };
+      }
+      if (data['button2_title'] === undefined || data['button2_title'] === '') cta.link2 = null;
+      else {
+        cta.link2 = {
+          text: data['button2_title'],
+          url: data['button2_url'],
+        };
+      }
     }
-    return author;
+  }
+  return cta;
+}
+
+function parseTestimonialSection(content: any[]) {
+  const testimonial: TestimonialElement = {} as TestimonialElement;
+  if (content.length === 5 && (content[0] as any[]).length === 2) {
+    const contentHead = content[0];
+    if (
+      contentHead[0][0].type === 'paragraph' &&
+      contentHead[0][0].data.text === 'type' &&
+      contentHead[1][0].type === 'paragraph' &&
+      contentHead[1][0].data.text === 'testimonial'
+    ) {
+      const data: any = {};
+      content.forEach(([[first], [second]], i) => {
+        if (first === undefined || first.type !== 'paragraph') return;
+        if (second === undefined || second.type !== 'paragraph') data[first.data.text] = '';
+        else data[first.data.text] = second.data.text;
+      });
+      testimonial.name = data['name'];
+      testimonial.title = data['title'];
+      testimonial.content = data['content'];
+      testimonial.picture = {
+        text: data['name'],
+        url: data['picture'],
+      };
+    }
+  }
+  return testimonial;
+}
+function getHeaderRowAuthor(content: Schema$ParagraphElement) {
+  const author: Author = {} as Author;
+  if (content && content.textRun?.textStyle?.link) {
+    const textRun = content.textRun as Schema$TextRun;
+    author.name = cleanText(textRun.content as string);
+    author.url = textRun.textStyle?.link?.url || '';
+  }
+  return author;
 }
 
 function getParagraphTag(p: Schema$Paragraph) {
-    const tags: Record<string, string> = {
-        NORMAL_TEXT: 'p',
-        SUBTITLE: 'blockquote',
-        HEADING_1: 'h1',
-        HEADING_2: 'h2',
-        HEADING_3: 'h3',
-        HEADING_4: 'h4',
-        HEADING_5: 'h5'
-    };
+  const tags: Record<string, string> = {
+    NORMAL_TEXT: 'p',
+    SUBTITLE: 'blockquote',
+    HEADING_1: 'h1',
+    HEADING_2: 'h2',
+    HEADING_3: 'h3',
+    HEADING_4: 'h4',
+    HEADING_5: 'h5',
+  };
 
-    return tags[p?.paragraphStyle?.namedStyleType as string];
+  return tags[p?.paragraphStyle?.namedStyleType as string];
 }
 
 function getListTag(list: Schema$List, nestingLevel: number | null | undefined) {
-    const glyphType = _get(list, [
-        'listProperties',
-        'nestingLevels',
-        nestingLevel ? nestingLevel : 0,
-        'glyphType'
-    ]);
+  const glyphType = _.get(list, [
+    'listProperties',
+    'nestingLevels',
+    nestingLevel ? nestingLevel : 0,
+    'glyphType',
+  ]);
 
-    if (glyphType === 'GLYPH_TYPE_UNSPECIFIED') {
-        return 'ul';
-    }
-    return glyphType !== undefined ? 'ol' : 'ul';
+  if (glyphType === 'GLYPH_TYPE_UNSPECIFIED') {
+    return 'ul';
+  }
+  return glyphType !== undefined ? 'ol' : 'ul';
 }
 
-let twitterRegExp = new RegExp(regExp.twitter, 'mi');
-let videoRegExp = new RegExp(regExp.video, 'mi');
-let tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^\/\?\&]*)?$/, 'mi');
+const twitterRegExp = new RegExp(regExp.twitter, 'mi');
+const videoRegExp = new RegExp(regExp.video, 'mi');
+const tallyRegExp = new RegExp(/^https?:\/\/apply.holdex.io\/([^/?&]*)?$/, 'mi');
 
 function isLink(elements: Schema$ParagraphElement[]) {
-    let [el1, el2] = elements;
+  const [el1, el2] = elements;
 
-    let s2 = cleanText(el2?.textRun?.content as string) === '';
-    let s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
+  const s2 = cleanText(el2?.textRun?.content as string) === '';
+  const s1 = el1.textRun && el1.textRun.textStyle && el1.textRun.textStyle.link !== undefined;
 
-    return s1 && s2;
+  return s1 && s2;
 }
 
 function getRichLink(el: Schema$ParagraphElement) {
-    let richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
+  const richLinkProperties = el.richLink?.richLinkProperties as Schema$RichLinkProperties;
 
-    let match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
-    return {
-        type: 'embed',
-        data: {
-            service: getEmbedSource(match[0]),
-            source: match[0],
-            embed: getEmbedUrl(match[0]),
-            caption: richLinkProperties.title || ''
-        }
-    };
+  const match = richLinkProperties?.uri?.match(videoRegExp) as RegExpMatchArray;
+  return {
+    type: 'embed',
+    data: {
+      service: getEmbedSource(match[0]),
+      source: match[0],
+      embed: getEmbedUrl(match[0]),
+      caption: richLinkProperties.title || '',
+    },
+  };
 }
-let quoteExp = new RegExp(/^\> (.*$)/, 'im');
+const quoteExp = new RegExp(/^> (.*$)/, 'im');
 function isQuote(el: Schema$ParagraphElement) {
-    let { textRun } = el;
-    if (textRun && textRun.content) {
-        let txt = cleanText(textRun.content);
-        return quoteExp.test(txt);
-    } else {
-        return false;
-    }
+  const { textRun } = el;
+  if (textRun && textRun.content) {
+    const txt = cleanText(textRun.content);
+    return quoteExp.test(txt);
+  } else {
+    return false;
+  }
 }
 
 function cleanText(text: string) {
-    return text.replace(/\n/g, '').trim();
-}
-
-function getTableCellContent(content: Schema$StructuralElement[]) {
-    if (!content || content.length === 0) return '';
-    return content
-        .map(({ paragraph }) => cleanText(getTextFromParagraph(paragraph as Schema$Paragraph)))
-        .join('');
-}
-
-function getTextFromParagraph(p: Schema$Paragraph) {
-    return p.elements
-        ? p.elements
-            .filter((el) => el.textRun && el.textRun.content !== '\n')
-            .map((el) => (el.textRun ? getText(el) : ''))
-            .join('')
-        : '';
+  return text.replace(/\n/g, '').trim();
 }
 
 function getBulletContent(document: Schema$Document, element: Schema$ParagraphElement) {
-    if (element.inlineObjectElement) {
-        const image = getImage(document, element);
-        if (image) {
-            return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
-        }
+  if (element.inlineObjectElement) {
+    const image = getImage(document, element);
+    if (image) {
+      return `<img src="${image.source}" alt="${image.alt}" title="${image.title}" />`;
     }
+  }
 
-    return getText(element);
+  return getText(element);
 }
 
 function getImage(document: Schema$Document, element: Schema$ParagraphElement) {
-    const { inlineObjects } = document;
+  const { inlineObjects } = document;
 
-    if (!inlineObjects || !element.inlineObjectElement) {
-        return null;
-    }
-
-    const inlineObject = inlineObjects[element.inlineObjectElement?.inlineObjectId as string];
-    const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
-
-    if (embeddedObject && embeddedObject.imageProperties) {
-        return {
-            source: embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri,
-            title: embeddedObject.title || '',
-            alt: embeddedObject.description || ''
-        };
-    }
-
+  if (!inlineObjects || !element.inlineObjectElement) {
     return null;
+  }
+
+  const inlineObject = inlineObjects[element.inlineObjectElement?.inlineObjectId as string];
+  const embeddedObject = inlineObject?.inlineObjectProperties?.embeddedObject;
+
+  if (embeddedObject && embeddedObject.imageProperties) {
+    return {
+      source: embeddedObject.imageProperties.sourceUri || embeddedObject.imageProperties.contentUri,
+      title: embeddedObject.title || '',
+      alt: embeddedObject.description || '',
+    };
+  }
+
+  return null;
 }
 
 function getText(element: Schema$ParagraphElement, { isHeader = false } = {}) {
-    let text = cleanText(element.textRun?.content as string);
-    const { link, underline, strikethrough, bold, italic } = element?.textRun
-        ?.textStyle as Schema$TextStyle;
+  let text = cleanText(element.textRun?.content as string);
+  const { link, underline, strikethrough, bold, italic } = element?.textRun
+    ?.textStyle as Schema$TextStyle;
 
-    if (underline && !link) {
-        // Underline isn't supported in markdown so we'll use emphasis
-        text = `<u>${text}</u>`;
-    }
+  if (underline && !link) {
+    // Underline isn't supported in markdown so we'll use emphasis
+    text = `<u>${text}</u>`;
+  }
 
-    if (italic) {
-        text = `<i>${text}</i>`;
-    }
+  if (italic) {
+    text = `<i>${text}</i>`;
+  }
 
-    // Set bold unless it's a header
-    if (bold && !isHeader) {
-        text = `<b>${text}</b>`;
-    }
+  // Set bold unless it's a header
+  if (bold && !isHeader) {
+    text = `<b>${text}</b>`;
+  }
 
-    if (strikethrough) {
-        text = `<s>${text}</s>`;
-    }
+  if (strikethrough) {
+    text = `<s>${text}</s>`;
+  }
 
-    if (link) {
-        return `<a href="${link.url}">${text}</a>`;
-    }
+  if (link) {
+    return `<a href="${link.url}">${text}</a>`;
+  }
 
-    return text;
+  return text;
 }
+
+const parseParagraphElement = (
+  document: Schema$Document,
+  tag: string,
+  parentContent: (Parsed$Paragraph | Parsed$ParagraphElement)[],
+  element: Schema$ParagraphElement
+) => {
+  const { textRun, richLink, inlineObjectElement } = element;
+
+  if (inlineObjectElement) {
+    const image = getImage(document, element);
+
+    if (image) {
+      parentContent.push({
+        type: 'image',
+        data: {
+          file: {
+            url: image.source as string,
+          },
+          caption: image.alt,
+        },
+      });
+    }
+  } else if (
+    richLink &&
+    richLink?.richLinkProperties &&
+    videoRegExp.test(richLink.richLinkProperties?.uri as string)
+  ) {
+    // support for each link
+    parentContent.push(getRichLink(element));
+  }
+  // Headings, Texts
+  else if (textRun && textRun.content !== '\n' && (textRun.content as string).trim().length > 0) {
+    parentContent.push({
+      [tag]: getText(element, {
+        isHeader: tag !== 'p',
+      }),
+    });
+  }
+};
+
+const parseParagraph = (
+  document: Schema$Document,
+  body: Schema$Body,
+  contents: (Parsed$Paragraph | Parsed$ParagraphElement)[],
+  paragraph: Schema$Paragraph,
+  i: number,
+  wrappingTable = false
+): void => {
+  if (!body || !body.content) return;
+
+  const { lists } = document;
+  const { bullet, elements } = paragraph;
+
+  const tag: string = getParagraphTag(paragraph);
+
+  // Lists
+  if (bullet && elements) {
+    const { nestingLevel, listId } = bullet;
+    const list = (lists as Record<string, Schema$List>)[listId as string];
+    const listTag = getListTag(list, nestingLevel);
+
+    const bulletContent = trimJoinArray(
+      elements.map((element) => getBulletContent(document, element))
+    );
+
+    if (!bulletContent) {
+      return;
+    }
+
+    const prev = (body.content as Schema$StructuralElement[])[i - 1];
+    const prevListId = prev?.paragraph?.bullet?.listId;
+    const listStyle = listTag === 'ol' ? 'ordered' : 'unordered';
+
+    if (prevListId === listId) {
+      const list: Parsed$ParagraphElementItems[] = _.last(contents)?.data.items ?? [];
+
+      if (nestingLevel !== undefined) {
+        const lastIndex = list.length - 1;
+        list[lastIndex].items.push({ content: bulletContent, items: [] });
+      } else {
+        list.push({ content: bulletContent, items: [] });
+      }
+    } else {
+      contents.push({
+        type: 'nestedList',
+        data: {
+          style: listStyle,
+          id: listId as string,
+          items: [
+            {
+              content: bulletContent,
+              items: [],
+            },
+          ],
+        },
+      });
+    }
+  }
+
+  // Headings, Images, Texts
+  else if (tag && elements) {
+    const tagContent: (Parsed$Paragraph | Parsed$ParagraphElement)[] = [];
+
+    if (elements.length === 2 && isLink(elements) && !wrappingTable) {
+      const { textStyle, content } = elements[0].textRun as Schema$TextRun;
+      const { url, headingId } = textStyle?.link as Schema$Link;
+
+      if (url) {
+        const link = textStyle?.link?.url as string;
+
+        switch (true) {
+          case twitterRegExp.test(link): {
+            const match = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/
+              .exec(link)
+              ?.slice(2);
+
+            tagContent.push({
+              type: 'embed',
+              data: {
+                service: 'twitter',
+                source: link,
+                embed: `api/tweets.json?id=${match?.shift()}`,
+              },
+            });
+
+            break;
+          }
+
+          case videoRegExp.test(link): {
+            const match = link.match(videoRegExp) as RegExpMatchArray;
+
+            tagContent.push({
+              type: 'embed',
+              data: {
+                service: getEmbedSource(match[0]),
+                source: match[0],
+                embed: getEmbedUrl(match[0]) as string,
+              },
+            });
+
+            break;
+          }
+
+          case tallyRegExp.test(link): {
+            const match = link.match(tallyRegExp) as RegExpMatchArray;
+
+            tagContent.push({
+              type: 'embed',
+              data: {
+                service: 'tally',
+                source: match[0],
+                embed: match[0],
+              },
+            });
+
+            break;
+          }
+
+          default: {
+            if (!content) {
+              break;
+            }
+
+            tagContent.push({
+              type: 'linkTool',
+              data: {
+                url: link,
+                title: content,
+                embed: `api/link.json?url=${link}`,
+              },
+            });
+
+            break;
+          }
+        }
+      } else if (headingId && content) {
+        const level =
+          (paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            ? paragraph?.paragraphStyle?.indentFirstLine?.magnitude
+            : 0) /
+            18 +
+          2;
+
+        tagContent.push({
+          type: 'header',
+          id: headingId.replace(/h./, ''),
+          data: {
+            level: level > 4 ? 4 : level,
+            text: content,
+          },
+        });
+      }
+    } else {
+      // trying to isolate the quote elements
+      if (elements && isQuote(elements[0])) {
+        const quoteElements: any[] = [];
+        elements?.forEach((element) =>
+          parseParagraphElement(document, tag, quoteElements, element)
+        );
+
+        tagContent.push({
+          type: 'quote',
+          data: {
+            text: trimJoinArray(
+              quoteElements
+                .map((element) => element[tag])
+                .filter((element) => Boolean(element.length))
+            ).slice(2),
+            caption: '',
+            alignment: 'left',
+          },
+        });
+      } else {
+        elements?.forEach((element) => parseParagraphElement(document, tag, tagContent, element));
+      }
+    }
+
+    if (tagContent.every((element) => (element as any)[tag] !== undefined)) {
+      if (tag !== 'p' && tag !== 'blockquote') {
+        contents.push({
+          type: 'header',
+          id: paragraph?.paragraphStyle?.headingId?.replace(/h./, ''),
+          data: {
+            level: Number(tag.replace('h', '')),
+            text: trimJoinArray(tagContent.map((element) => (element as any)[tag]) as string[]),
+          },
+        });
+      } else if (tag == 'p') {
+        contents.push({
+          type: 'paragraph',
+          data: {
+            text: trimJoinArray(tagContent.map((element) => (element as any)[tag]) as string[]),
+          },
+        });
+      } else {
+        contents.push({
+          type: 'quote',
+          data: {
+            text: trimJoinArray(
+              tagContent
+                .map((element) => (element as any)[tag])
+                .filter((element) => element.length > 0) as string[]
+            ),
+            caption: '',
+            alignment: 'left',
+          },
+        });
+      }
+    } else {
+      contents.push(...tagContent);
+    }
+  }
+};
