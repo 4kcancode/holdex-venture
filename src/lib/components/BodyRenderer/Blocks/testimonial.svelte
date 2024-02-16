@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { TestimonialElement } from '$components/BodyParser/blocks';
   import { getContext } from 'svelte';
+  import type { Writable } from 'svelte/store';
   /* eslint-disable @typescript-eslint/no-unused-vars */
 
   export let item: TestimonialElement;
 
-  let themeContext = getContext('theme');
+  let themeContext: Writable<string> = getContext('theme');
 </script>
 
 <div
