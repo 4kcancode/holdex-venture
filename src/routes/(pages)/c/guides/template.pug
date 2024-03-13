@@ -1,6 +1,16 @@
 include ../../common-mixins
 include ../../c/mixins
 
+mixin guideCard(href, title, subtitle, className='')
+  a.card(
+    class=`group w-full h-full justify-center rounded-xl flex flex-col transition-colors border border-l4 p-8 smDown:px-4 smDown:py-6 gap-4 bg-center bg-cover bg-l1 hover:bg-l2 ${className}`
+    href=href
+  )
+    h2(
+      class="relative text-h2-l xs:text-h2-s font-satoshi inline-block text-t1 group-hover:text-accent1-default"
+    ) #{title}
+    TextParagraph(class="group-hover:text-accent1-default w-full" textColor="text-t2") #{subtitle}
+
 +if('storeData')
   +main-section
     +header-wrapper(class="flex-col gap-8 xs:gap-4")
@@ -10,7 +20,14 @@ include ../../c/mixins
         +crumbItemLink("/c", "Studio")
         +crumbDelimiter
         +crumbItemText("Guides")
-      +messageHeader("Guides", "Crypto made clear with beginner-friendly guides and insights.")()
+      +messageHeader("Guides", "Product and business crypto guides for someone who truly understands the power of blockchain.")()
+      .card-wrapper(
+        class="w-full grid grid-cols-2 smDown:grid-cols-1 gap-8 smDown:gap-4 auto-rows-max mt-2 mb-8 smDown:mb-4 smDown:mt-0"
+      )
+        +guideCard("/c/learn/article-top-web3-security-auditors", "Best Web3 Security Auditors", "Navigating the Web3 Security Landscape and Unveiling Top Auditors' Unique Approaches", "bg-card-1-light dark:bg-card-1-dark")
+        +guideCard("/c?filter=defi", "Defi Guides", "Explore the exciting world of decentralized finance with our guides and information to empower your journey", "bg-card-2-light dark:bg-card-2-dark")
+        +guideCard("/for-startups", "For Startups", "Learn about our partnership recipe that empowers the company success", "bg-card-3-light dark:bg-card-3-dark")
+        +guideCard("/c/learn/what-is-defi", "What is DeFi?", "Beginners guide to DeFi meaning, history, DeFi blockchains and apps. CeFi vs DeFi. The future of DeFi.", "bg-card-4-light dark:bg-card-4-dark")
 
     +content-wrapper
       +feedRenderer

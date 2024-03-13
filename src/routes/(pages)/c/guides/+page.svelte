@@ -19,6 +19,7 @@
 
   import DefaultFeedItem from '$components/Feed/Item/index.svelte';
   import Feed from '$components/Feed/index.svelte';
+  import TextParagraph from '$components/TextParagraph/index.svelte';
 
   import { timeFormat, extendedTimeFormat } from '$components/DateManager';
   import { formatNumber } from '$components/NumbersManager';
@@ -89,7 +90,7 @@
 
 <MetaTags
   title="Guides | Holdex"
-  description="Crypto made clear with beginner-friendly guides and insights."
+  description="Product and business crypto guides for someone who truly understands the power of blockchain."
   path={routes.guides}
   imagePath="/og/index.png"
 />

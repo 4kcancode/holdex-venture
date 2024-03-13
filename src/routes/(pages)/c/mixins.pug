@@ -82,7 +82,7 @@ mixin messageHeader(title, subtitle, cover=null)
       class="w-full h-auto object-contain box-border border border-solid border-l4 rounded-xl"
     )
   if subtitle
-    p(class="text-subtitle-xl text-t2 text-center smDown:text-left xs:text-subtitle-s w-full")= subtitle
+    p(class="text-subtitle-xl text-t2 text-center smDown:text-left xs:text-subtitle-s w-full max-w-[604px]")= subtitle
 
 mixin feedRenderer
   +if('isSearchMode')
