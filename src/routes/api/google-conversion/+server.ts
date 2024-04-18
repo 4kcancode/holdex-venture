@@ -126,50 +126,7 @@ function convertToHoldexJson(document: Schema$Document) {
             }
           });
 
-          newContent.push({
-            type: 'toc',
-            items: tocContent,
-          });
-        }
-      }
-    });
-  }
 
-  return newContent;
-}
-
-function parseCTASection(content: any[]) {
-  const cta: CTAElement = {} as CTAElement;
-  if (content.length === 7 && (content[0] as any[]).length === 2) {
-    const contentHead = content[0];
-    if (
-      contentHead[0][0].type === 'paragraph' &&
-      contentHead[0][0].data.text === 'type' &&
-      contentHead[1][0].type === 'paragraph' &&
-      contentHead[1][0].data.text === 'cta'
-    ) {
-      const data: any = {};
-      content.forEach(([[first], [second]], i) => {
-        if (first === undefined || first.type !== 'paragraph') return;
-        if (second === undefined || second.type !== 'paragraph') data[first.data.text] = '';
-        else data[first.data.text] = second.data.text;
-      });
-      cta.title = data['title'];
-      cta.description = data['description'];
-      if (data['button1_title'] === undefined || data['button1_title'] === '') cta.link1 = null;
-      else {
-        cta.link1 = {
-          text: data['button1_title'],
-          url: data['button1_url'],
-        };
-      }
-      if (data['button2_title'] === undefined || data['button2_title'] === '') cta.link2 = null;
-      else {
-        cta.link2 = {
-          text: data['button2_title'],
-          url: data['button2_url'],
-        };
-      }
     }
   }
   return cta;
