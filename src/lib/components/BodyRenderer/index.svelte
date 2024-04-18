@@ -3,9 +3,11 @@
   import Item from './item.svelte';
 
   export let blocks: any[];
+
+  let allBlocks: any[] = blocks.slice(1, blocks.length);
 </script>
 
-{#each blocks as item, index}
+
   <Item {item} {index} />
 {/each}
 

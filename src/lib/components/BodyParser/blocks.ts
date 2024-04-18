@@ -188,7 +188,7 @@ const replaceSymbols = (text: string) => {
 const tokeniseInlineEls = (inlineBlocks: string[]) => {
   const tokens: any[] = [];
 
-  inlineBlocks.forEach((b) => {
+  inlineBlocks.forEach((b, index) => {
     if (linkExp.test(b)) {
       switch (true) {
         case videoRegExp.test(b): {
