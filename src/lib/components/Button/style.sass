@@ -1,5 +1,5 @@
 .btn
-    @apply relative flex items-center justify-center cursor-pointer border-0 max-w-full bg-transparent z-1
+    @apply relative flex items-center justify-center cursor-pointer border-0 max-w-full bg-transparent z-1 h-fit
 
     & > *
         @apply pointer-events-none
@@ -37,21 +37,21 @@
                 @apply bg-accent1-active dark:shadow-button-hover
 
             &.active
-                @apply bg-accent1-active shadow-button-active
+                @apply bg-accent1-active shadow-button-active-light dark:shadow-button-active
 
         &.btn__disabled
-            @apply text-t3 bg-l3 shadow-none border border-solid border-l4 dark:bg-l3
+            @apply text-t3 bg-l3 shadow-none dark:shadow-button-disabled border border-solid border-l4
 
     &--secondary
-        @apply text-t1 bg-l3 border border-solid border-l3 transition-all shadow-secondary-button
+        @apply text-t1 bg-l3 border border-solid dark:border-l3 border-l5 transition-all shadow-secondary-button
 
         &:not(.btn__disabled)
             &:hover,
             &:focus
-                @apply bg-l4 border-l4 dark:shadow-secondary-button-hover
+                @apply bg-l4 dark:border-l4 border-l6 dark:shadow-secondary-button-hover
 
             &.active
-                @apply bg-l3 border-accent1-default dark:shadow-secondary-button-active
+                @apply bg-l3 border-accent1-default shadow-secondary-button-active-light dark:shadow-secondary-button-active
 
         &.btn__disabled
             @apply text-t3 bg-l3 border-l3 shadow-input
@@ -71,15 +71,15 @@
             @apply text-t3 bg-l3 before:border-l3 shadow-input
 
     &--solo
-        @apply text-t1 bg-l3 border border-solid border-l3 transition-all shadow-secondary-button
+        @apply text-t1 bg-l3 border border-solid dark:border-l3 border-l5 transition-all shadow-secondary-button
 
         &:not(.btn__disabled)
             &:hover,
             &:focus
-                @apply bg-l4 text-t1 border-l4 dark:shadow-secondary-button-hover
+                @apply bg-l4 dark:border-l4 border-l6 dark:shadow-secondary-button-hover
 
             &.active
-                @apply bg-l3 text-t1 border-accent1-default shadow-secondary-button-active
+                @apply bg-l3 border-accent1-default shadow-secondary-button-active-light dark:shadow-secondary-button-active
 
         &.btn__disabled
             @apply text-t3 bg-l3 border-l3 shadow-input

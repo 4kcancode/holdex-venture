@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   /* eslint-disable @typescript-eslint/no-unused-vars */
   import Item from '../item.svelte';
 
@@ -7,38 +6,44 @@
 
   let isLeftEnd = true;
   let isRightEnd = false;
-
-  let hasRoomToScrollRight = 0;
-  let hasRoomToScrollLeft = 0;
+  let maxScroll: number;
+  let isScroller = false;
 
   let tableWidth;
 
-  const scrollAction = (node: HTMLElement) => {
-    const hasReachedRightEnd = () => {
-      const tableScrollElement = document.getElementById('table-scroll');
+  const hasScroll = (element: any, direction: any) => {
+    direction = direction === 'vertical' ? 'scrollTop' : 'scrollLeft';
 
+    let result = !!element[direction];
+
+    if (!result) {
+      element[direction] = 1;
+      result = !!element[direction];
+      element[direction] = 0;
+    }
+    return result;
+  };
+
+  const scrollAction = (node: HTMLElement) => {
+    const tableScrollElement = document.getElementById('table-scroll');
+
+    const maxScrollLeft = node?.scrollWidth - node?.clientWidth;
+    maxScroll = tableScrollElement!.clientWidth - node!.parentElement!.clientWidth;
+
+    const hasReachedRightEnd = () => {
       if (!node || !tableScrollElement) {
-        console.log('return');
         return;
       }
+      isLeftEnd = node?.scrollLeft === 0;
+      isRightEnd = maxScroll === node?.scrollLeft;
+      isScroller = hasScroll(node, 'horizontal') || !isRightEnd;
 
-      const maxScroll = tableScrollElement.clientWidth - node!.parentElement!.clientWidth;
+      if (isRightEnd) {
+        isScroller = false;
+      }
 
-      hasRoomToScrollLeft = node?.scrollLeft;
-
-      isLeftEnd = hasRoomToScrollLeft === 0;
-
-      const hasRoomToScrollRight = maxScroll - hasRoomToScrollLeft;
-
-      let rect = node.getBoundingClientRect();
-
-      isRightEnd = isLeftEnd || maxScroll - hasRoomToScrollLeft >= 0;
-
-      if (
-        (!isLeftEnd && hasRoomToScrollLeft === node.scrollWidth - node.offsetWidth) ||
-        hasRoomToScrollRight === 0
-      ) {
-        isRightEnd = false;
+      if (maxScrollLeft === node?.scrollLeft) {
+        isRightEnd = true;
       }
     };
 
@@ -64,3 +69,13 @@
     </div>
   </div>
 {/if}
+
+<style lang="sass">
+  .scrollbar-hide::-webkit-scrollbar
+    display: none
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide 
+    -ms-overflow-style: none  /* IE and Edge */
+    scrollbar-width: none  /* Firefox */
+</style>

@@ -18,7 +18,7 @@
         +each('item.items as cell')
           InlineBlock(item="{cell}" isTableCell)
         +else
-          svelte:element(this="p" class="p-el text-paragraph-l text-t2")
+          svelte:element(this="p" class="w-full break-words p-el text-paragraph-l text-t2")
             +each("item.items as pItem")
               InlineBlock(item="{pItem}")
     Case(value="list")
@@ -47,11 +47,13 @@
         +each("item.items as QItem")
           InlineBlock(item="{QItem}") 
     Case(value="embed")
-      +if("item.service !== 'twitter'")
-        Embed(item="{item}")
-        +else
+      +if("item.service === 'gist'")
+        EmbedGist(item="{item}")
+        +elseif("item.service === 'twitter'")
           svelte:element(this="p" class="p-el text-paragraph-l text-t2")
             InlineBlock(item="{{type: 'link', href: item.source}}")
+        +else
+          Embed(item="{item}")
     Case(value="code")
       pre(class="bg-l2 border border-solid border-l4 rounded-xl py-4 px-6 w-full overflow-auto")
         code(class="text-code font-mono")
@@ -64,5 +66,9 @@
       TallyButton(item="{item}")
     Case(value="chart")
       Chart(item="{item}")
+    Case(value="cta")
+      CTA(item="{item.data}")
+    Case(value="testimonial")
+      Testimonial(item="{item.data}")
   +else
     TextWrapper(text="{item}")

@@ -28,6 +28,9 @@ mixin main-nav
     +link("{routes.forStartups}", "For Startups")(
       class!="{isActive(path, routes.forStartups, true) ? 'before:!bg-accent1-default' : ''}"
     )
+    +link("{routes.guides}", "Guides")(
+      class!="{isActive(path, routes.guides, true) ? 'before:!bg-accent1-default' : ''}"
+    )
     +link("{routes.jobs}", "Jobs")(
       class!="{isActive(path, routes.jobs) ? 'before:!bg-accent1-default' : ''}"
     )
@@ -44,13 +47,13 @@ mixin social
     +social-link("https://www.linkedin.com/company/holdexlimited/", "{@html socialIcons.linkedin}")(
       class="!h-5 !w-5 !p-0 text-i1"
     )
+    +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
+      class="!h-5 !w-5 !p-0 text-i1"
+    )
     +social-link("https://github.com/holdex", "{@html socialIcons.github}")(
       class="!h-5 !w-5 !p-0 text-i1"
     )
     +social-link("https://twitter.com/HoldexIo", "{@html socialIcons.twitter}")(
-      class="!h-5 !w-5 !p-0 text-i1"
-    )
-    +social-link("https://discord.gg/sEuyYf5euF", "{@html socialIcons.discord}")(
       class="!h-5 !w-5 !p-0 text-i1"
     )
     +social-link("https://t.me/holdex", "{@html socialIcons.telegram}")(class="!h-5 !w-5 !p-0 text-i1")

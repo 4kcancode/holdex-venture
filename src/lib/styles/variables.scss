@@ -69,6 +69,7 @@ $tw-dark: (
   tweet-btn-border: toSpacedRgb(#2f323d),
   shadow-button-ring-alpha: 0.2,
   shadow-input-alpha: 0.16,
+  shadow-active-ring-alpha: 0.24,
 );
 
 $tw-light: (
@@ -95,4 +96,5 @@ $tw-light: (
   tweet-border-hover: toSpacedRgb(#ccd6dd),
   shadow-button-ring-alpha: 0.04,
   shadow-input-alpha: 0,
+  shadow-active-ring-alpha: 0,
 );

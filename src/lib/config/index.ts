@@ -52,7 +52,7 @@ const prodConfig: Config = {
   apiUrl: 'https://stellate.holdex.io',
 };
 
-const config = PUB_USE_PRODUCTION_API === "true" ? prodConfig : baseConfig;
+const config = PUB_USE_PRODUCTION_API === 'true' ? prodConfig : baseConfig;
 
 export const routes = {
   index: '/',
@@ -62,6 +62,7 @@ export const routes = {
   forStartups: '/for-startups',
   studio: '/c',
   jobs: '/c/jobs',
+  guides: '/c/guides',
   category: (category: string | undefined) => `/c/${category}`,
   message: (category: string | undefined, message: string | undefined) =>
     `/c/${category}/${message}`,

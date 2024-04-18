@@ -22,42 +22,29 @@ mixin author
       +crumbDelimiter
       +crumbItemLink("/c/{storeData.community.slug}","{storeData.community.name}")
 
-    +if("message.blocks[0].type === 'image'")
-      +messageHeader("{message.title}", "{message.subtitle}", "{message.blocks[0].src}")(
-        id="{message.id}"
-      )
-      +else
-        +messageHeader("{message.title}", "{message.subtitle}")(id="{message.id}")
-
-  +content-wrapper
-    .author-block(class="flex flex-col bg-l1 border border-solid border-l4 rounded-xl w-full dark:bg-l2")
-      .text-content(class!="flex flex-col items-start p-3.75 {message.isGoogleDoc ? 'pb-4' : ''}")
         TextParagraph(textColor="text-t3")
           time(
             datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
             title="{extendedTimeFormat(message.createdAt)}"
           ) {timeFormat(message.createdAt)} {message.updatedAt ? '| Updated ' + timeFormat(message.updatedAt) : ''}
-        TextParagraph(class="flex flex-wrap" textColor="text-t3") #[span.mr-1 By] #[+author]
-        //- TextParagraph(class="flex flex-wrap gap-3 xs:gap-2" textColor="text-t3")
-        //-     span(class="inline-flex items-center gap-1")
-        //-         Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
-        //-         span {formatNumber(message.viewsCount, '0,0a')}
-        //-     span(class="inline-flex items-center gap-1") 
-        //-         Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
-        //-         span {formatNumber(message.allReplies.totalCount, '0,0a')}
-      +if('message.isGoogleDoc')
-        .edit-wrapper(
-          class="flex items-center justify-between gap-4 border-t border-solid border-l4 p-3.75"
-        )
-          TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
-          Button(
-            variant="secondary"
-            size="small"
-            label="Edit Article"
-            href="{message.isGoogleDoc}"
-            target="_blank"
-            rel="noreferrer"
-          )
+        //- TextParagraph(class="flex flex-wrap flex-row gap-3 xs:gap-2" textColor="text-t3")
+        //-   span(class="inline-flex items-center gap-1")
+        //-     Icon(icon="{Eye}" width="{20}" height="{20}" colorInherit)
+        //-     span {formatNumber(message.viewsCount, '0,0a')}
+        //-   span(class="inline-flex items-center gap-1") 
+        //-     Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
+        //-     span {formatNumber(message.allReplies.totalCount, '0,0a')}
+      .text-content(class!="flex flex-col smDown:gap-4")
+        TextParagraph(class="flex flex-wrap justify-end smDown:justify-start" textColor="text-t3") #[span.mr-1 By] #[+author]
+        +if('message.isGoogleDoc')
+          .edit-wrapper(class="flex gap-2 justify-end smDown:justify-start")
+            TextParagraph(class="flex" textColor="text-t3") Have a suggestion?
+            +inline-link("{message.isGoogleDoc}",'Edit Article')(
+              class="xs:text-paragraph-s"
+              target="_blank"
+              rel="noreferrer"
+            )
+  +content-wrapper
     +if('message.tocs && message.tocs.length > 0')
       details(
         open="false"

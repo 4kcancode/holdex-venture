@@ -7,7 +7,7 @@
   let allBlocks: any[] = blocks.slice(1, blocks.length);
 </script>
 
-{#each allBlocks as item, index}
+
   <Item {item} {index} />
 {/each}
 

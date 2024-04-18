@@ -4,6 +4,8 @@
   import { page } from '$app/stores';
   import { isBrowser, routes } from '$lib/config';
   import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { setContext } from 'svelte';
 
   /** internal deps */
   import {
@@ -38,10 +40,14 @@
     ? 'moon'
     : 'sun';
 
+  let themeContext = writable(themeIconName === 'sun' ? 'dark' : 'light');
+  setContext('theme', themeContext);
+
   /** funcs */
   const onThemeToggle = () => {
     themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
     localStorage.setItem('theme', themeIconName === 'moon' ? 'light' : 'dark');
+    $themeContext = themeIconName === 'sun' ? 'dark' : 'light';
   };
 
   let lastScrollTop = 0;

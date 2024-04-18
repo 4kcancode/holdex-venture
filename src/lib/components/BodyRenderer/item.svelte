@@ -7,9 +7,12 @@
   import NestedList from './Blocks/nestedList.svelte';
   import Image from './Blocks/image.svelte';
   import Embed from './Blocks/embed.svelte';
+  import EmbedGist from './Blocks/gist.svelte';
   import TallyButton from './Blocks/tallyButton.svelte';
   import Chart from './Blocks/chart.svelte';
   import Table from './Blocks/table.svelte';
+  import CTA from './Blocks/cta.svelte';
+  import Testimonial from './Blocks/testimonial.svelte';
   import { parseTableCell } from '../BodyParser/blocks';
 
   export let item: any;
