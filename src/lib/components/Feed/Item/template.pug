@@ -1,27 +1,34 @@
-a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-colors text-t1 hover:text-accent1-default block {className}")
-    article(class="flex items-center gap-4")
-        .feed-icon(class="relative block w-32 h-24 xs:w-24 border border-solid border-l4 rounded-xl bg-l2")
-            img(class="relative block w-full h-full object-center rounded-xl object-cover" alt="{message.title}" src="{message.cover || '/default-cover.png'}")
-        .feed-content(class="flex items-start justify-center flex-col")
-            TextParagraph(
-                element="h2" 
-                textColor="text-inherit" 
-                class="!font-bold block relative w-full whitespace-nowrap overflow-hidden text-ellipsis"
-            ) {message.title}
-            +if('message.subtitle')
-                TextParagraph(
-                    textColor="text-t2" 
-                    class="block relative w-full whitespace-nowrap overflow-hidden text-ellipsis xs:hidden"
-                ) {message.subtitle}
-            TextParagraph(textColor="text-t3" class="flex gap-2")
-                time(
-                    datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
-                    title="{extendedTimeFormat(message.createdAt)}"
-                ) {timeFormat(message.createdAt)}
-                span(class="opacity-50 xs:hidden") • 
-                span(class="inline-flex items-center gap-1 xs:hidden")
-                    Icon(icon="{HandThumbUp}" width="{20}" height="{20}" colorInherit)
-                    span {formatNumber(message.votesCount.up - message.votesCount.down, '0,0a')}
-                span(class="inline-flex items-center gap-1 xs:hidden") 
-                    Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
-                    span {formatNumber(message.allReplies.totalCount, '0,0a')}
+article.block.flex.items-center.gap-4(class!="{className}") 
+  .feed-icon.relative.block.w-32.h-24.border.border-solid.border-l4.rounded-xl.bg-l2(class!="xs:w-24")
+    a(href="/c/{message.communitySlug}/{message.messageSlug}")
+      img.relative.block.w-full.h-full.object-center.rounded-xl.object-cover(
+        alt="{message.title}"
+        src="{message.cover || '/default-cover.png'}"
+      )
+  .feed-content.flex.items-start.justify-center.flex-col
+    a.transition-colors.block(
+      href="/c/{message.communitySlug}/{message.messageSlug}"
+      class!="hover:text-accent1-default"
+    )
+      TextParagraph.block.relative.w-full.whitespace-nowrap.overflow-hidden.text-ellipsis(
+        element="h2"
+        textColor="text-inherit"
+        class="!font-bold"
+      ) {message.title}
+    +if('message.subtitle')
+      TextParagraph.block.relative.w-full.whitespace-nowrap.overflow-hidden.text-ellipsis(
+        textColor="text-t2"
+        class="xs:hidden"
+      ) {message.subtitle}
+    TextParagraph.flex.gap-2(textColor="text-t3")
+      time(
+        datetime="{timeFormat(message.createdAt, 'YYYY-MM-DD')}"
+        title="{extendedTimeFormat(message.createdAt)}"
+      ) {timeFormat(message.createdAt)}
+      span.opacity-50(class="xs:hidden") •
+      span.inline-flex.items-center.gap-1(class="xs:hidden")
+        Icon(icon="{HandThumbUp}" width="{20}" height="{20}" colorInherit)
+        span {formatNumber(message.votesCount.up - message.votesCount.down, '0,0a')}
+      span.inline-flex.items-center.gap-1(class="xs:hidden") 
+        Icon(icon="{ChatBubbleLeftEllipsis}" width="{20}" height="{20}" colorInherit)
+        span {formatNumber(message.allReplies.totalCount, '0,0a')}
