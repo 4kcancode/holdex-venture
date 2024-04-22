@@ -19,6 +19,15 @@
 
   export let item: Item;
 
+  function trimText(text: string) {
+    if (text.endsWith('( ')) {
+      text = text.trim();
+    }
+    if (text.startsWith(' )')) {
+      text = text.trim();
+    }
+    return text;
+  }
   export let parentWrapper: string | undefined = undefined;
   setContext('wrapper', parentWrapper);
 </script>
@@ -27,8 +36,8 @@
 </template>
 
 <style lang="sass">
-	:global(b),
-	:global(em),
-	:global(strong)
-		@apply text-t1
+  :global(b),
+  :global(em),
+  :global(strong)
+    @apply text-t1
 </style>

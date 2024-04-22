@@ -36,6 +36,13 @@ type ImageBlock = {
   };
 };
 
+type CoverBlock = {
+  type: string;
+  data: {
+    text: string;
+  };
+};
+
 type ListBlock = {
   type: 'list';
   data: {
@@ -71,8 +78,10 @@ type TableBlock = {
   };
 };
 
-type TableRowOfStrings = Array<Array<string>>
-type TableRowOfElements = Array<Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>>;
+type TableRowOfStrings = Array<Array<string>>;
+type TableRowOfElements = Array<
+  Array<Array<HeadingBlock | ParagraphBlock | ListBlock | NestedListBlock | ImageBlock | CodeBlock>>
+>;
 
 type EmbedBlock = {
   type: string;
@@ -102,9 +111,38 @@ type LinkToolBlock = {
   };
 };
 
+type CTA = {
+  type: string;
+  data: CTAElement;
+};
+
+type Testimonial = {
+  type: string;
+  data: TestimonialElement;
+};
+
 export type Author = {
   name: string;
   url: string;
+};
+
+export type CTAElement = {
+  title: string;
+  description: string;
+  link1: null | Link;
+  link2: null | Link;
+};
+
+export type TestimonialElement = {
+  picture: null | Link;
+  name: string;
+  title: string;
+  content: string;
+};
+
+type Link = {
+  url: string;
+  text: string;
 };
 
 type AuthorBlock = {
@@ -112,10 +150,16 @@ type AuthorBlock = {
   items: Author[];
 };
 
+type TocBlock = {
+  type: string;
+  items: HeadingBlock[];
+};
+
 const videoRegExp = new RegExp(regExp.video, 'gmi');
 const imageRegExp = new RegExp(regExp.image, 'gmi');
 const tallyLinkExp = new RegExp(regExp.tallyLink, 'mi');
 const coingeckoLinkExp = new RegExp(regExp.coingeckoLink, 'mi');
+const gistLinkExp = new RegExp(regExp.gistLink, 'mi');
 export const linkExp = new RegExp(
   /^<a\s+(?:[^>]*?\s+)?href=(["'\\])(.*?)\1[^>]*>(.*?)<\/a>$/,
   'ui'
@@ -144,7 +188,7 @@ const replaceSymbols = (text: string) => {
 const tokeniseInlineEls = (inlineBlocks: string[]) => {
   const tokens: any[] = [];
 
-  inlineBlocks.forEach((b) => {
+  inlineBlocks.forEach((b, index) => {
     if (linkExp.test(b)) {
       switch (true) {
         case videoRegExp.test(b): {
@@ -168,6 +212,14 @@ const tokeniseInlineEls = (inlineBlocks: string[]) => {
           const match = b.match(coingeckoLinkExp) as RegExpExecArray;
           tokens.push({
             type: 'chart',
+            url: match[0],
+          });
+          break;
+        }
+        case gistLinkExp.test(b): {
+          const match = b.match(gistLinkExp) as RegExpExecArray;
+          tokens.push({
+            type: 'embed',
             url: match[0],
           });
           break;
@@ -206,6 +258,16 @@ const tokeniseInlineEls = (inlineBlocks: string[]) => {
           tokens.push({
             type: 'chart',
             url: match[0],
+          });
+          break;
+        }
+        case gistLinkExp.test(b): {
+          const match = b.match(gistLinkExp) as RegExpExecArray;
+          tokens.push({
+            type: 'embed',
+            embed: match[0],
+            source: match[0],
+            service: 'gist',
           });
           break;
         }
@@ -333,6 +395,13 @@ const parseHeading = (block: HeadingBlock) => {
   };
 };
 
+const parseToc = (block: TocBlock) => {
+  return {
+    type: 'toc',
+    data: block.items.map((header) => parseHeading(header)),
+  };
+};
+
 const parseList = (block: ListBlock) => {
   const tokens: any[] = [];
   block.data.items.forEach((item) => {
@@ -403,6 +472,15 @@ const parseImage = (block: ImageBlock) => {
   };
 };
 
+const parseCoverBlock = (block: CoverBlock) => {
+  return {
+    type: 'cover',
+    data: {
+      text: getOptimizedUrl(block.data.text, '_1500x1500'),
+    },
+  };
+};
+
 const parseTable = (block: TableBlock) => {
   if (typeof block.data.content[0][0] === 'string') {
     return {
@@ -412,9 +490,15 @@ const parseTable = (block: TableBlock) => {
   }
   const tableContent: TableRowOfElements = [];
   (block.data.content as TableRowOfElements).forEach((row) => {
-    let rowContent: any = [];
-    row.forEach(cell => rowContent.push(parseBlocks(cell)));
-    tableContent.push(rowContent)
+    const rowContent: any = [];
+    row.forEach((cell) => {
+      if (Array.isArray(cell)) {
+        rowContent.push(parseBlocks(cell));
+      } else {
+        rowContent.push(parseBlocks([cell]));
+      }
+    });
+    tableContent.push(rowContent);
   });
 
   return {
@@ -474,11 +558,25 @@ const parseAuthor = (block: AuthorBlock) => {
   };
 };
 
+const parseCTA = (block: CTA) => {
+  return {
+    type: 'cta',
+    data: block.data,
+  };
+};
+const parseTestimonial = (block: Testimonial) => {
+  return {
+    type: 'testimonial',
+    data: block.data,
+  };
+};
+
 const htmlParser = HTMLParser({
   header: parseHeading,
   quote: parseQuote,
   image: parseImage,
   list: parseList,
+  cover: parseCoverBlock,
   nestedList: parseNestedList,
   paragraph: parseParagraph,
   table: parseTable,
@@ -489,6 +587,9 @@ const htmlParser = HTMLParser({
   subtitle: (b: any) => b,
   source: (b: any) => b,
   author: parseAuthor,
+  toc: parseToc,
+  cta: parseCTA,
+  testimonial: parseTestimonial,
 });
 
 const parseBlocks = (blocks: any[]) => htmlParser.parse({ blocks });

@@ -28,7 +28,7 @@ type ParsedMessage = Partial<Message> & {
   _author: MessageAuthor;
   docAuthors: Author[];
   parsedBody: Record<string, any>;
-  tocs: any[];
+  tocs: any[] | null;
   cover?: string;
   isGoogleDoc: string;
 };
@@ -41,8 +41,8 @@ class Parser {
       parsedBody?.blocks
     );
     const blocks = Parser.parseBlocks(parsedBlocks);
-    const tocs = Parser.parseTocs(blocks);
     const cover = Parser.parseThreadCover(blocks);
+    const tocs = blocks.find((block) => block.type === 'toc');
 
     return {
       ...message,
@@ -51,9 +51,9 @@ class Parser {
       isGoogleDoc,
       blocks,
       parsedBody,
-      tocs,
+      tocs: tocs?.data,
       subtitle,
-      cover,
+      cover
     };
   }
 
@@ -110,16 +110,6 @@ class Parser {
     return message?.author || ({} as MessageAuthor);
   }
 
-  private static parseTocs(blocks: any[], allowedDepth: string[] = ['h2', 'h3', 'h4']): any[] {
-    const tocs = [];
-    for (const block of blocks) {
-      if (block.type === 'heading' && allowedDepth.includes(block.level)) {
-        tocs.push(block);
-      }
-    }
-    return tocs;
-  }
-
   private static parseSubtitle(blocks: any[]): [any[], string, Author[], string] {
     try {
       const firstBlock = blocks[0];
@@ -152,16 +142,8 @@ class Parser {
   }
 
   private static parseThreadCover(blocks: any[]): string | undefined {
-    const block = blocks.find((b) => b.type === 'image' || b.type === 'embed');
-    if (block) {
-      if (block.type === 'image') {
-        return block.src;
-      }
-
-      if (block.type === 'embed') {
-        return getVideoCover(block.source);
-      }
-    }
+    const found = blocks.find(b => b.type === "cover");
+    if (found) return found.data.text;
     return undefined;
   }
 }

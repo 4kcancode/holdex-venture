@@ -9,13 +9,117 @@ include ../c/mixins
         +crumbDelimiter
         +crumbItemText("Portfolio")
       +messageHeader("Portfolio", "Meet the companies that are driving the innovation and adoption of disruptive technologies.")()
-    +content-wrapper
+      +companyLogoStrip([{ lightPath: '/portfolioLogo/light/clearpool.png', darkPath: '/portfolioLogo/dark/clearpool.png', name: 'Clearpool' }, { lightPath: '/portfolioLogo/light/truflation.png', darkPath: '/portfolioLogo/dark/truflation.png', name: 'Truflation' }, { lightPath: '/portfolioLogo/light/zebec.png', darkPath: '/portfolioLogo/dark/zebec.png', name: 'Zebec Protocol' }, { lightPath: '/portfolioLogo/light/synnax.png', darkPath: '/portfolioLogo/dark/synnax.png', name: 'Synnax' }, { lightPath: '/portfolioLogo/light/finoverse.png', darkPath: '/portfolioLogo/dark/finoverse.png', name: 'Finoverse' }, { lightPath: '/portfolioLogo/light/web3headhunting.png', darkPath: '/portfolioLogo/dark/web3headhunting.png', name: 'Web3 Headhunting' }, { lightPath: '/portfolioLogo/light/wakame.png', darkPath: '/portfolioLogo/dark/wakame.png', name: 'Wakame' }, { lightPath: '/portfolioLogo/light/pickle.png', darkPath: '/portfolioLogo/dark/pickle.png', name: 'Pickle Finance' }, { lightPath: '/portfolioLogo/light/lumiere.png', darkPath: '/portfolioLogo/dark/lumiere.png', name: 'Lumiere' }, { lightPath: '/portfolioLogo/light/amplify.png', darkPath: '/portfolioLogo/dark/amplify.png', name: 'Amplify' }, { lightPath: '/portfolioLogo/light/coins-and-skins.png', darkPath: '/portfolioLogo/dark/coins-and-skins.png', name: 'Coins and Skins' }])
+    +content-wrapper-portfolio
       +feedRenderer
-        Feed(
-          feedType="portfolio"
-          edges="{edges}"
-          totalCount="{totalCount}"
-          isRefetching="{isRefetching}"
-          pageInfo="{pageInfo}"
-          loadMore="{loadMore}"
+      +subheadingText("Featured Projects")
+      +portfolio-product-wrapper
+        PortfolioItem(
+          isFeatured
+          communitySlug="companies"
+          messageSlug="clearpool-finance"
+          title="Clearpool Finance"
+          subtitle="Lend stablecoins to leading institutions & earn attractive risk-adjusted yields."
+          description="As core members and stakeholders, we are Clearpool’s product department from day 1. We continue to design, develop, and launch lending products together with business stakeholders."
+          hashtags=["defi", "dapp", "ethereum", "optimism", "polygon"]
+          totalLoansOriginated=450982341
+          totalValueLocked=39807292
+          investors=["sequoia", "arrington", "sino", "hashkey", "wintermute"]
+        )
+        PortfolioItem(
+          isFeatured
+          communitySlug="companies"
+          messageSlug="truflation"
+          title="Truflation"
+          subtitle="Independent, economic & financial on-chain data in real-time."
+          description="We joined Truflation movement as the core contributors and stakeholders. Our immediate task is to design architecture, build, and launch an unstoppable decentralized network of financial data streams."
+          hashtags=["defi", "oracle", "multi-chain", "architecture", "python"]
+          investors=["coinbase", "chainlink", "c2ventures", "balaji", "g2venture"]
+        )
+        PortfolioItem(
+          isFeatured
+          communitySlug="companies"
+          messageSlug="zebec-protocol"
+          title="Zebec Protocol"
+          subtitle="Multi-chain streaming and web3 banking services for institutional and retail consumers."
+          description="Being aligned on the same mission to grow the adoption of decentralized financial services, Holdex provided Zebec access to a pool of investors to help secure their first investment round."
+          hashtags=["defi", "streaming", "banking", "multi-chain"]
+          investors=["gemini", "coinbase", "circle", "500", "shima-capital", "okx-ventures"]
+          totalFunding=15000000
+        )
+        PortfolioItem(
+          isFeatured
+          communitySlug="companies"
+          messageSlug="synnax"
+          title="Synnax"
+          subtitle="AI-powered credit intelligence."
+          description="Synnax takes credit intelligence one step further and integrates AI to curate, analyze and, predict market data for decentralized loans. Holdex is assigned to lead product development and engineering team management at Synnax."
+          hashtags=["defi", "credit-rating", "ai", "zk"]
+          founders="Robert Alcorn, Dario Capodici, Alessio Quaglini"
+        )
+      +subheadingText("More Projects")
+      +portfolio-product-wrapper
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="finoverse"
+          title="Finoverse"
+          subtitle="A global network of FinTech and Web3 professionals and investors."
+          hashtags=["streaming", "voip", "design", "software-development", "react", "go"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="hh-whitepaper"
+          title="Web3 Headhunting"
+          subtitle="Hire vetted web3 talent across the globe and streamline payroll."
+          hashtags=["hr", "remote", "team-management"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="wakame"
+          title="Wakame"
+          subtitle="Proof of Attendance Protocol for secure events access."
+          hashtags=["poap", "nft", "design", "svelte", "ios", "android"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="pickle-finance"
+          title="Pickle Finance"
+          subtitle="Automated compounding yields from multiple DeFi protocols."
+          hashtags=["defi", "yield-farming", "design", "nodejs"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="lumiere"
+          title="Lumiere"
+          subtitle="Unique film & fashion collectibles powered by NFTs."
+          hashtags=["defi", "nft", "decentraland", "design", "svelte"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="amplify"
+          title="Amplify"
+          subtitle="Invoice financing and real-world collateralized loans."
+          hashtags=["defi", "factoring", "collateralized", "credit", "design", "react"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="pass-club"
+          title="Pass Club"
+          subtitle="Permissionless decentralized identity platform."
+          hashtags=["defi", "did", "kyc", "identity", "design", "react"]
+        )
+        PortfolioItem(
+          isFeatured=false
+          communitySlug="companies"
+          messageSlug="coins-and-skins"
+          title="Coins and Skins"
+          subtitle="Superexchange for gaming digital assets powered by blockchain."
+          hashtags=["gaming", "defi", "exchange"]
         )

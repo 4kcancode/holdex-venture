@@ -44,6 +44,7 @@ export const regExp = {
   symbols: /^[a-zA-Z0-9 ,.";():&%£’€$#@_=/\-'!*?\\/s]{2,}$/,
   image: /.*\.(gif|jpe?g|bmp|png)$/,
   holdexLink: /^(http:\/\/|https:\/\/)(holdex\.io)/,
+  gistLink: /^(http:\/\/|https:\/\/)(gist\.github\.com\/.*)/,
 };
 
 export const getEmbedSource = (href: string) => {

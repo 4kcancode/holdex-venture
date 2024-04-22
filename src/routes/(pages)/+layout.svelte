@@ -4,6 +4,8 @@
   import { page } from '$app/stores';
   import { isBrowser, routes } from '$lib/config';
   import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { setContext } from 'svelte';
 
   /** internal deps */
   import {
@@ -28,7 +30,6 @@
   let name = '';
   let isError = false;
   let success = false;
-  let scrollY: any;
   let isBurgerDropdownShown = false;
   let theme = globalThis.localStorage?.getItem('theme') as 'dark' | 'light' | undefined | null;
   let themeIconName: SVGIconName = theme
@@ -39,10 +40,14 @@
     ? 'moon'
     : 'sun';
 
+  let themeContext = writable(themeIconName === 'sun' ? 'dark' : 'light');
+  setContext('theme', themeContext);
+
   /** funcs */
   const onThemeToggle = () => {
     themeIconName = themeIconName === 'moon' ? 'sun' : 'moon';
     localStorage.setItem('theme', themeIconName === 'moon' ? 'light' : 'dark');
+    $themeContext = themeIconName === 'sun' ? 'dark' : 'light';
   };
 
   let lastScrollTop = 0;
@@ -75,6 +80,7 @@
       },
     };
   };
+=======
 
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
     if (deepEqual) {
@@ -152,8 +158,6 @@
 
 <template lang="pug" src="./layout.pug">
 </template>
-
-<svelte:window bind:scrollY />
 
 <svelte:head>
   <style lang="scss" src="./layout.scss"></style>

@@ -11,7 +11,7 @@
             class="{index === 0 ? '' : 'mt-8 xs:mt-4'}"
             message="{parseMessage(messageNode.node)}"
           )
-        +elseif("feedType === 'job'")
+        +elseif("feedType === 'resource'")
           JobFeedItem.totalCount.border-l4.pb-8(
             class="{index === 0 ? '' : 'mt-8 xs:mt-4'} {index !== -1 ? 'border-b xs:pb-4' : ''}"
             message="{parseMessage(messageNode.node)}"
