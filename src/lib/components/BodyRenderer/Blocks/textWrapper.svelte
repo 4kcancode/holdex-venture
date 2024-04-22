@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let text: any;
+  export let text: any;
 </script>
 
 {#if text}
-	{@html text}
+  {@html text}
 {:else}
-	<slot />
+  <slot />
 {/if}
