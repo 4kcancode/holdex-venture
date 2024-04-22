@@ -45,11 +45,16 @@ mixin empty-state-graph
 
 mixin legend-item(label, value)
   .chart-legend-item.relative.flex.flex-col.items-start.w-full(class="p-2.75")&attributes(attributes)
-    span.text-footnote.text-t3.block= label
-    +if('isLoading')
+    if label === 'FDM'
+      /// todo: correct the tooltip..
+      span.flex.items-center.gap-1
+        span.text-footnote.text-t3.block= label
+    else
+      span.text-footnote.text-t3.block= label
+    if 'isLoading'
       span.block.bg-l3.rounded-2sm.h-8.w-32
-      +else
-        span.text-h6-l.font-satoshi(class="xs:text-h6-s")= value
+    else
+      span.text-h6-l.font-satoshi(class="xs:text-h6-s")= value
 
 .chart.relative.w-full.bg-l2.border.border-solid.border-l4.rounded-xl.h-96.flex.justify-between.flex-col(
   class="xs:h-[480px]"
