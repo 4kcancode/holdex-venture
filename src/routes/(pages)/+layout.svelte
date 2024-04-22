@@ -53,6 +53,35 @@
   let lastScrollTop = 0;
   let secondaryNavScrollLeft = 0;
 
+  let isLeftEnd = true;
+  let isRightEnd = false;
+
+  const scrollAction = (node: HTMLElement) => {
+    const hasReachedRightEnd = () => {
+      const navbarSectionElement = document.getElementById('secondary-navbar-section');
+
+      if (!node || !navbarSectionElement) {
+        return;
+      }
+
+      secondaryNavScrollLeft = node?.scrollLeft;
+
+      const maxScroll = node?.scrollWidth;
+
+      isLeftEnd = secondaryNavScrollLeft === 0;
+      isRightEnd = maxScroll - secondaryNavScrollLeft - node?.clientWidth <= 0;
+    };
+
+    node.addEventListener('scroll', hasReachedRightEnd, false);
+
+    return {
+      destory() {
+        node.removeEventListener('scroll', hasReachedRightEnd);
+      },
+    };
+  };
+=======
+
   const isActive = (currentUrl: string, path: string, deepEqual = false) => {
     if (deepEqual) {
       return currentUrl === path;
