@@ -39,6 +39,13 @@ export function parseCommunityCoverImage(community: Community): string {
   }
 }
 
+export const cleanLinebreaks = (text: string) => {
+  return text.replace(/\n/g, '').trim();
+};
+
+export const sanitizeTexts = (text: string) => {
+  return text.replace(/>/g, '').trim();
+=======
 export const trimJoinArray = (target: string[]): string => {
   return target.join(' ').replace(/\s([.,])/g, '$1');
 };

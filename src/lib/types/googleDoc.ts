@@ -849,6 +849,10 @@ export interface Schema$FootnoteReference {
 /**
  * A document header.
  */
+export interface Schema$Headers {
+  [key: string]: Schema$Header;
+}
+
 export interface Schema$Header {
   /**
    * The contents of the header. The indexes for a header's content begin at zero.
@@ -951,6 +955,10 @@ export interface Schema$ImagePropertiesSuggestionState {
 /**
  * An object that appears inline with text. An InlineObject contains an EmbeddedObject such as an image.
  */
+export interface Schema$InlineObjects {
+  [key: string]: Schema$InlineObject;
+}
+
 export interface Schema$InlineObject {
   /**
    * The properties of this inline object.
@@ -1210,6 +1218,10 @@ export interface Schema$List {
   suggestedListPropertiesChanges?: {
     [key: string]: Schema$SuggestedListProperties;
   } | null;
+}
+
+export interface Schema$Lists {
+  [key: string]: Schema$List;
 }
 /**
  * The properties of a list which describe the look and feel of bullets belonging to paragraphs associated with a list.
