@@ -23,6 +23,7 @@ $light-colors: (
   t2: toSpacedRgb(#2f323d),
   t3: toSpacedRgb(#5d657a),
   t4: toSpacedRgb(#ffffff),
+  i1: toSpacedRgb(#10141f),
 );
 
 $dark-colors: (
@@ -40,6 +41,7 @@ $dark-colors: (
   t2: toSpacedRgb(#d7dae0),
   t3: toSpacedRgb(#a2a7b8),
   t4: toSpacedRgb(#10141f),
+  i1: toSpacedRgb(#ffffff),
 );
 
 $tw-dark: (
@@ -69,6 +71,7 @@ $tw-dark: (
   tweet-btn-border: toSpacedRgb(#2f323d),
   shadow-button-ring-alpha: 0.2,
   shadow-input-alpha: 0.16,
+  shadow-active-ring-alpha: 0.24,
 );
 
 $tw-light: (
@@ -95,4 +98,5 @@ $tw-light: (
   tweet-border-hover: toSpacedRgb(#ccd6dd),
   shadow-button-ring-alpha: 0.04,
   shadow-input-alpha: 0,
+  shadow-active-ring-alpha: 0,
 );

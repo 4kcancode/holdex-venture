@@ -1,6 +1,6 @@
 # Welcome to Holdex
 
-Learn more about our DNA [here](https://holdex.io/about).
+> Before you begin align yourself with [contributing guidelines](https://github.com/holdex/developers/blob/main/.github/CONTRIBUTING.md).
 
 ## Developing
 

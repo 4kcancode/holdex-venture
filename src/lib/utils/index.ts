@@ -45,4 +45,7 @@ export const cleanLinebreaks = (text: string) => {
 
 export const sanitizeTexts = (text: string) => {
   return text.replace(/>/g, '').trim();
+=======
+export const trimJoinArray = (target: string[]): string => {
+  return target.join(' ').replace(/\s([.,])/g, '$1');
 };

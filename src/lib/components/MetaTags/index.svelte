@@ -21,8 +21,8 @@
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   {#if imageUrl}
-    <meta name="og:image" content={imageUrl} />
-    <meta name="twitter:image" content={imageUrl} />
+    <meta name="og:image" content={imageUrl.trim()} />
+    <meta name="twitter:image" content={imageUrl.trim()} />
   {:else}
     <meta name="og:image" content="{deploymentUrl}{imagePath}" />
     <meta name="twitter:image" content="{deploymentUrl}{imagePath}" />

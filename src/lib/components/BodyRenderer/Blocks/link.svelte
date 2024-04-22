@@ -18,7 +18,9 @@
   let classes =
     'relative inline-block underline underline-offset-4 bg-accent1-default/15 text-accent1-default  transition-colors hover:bg-accent1-default/25 focus:bg-accent1-default/25';
 
-  switch (parentWrapper) {
+  switch (item.type) {
+    case 'link':
+      break;
     default:
       classes += ' text-paragraph-l';
       break;
@@ -55,3 +57,8 @@
     <Icon icon={ArrowTopRightOnSquare} width={16} height={16} colorInherit />
   {/if}
 </a>
+
+<style lang="sass">
+  a :global(*)
+    @apply text-inherit
+</style>
