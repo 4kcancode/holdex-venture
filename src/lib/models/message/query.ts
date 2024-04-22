@@ -1,60 +1,60 @@
-import { gql } from '@apollo/client/core'
+import { gql } from '@apollo/client/core';
 
 export const messageFragment = gql`
-    fragment MessageFragment on Message  {
-        id
-        draft
-        createdAt
-        updatedAt
-        publishedAt
-        deletedAt
-        title
-        body
-        hashtags
-        votesCount {
-            up
-            down
-        }
+  fragment MessageFragment on Message {
+    id
+    draft
+    createdAt
+    updatedAt
+    publishedAt
+    deletedAt
+    title
+    body
+    hashtags
+    votesCount {
+      up
+      down
     }
+  }
 `;
 
 export const messageViewerFragment = gql`
-    fragment MessageViewerFragment on Message {
-        viewerVote {
-            voteType
-        }
-        viewerWatches {
-            watchOption
-            watchesSince
-        }
+  fragment MessageViewerFragment on Message {
+    viewerVote {
+      voteType
     }
-`
+    viewerWatches {
+      watchOption
+      watchesSince
+    }
+  }
+`;
 
 export const messageAuthorFragment = gql`
-    fragment MessageAuthorFragment on Message {
-        authorIsCommunity {
-            id
-            slug
-            name
-            tagline
-            logoUrl
-        }
-        author {
-            id
-            slug
-            name
-            avatarUrl
-        }
+  fragment MessageAuthorFragment on Message {
+    authorIsCommunity {
+      id
+      slug
+      name
+      tagline
+      logoUrl
     }
+    author {
+      id
+      slug
+      name
+      avatarUrl
+    }
+  }
 `;
 
 export const getMessageById = gql`
-    query getMessageById($id: ID!) {
-        message(id: $id) {
-            ...MessageFragment
-        }
-    },
-    ${messageFragment}
+  query getMessageById($id: ID!) {
+    message(id: $id) {
+      ...MessageFragment
+    }
+  }
+  ${messageFragment}
 `;
 
 export const getMessageByCategorySlug = gql`
@@ -86,4 +86,3 @@ export const getMessageByCategorySlug = gql`
     ${messageViewerFragment},
     ${messageAuthorFragment}
 `;
-

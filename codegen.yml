@@ -1,7 +1,7 @@
 overwrite: true
-schema: "https://stage.api.holdex.io/graphql"
+schema: 'https://stage.api.holdex.io/graphql'
 generates:
-    src/lib/types/api.ts:
-        plugins:
-            - "typescript"
-            - "typescript-operations"
+  src/lib/types/api.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'

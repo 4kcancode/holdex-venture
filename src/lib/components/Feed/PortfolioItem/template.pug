@@ -1,11 +1,22 @@
-a(href="/c/{message.communitySlug}/{message.messageSlug}" class!="transition-colors text-t1 hover:text-accent1-default block {className}")
-    article(class="relative flex items-start gap-4 flex-col p-5.75 border border-solid border-l4 rounded-xl h-96 xs:p-3.75 xs:h-80")
-        img(class="absolute block w-full h-full left-0 top-0 object-center rounded-xl object-cover" alt="{message.title}" src="{message.cover || '/default-cover.png'}")
-        +if('message.hashtags && message.hashtags.length > 0')
-            ul.feed-body-tags(class="relative z-1 flex items-start gap-3 flex-wrap w-full")
-                +each('message.hashtags as tag')
-                    Hashtag(tag="{'#'}{tag}" disabled)
-        .feed-body(class="flex flex-col gap-4 xs:gap-2 justify-end relative z-1 flex-grow")
-            h2(class="relative w-full text-h2-l xs:text-h2-s font-satoshi text-inherit block whitespace-nowrap overflow-hidden text-ellipsis") {message.title}
-            +if('message.subtitle')
-                TextParagraph {message.subtitle}
+a(
+  href="/c/{message.communitySlug}/{message.messageSlug}"
+  class!="transition-colors text-white hover:text-accent1-default block {className}"
+)
+  article(
+    class="relative flex items-start gap-4 flex-col p-5.75 border border-solid border-l4 rounded-xl h-96 xs:p-3.75 xs:h-80"
+  )
+    img(
+      class="absolute block w-full h-full left-0 top-0 object-center rounded-xl object-cover"
+      alt="{message.title}"
+      src="{message.cover || '/default-cover.png'}"
+    )
+    +if('message.hashtags && message.hashtags.length > 0')
+      ul.feed-body-tags(class="relative z-1 flex items-start gap-3 flex-wrap w-full")
+        +each('message.hashtags as tag')
+          Hashtag(tag="{'#'}{tag}" disabled)
+    .feed-body(class="flex flex-col gap-4 xs:gap-2 justify-end relative z-1 flex-grow")
+      h2(
+        class="relative w-full text-h2-l xs:text-h2-s font-satoshi block whitespace-nowrap overflow-hidden text-ellipsis"
+      ) {message.title}
+      +if('message.subtitle')
+        p {message.subtitle}

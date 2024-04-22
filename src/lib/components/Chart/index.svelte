@@ -1,44 +1,44 @@
 <script lang="ts">
-	import { isBrowser } from '$lib/config';
-	import { generateOptions } from './options';
-	import { formatNumber } from '$components/NumbersManager';
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  import { isBrowser } from '$lib/config';
+  import { generateOptions } from './options';
+  import { formatNumber } from '$components/NumbersManager';
 
-	import type { ApexOptions } from 'apexcharts';
+  import type { ApexOptions } from 'apexcharts';
 
-	export let prices: any[] | null = null;
-	export let info: any | undefined = undefined;
+  export let prices: any[] | null = null;
+  export let info: any | undefined = undefined;
 
-	let el: HTMLDivElement;
-	let chart: any;
+  let el: HTMLDivElement;
+  let chart: any;
 
-	$: isLoading = !Array.isArray(prices);
-	$: options = generateOptions(prices, isLoading);
+  let initComponent = async (options: ApexOptions) => {
+    let module = await import('apexcharts');
+    chart = new module.default(el, options);
+    await chart.render();
+  };
 
-	$: {
-		if (isBrowser && prices) {
-			initComponent(options);
-		}
-	}
+  let bindPriceChangeClass = (price: string) => {
+    if (Number(price) > 0) {
+      return 'text-rating-a';
+    } else {
+      return 'text-rating-c';
+    }
+  };
 
-	$: chart && chart.updateOptions(options);
+  $: isLoading = !Array.isArray(prices);
+  $: options = generateOptions(prices, isLoading);
 
-	let initComponent = async (options: ApexOptions) => {
-		let module = await import('apexcharts');
-		chart = new module.default(el, options);
-		await chart.render();
-	};
+  $: {
+    if (isBrowser && prices) {
+      initComponent(options);
+    }
+  }
 
-	let bindPriceChangeClass = (price: string) => {
-		if (Number(price) > 0) {
-			return 'text-rating-a';
-		} else {
-			return 'text-rating-c';
-		}
-	};
+  $: chart && chart.updateOptions(options);
 </script>
 
 <template lang="pug" src="./template.pug">
-
 </template>
 
 <style lang="sass" src="./style.sass">
